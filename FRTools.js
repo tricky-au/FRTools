@@ -4,6 +4,8 @@
 // @version      0.3
 // @description  Core framework for FR Tools (modular Tampermonkey system)
 // @match        https://vicpol.forensic-register.app/*
+// @downloadURL   https://raw.githubusercontent.com/forensic-register/frtools/main/FRTools.js
+// @updateURL     https://raw.githubusercontent.com/forensic-register/frtools/main/FRTools.js
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
