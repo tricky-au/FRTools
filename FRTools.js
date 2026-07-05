@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FR Tools (Core)
 // @namespace    FRTOOLS
-// @version      0.2
+// @version      0.3
 // @description  Core framework for FR Tools (modular Tampermonkey system)
 // @match        https://vicpol.forensic-register.app/*
 // @grant        GM_getValue
