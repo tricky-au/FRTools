@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+"scripts": {
+    "build": "node build/build.js",
+    "lint": "eslint src build",
+    "release": "node build/release.js",
+    "bump:patch": "node build/bump.js patch",
+    "bump:minor": "node build/bump.js minor",
+    "bump:major": "node build/bump.js major"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tricky-au/FRTools.git"
@@ -17,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/tricky-au/FRTools/issues"
   },
-  "homepage": "https://github.com/tricky-au/FRTools#readme"
+  "homepage": "https://github.com/tricky-au/FRTools#readme",
+  "devDependencies": {
+    "eslint": "^10.6.0"
+  }
 }

@@ -1,22 +1,3 @@
-// ==UserScript==
-// @name         FR Tools
-// @author       Nick Filipovic (DFU)
-// @namespace    FRTOOLS
-// @version      2.1.1
-// @description  Modular Tampermonkey toolkit for the Forensic Register
-// @match        https://vicpol.forensic-register.app/*
-// @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
-// @updateURL    https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
-// @grant        GM_getValue
-// @grant        GM_setValue
-// @grant        GM_addStyle
-// ==/UserScript==
-
-
-// ======================================
-// main.js
-// ======================================
-
 (function () {
     'use strict';
 
@@ -160,40 +141,3 @@
     waitForBody();
 
 })();
-
-
-
-// ======================================
-// gui.js
-// ======================================
-
-
-
-
-// ======================================
-// header.js
-// ======================================
-
-
-
-
-// ======================================
-// settings.js
-// ======================================
-
-
-
-
-// ======================================
-// shortcuts.js
-// ======================================
-
-
-
-
-// ======================================
-// timestamp.js
-// ======================================
-
-
-

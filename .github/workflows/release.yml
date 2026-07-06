@@ -16,29 +16,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Verify Repository Structure
-        run: |
-          echo "Current directory:"
-          pwd
-          echo ""
-          echo "Repository contents:"
-          ls -R
-          echo ""
-          echo "Userscript header:"
-          head -15 dist/FRTools.user.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build FR Tools
+        run: node build/build.js
 
       - name: Read Version
         id: version
         shell: bash
         run: |
-          VERSION=$(sed -n 's#// @version[[:space:]]*##p' dist/FRTools.user.js)
-
-          if [ -z "$VERSION" ]; then
-            echo "❌ Could not determine version."
-            exit 1
-          fi
-
-          echo "Found version: $VERSION"
+          VERSION=$(cat version.txt)
+          echo "Version: $VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release

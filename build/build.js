@@ -1,0 +1,102 @@
+const fs = require("fs");
+const path = require("path");
+
+const ROOT = path.join(__dirname, "..");
+const SRC = path.join(ROOT, "src");
+const DIST = path.join(ROOT, "dist");
+
+const VERSION_FILE = path.join(ROOT, "version.txt");
+const HEADER_FILE = path.join(SRC, "userscript.header");
+const OUTPUT_FILE = path.join(DIST, "FRTools.user.js");
+
+console.log("================================");
+console.log("FR Tools Build");
+console.log("================================");
+
+//
+// Read Version
+//
+const version = fs.readFileSync(VERSION_FILE, "utf8").trim();
+
+console.log("Version:", version);
+
+//
+// Read Header
+//
+let header = fs.readFileSync(HEADER_FILE, "utf8");
+
+header = header.replace("{{VERSION}}", version);
+
+//
+// Build Order
+//
+//
+// Discover source files
+//
+
+let output = header + "\n\n";
+
+let sourceFiles = fs.readdirSync(SRC)
+
+    .filter(file => file.endsWith(".js"))
+
+    .filter(file => file !== "main.js")
+
+    .sort();
+
+sourceFiles.unshift("main.js");
+
+for (const file of sourceFiles) {
+
+    const filePath = path.join(SRC, file);
+
+    console.log("📄", file);
+
+    output += "\n";
+    output += "// ======================================\n";
+    output += `// ${file}\n`;
+    output += "// ======================================\n\n";
+
+    output += fs.readFileSync(filePath, "utf8");
+
+    output += "\n\n";
+
+}
+
+//
+// Modules
+//
+const modulesDir = path.join(SRC, "modules");
+
+if (fs.existsSync(modulesDir)) {
+
+    const modules = fs.readdirSync(modulesDir)
+        .filter(f => f.endsWith(".js"))
+        .sort();
+
+    for (const file of modules) {
+
+        console.log("🧩", file);
+
+        output += "\n";
+        output += "// ======================================\n";
+        output += `// modules/${file}\n`;
+        output += "// ======================================\n\n";
+
+        output += fs.readFileSync(path.join(modulesDir, file), "utf8");
+        output += "\n\n";
+    }
+}
+
+//
+// Ensure dist exists
+//
+if (!fs.existsSync(DIST)) {
+    fs.mkdirSync(DIST);
+}
+
+fs.writeFileSync(OUTPUT_FILE, output);
+
+console.log("");
+console.log("✅ Build Complete");
+console.log("Output:", OUTPUT_FILE);
