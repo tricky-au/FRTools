@@ -2,7 +2,7 @@
 // @name         FR Tools (Core)
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      1.0.0
+// @version      1.0.2
 // @description  Core framework for FR Tools (modular Tampermonkey script for Forensic Register)
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
