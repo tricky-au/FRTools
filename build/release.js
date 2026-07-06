@@ -221,8 +221,73 @@ function build() {
 
     console.log("");
 
-    finish();
+    gitStage();
 
+}
+
+function gitStage() {
+
+    console.log("");
+    console.log("📦 Staging changes...");
+    console.log("");
+
+    try {
+
+        execSync("git add .", {
+            stdio: "inherit"
+        });
+
+        console.log("");
+        console.log("✅ Changes staged");
+        console.log("");
+
+        gitCommit();
+
+    } catch (err) {
+
+        console.log("");
+        console.log("❌ Git staging failed");
+        console.log("Make sure this is a git repository.");
+        console.log("");
+
+        rl.close();
+
+    }
+}
+
+function gitCommit() {
+
+    console.log("");
+    console.log("📝 Creating commit...");
+    console.log("");
+
+    const safeTitle = releaseTitle.replace(/"/g, '\\"');
+    const commitMessage = `v${newVersion} - ${safeTitle}`;
+
+    try {
+
+        execSync(`git commit -m "${commitMessage}"`, {
+            stdio: "inherit"
+        });
+
+        console.log("");
+        console.log("✅ Commit created");
+        console.log("");
+        console.log("🚀 Ready to push (use VS Code Sync Changes)");
+        console.log("");
+
+        finish();
+
+    } catch (err) {
+
+        console.log("");
+        console.log("❌ Git commit failed");
+        console.log("Make sure you have staged changes and Git is initialized.");
+        console.log("");
+
+        rl.close();
+
+    }
 }
 
 function finish() {
