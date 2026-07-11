@@ -14,7 +14,8 @@ module.exports = [
             globals: {
                 console: "readonly",
                 process: "readonly",
-                __dirname: "readonly"
+                __dirname: "readonly",
+                FRTools: "readonly"
             }
         },
 
@@ -52,7 +53,9 @@ module.exports = [
 
                 GM_getValue: "readonly",
                 GM_setValue: "readonly",
-                GM_addStyle: "readonly"
+                GM_addStyle: "readonly",
+
+                FRTools: "readonly"
             }
         },
 

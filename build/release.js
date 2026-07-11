@@ -273,7 +273,7 @@ function gitCommit() {
         console.log("");
         console.log("✅ Commit created");
         console.log("");
-        console.log("🚀 Ready to push (use VS Code Sync Changes)");
+        console.log("🚀 Creating annotated release tag...");
         console.log("");
 
         gitTag();

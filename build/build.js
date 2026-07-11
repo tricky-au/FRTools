@@ -16,6 +16,7 @@ console.log("================================");
 //
 // Read Version
 //
+
 const version = fs.readFileSync(VERSION_FILE, "utf8").trim();
 
 console.log("Version:", version);
@@ -23,28 +24,27 @@ console.log("Version:", version);
 //
 // Read Header
 //
+
 let header = fs.readFileSync(HEADER_FILE, "utf8");
 
 header = header.replace("{{VERSION}}", version);
 
-//
-// Build Order
-//
-//
-// Discover source files
-//
-
 let output = header + "\n\n";
 
-let sourceFiles = fs.readdirSync(SRC)
+//
+// Core Source Files
+//
+
+const sourceFiles = fs.readdirSync(SRC)
 
     .filter(file => file.endsWith(".js"))
 
     .filter(file => file !== "main.js")
 
+    .filter(file => file !== "header.js")
+
     .sort();
 
-sourceFiles.unshift("main.js");
 
 for (const file of sourceFiles) {
 
@@ -66,13 +66,17 @@ for (const file of sourceFiles) {
 //
 // Modules
 //
+
 const modulesDir = path.join(SRC, "modules");
 
 if (fs.existsSync(modulesDir)) {
 
     const modules = fs.readdirSync(modulesDir)
-        .filter(f => f.endsWith(".js"))
+
+        .filter(file => file.endsWith(".js"))
+
         .sort();
+
 
     for (const file of modules) {
 
@@ -83,19 +87,51 @@ if (fs.existsSync(modulesDir)) {
         output += `// modules/${file}\n`;
         output += "// ======================================\n\n";
 
-        output += fs.readFileSync(path.join(modulesDir, file), "utf8");
+        output += fs.readFileSync(
+            path.join(modulesDir, file),
+            "utf8"
+        );
+
         output += "\n\n";
+
     }
+
 }
+
+//
+// Application Entry Point
+//
+
+const mainFile = path.join(SRC, "main.js");
+
+console.log("📄 main.js");
+
+output += "\n";
+output += "// ======================================\n";
+output += "// main.js\n";
+output += "// ======================================\n\n";
+
+output += fs.readFileSync(mainFile, "utf8");
+
+output += "\n\n";
+
 
 //
 // Ensure dist exists
 //
+
 if (!fs.existsSync(DIST)) {
+
     fs.mkdirSync(DIST);
+
 }
 
-fs.writeFileSync(OUTPUT_FILE, output);
+
+fs.writeFileSync(
+    OUTPUT_FILE,
+    output
+);
+
 
 console.log("");
 console.log("✅ Build Complete");
