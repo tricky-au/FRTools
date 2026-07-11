@@ -2,8 +2,8 @@ name: Release FR Tools
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
 
 permissions:
   contents: write
