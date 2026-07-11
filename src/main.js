@@ -3,7 +3,7 @@
 
     const FRTools = {
         modules: {},
-        state: { uiOpen: false }
+        state: { uiOpen: false, uiInitialized: false }
     };
 
     window.FRTools = FRTools;
@@ -76,6 +76,14 @@
     `);
 
     function createUI() {
+        if (FRTools.state.uiInitialized) {
+            return;
+        }
+
+        if (document.getElementById('frtools-button')) {
+            FRTools.state.uiInitialized = true;
+            return;
+        }
 
         const btn = document.createElement('button');
         btn.id = 'frtools-button';
@@ -117,6 +125,8 @@
         document.body.appendChild(btn);
         document.body.appendChild(overlay);
         document.body.appendChild(modal);
+
+        FRTools.state.uiInitialized = true;
     }
 
     function init() {

@@ -243,7 +243,7 @@ function gitStage() {
 
         gitCommit();
 
-    } catch (err) {
+    } catch {
 
         console.log("");
         console.log("❌ Git staging failed");
@@ -276,9 +276,9 @@ function gitCommit() {
         console.log("🚀 Ready to push (use VS Code Sync Changes)");
         console.log("");
 
-        finish();
+        gitTag();
 
-    } catch (err) {
+    } catch {
 
         console.log("");
         console.log("❌ Git commit failed");
@@ -288,6 +288,37 @@ function gitCommit() {
         rl.close();
 
     }
+}
+
+function gitTag() {
+
+    console.log("");
+    console.log("🏷️  Creating Git tag...");
+    console.log("");
+
+    const tag = `v${newVersion}`;
+
+    try {
+
+        execSync(`git tag ${tag}`, {
+            stdio: "inherit"
+        });
+
+        console.log(`✅ Created tag ${tag}`);
+        console.log("");
+
+        finish();
+
+    } catch (err) {
+
+        console.log("");
+        console.log("❌ Failed to create Git tag.");
+        console.log("");
+
+        rl.close();
+
+    }
+
 }
 
 function finish() {
