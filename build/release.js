@@ -307,12 +307,50 @@ function gitTag() {
         console.log(`✅ Created tag ${tag}`);
         console.log("");
 
-        finish();
+        gitPush();
 
     } catch (err) {
 
         console.log("");
         console.log("❌ Failed to create Git tag.");
+        console.log("");
+
+        rl.close();
+
+    }
+
+}
+
+function gitPush() {
+
+    console.log("");
+    console.log("🚀 Pushing to GitHub...");
+    console.log("");
+
+    try {
+
+        execSync("git push origin main", {
+            stdio: "inherit"
+        });
+
+        execSync("git push origin --tags", {
+            stdio: "inherit"
+        });
+
+        console.log("");
+        console.log("✅ Push complete");
+        console.log("");
+
+        finish();
+
+    }
+    catch (err) {
+
+        console.log("");
+        console.log("❌ Push failed");
+        console.log("");
+        console.log("Your commit and tag still exist locally.");
+        console.log("You can push them later.");
         console.log("");
 
         rl.close();
@@ -332,11 +370,10 @@ function finish() {
     console.log("");
     console.log("Everything completed successfully.");
     console.log("");
-    console.log("Next steps:");
+    console.log("Everything has been published.");
     console.log("");
-    console.log("1. Review the generated userscript.");
-    console.log("2. Commit your changes.");
-    console.log("3. Click 'Sync Changes' in VS Code.");
+    console.log("GitHub Actions will now create the release.");
+    console.log("Tampermonkey users will receive the update automatically.");
     console.log("");
     console.log("GitHub Actions will automatically create the release.");
     console.log("");
