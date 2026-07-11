@@ -25,6 +25,7 @@
     };
 
     window.FRTools = FRTools;
+    unsafeWindow.FRTools = FRTools;
 
     const Storage = {
         get(key, fallback) {

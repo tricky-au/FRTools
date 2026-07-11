@@ -55,7 +55,8 @@ module.exports = [
                 GM_setValue: "readonly",
                 GM_addStyle: "readonly",
 
-                FRTools: "readonly"
+                FRTools: "readonly",
+                unsafeWindow: "readonly",
             }
         },
 
