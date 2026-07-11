@@ -8,6 +8,8 @@
         FRTools.Module.all()
     );
 
+    FRTools.Module.initAll();
+
     FRTools.init();
 
 })();

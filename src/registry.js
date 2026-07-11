@@ -38,11 +38,9 @@
 
             modules[module.id] = module;
 
-
             console.log(
                 `[FR Tools] Registered module: ${module.id}`
             );
-
 
             return true;
         },
@@ -55,7 +53,28 @@
 
         all() {
             return Object.values(modules);
+        },
+
+        initAll() {
+
+        Object.values(modules).forEach(module => {
+
+        if (
+            typeof module.init === "function" &&
+            module.enabledByDefault !== false
+        ) {
+
+            console.log(
+                `[FR Tools] Starting module: ${module.id}`
+            );
+
+            module.init();
+
         }
+
+    });
+
+}
 
     };
 
