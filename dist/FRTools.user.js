@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.0.5
+// @version      4.0.6
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -263,24 +263,38 @@
 
         initAll() {
 
-        Object.values(modules).forEach(module => {
+            Object.values(modules).forEach(module => {
 
-        if (
-            typeof module.init === "function" &&
-            module.enabledByDefault !== false
-        ) {
+                const enabled =
+                    FRTools.Settings.getModuleState(
+                        module.id,
+                        module.enabledByDefault !== false
+                    );
 
-            console.log(
-                `[FR Tools] Starting module: ${module.id}`
-            );
 
-            module.init();
+                if (
+                    enabled &&
+                    typeof module.init === "function"
+                ) {
+
+                    console.log(
+                        `[FR Tools] Starting module: ${module.id}`
+                    );
+
+                    module.init();
+
+                }
+                else {
+
+                    console.log(
+                        `[FR Tools] Disabled module: ${module.id}`
+                    );
+
+                }
+
+            });
 
         }
-
-    });
-
-}
 
     };
 
@@ -291,7 +305,32 @@
 // settings.js
 // ======================================
 
+FRTools.Settings = {
 
+    getModuleState(id, defaultValue = true) {
+
+        const key = `module_${id}_enabled`;
+
+        return FRTools.Storage.get(
+            key,
+            defaultValue
+        );
+
+    },
+
+
+    setModuleState(id, enabled) {
+
+        const key = `module_${id}_enabled`;
+
+        FRTools.Storage.set(
+            key,
+            enabled
+        );
+
+    }
+
+};
 
 
 // ======================================

@@ -57,24 +57,38 @@
 
         initAll() {
 
-        Object.values(modules).forEach(module => {
+            Object.values(modules).forEach(module => {
 
-        if (
-            typeof module.init === "function" &&
-            module.enabledByDefault !== false
-        ) {
+                const enabled =
+                    FRTools.Settings.getModuleState(
+                        module.id,
+                        module.enabledByDefault !== false
+                    );
 
-            console.log(
-                `[FR Tools] Starting module: ${module.id}`
-            );
 
-            module.init();
+                if (
+                    enabled &&
+                    typeof module.init === "function"
+                ) {
+
+                    console.log(
+                        `[FR Tools] Starting module: ${module.id}`
+                    );
+
+                    module.init();
+
+                }
+                else {
+
+                    console.log(
+                        `[FR Tools] Disabled module: ${module.id}`
+                    );
+
+                }
+
+            });
 
         }
-
-    });
-
-}
 
     };
 
