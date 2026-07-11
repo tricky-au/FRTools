@@ -24,21 +24,14 @@ jobs:
       - name: Build FR Tools
         run: node build/build.js
 
-      - name: Read Version
-        id: version
-        shell: bash
-        run: |
-          VERSION=$(cat version.txt)
-          echo "Version: $VERSION"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: FR Tools v${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref_name }}
+          name: FR Tools ${{ github.ref_name }}
           generate_release_notes: true
           files: |
             dist/FRTools.user.js
+            
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

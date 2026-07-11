@@ -300,9 +300,12 @@ function gitTag() {
 
     try {
 
-        execSync(`git tag ${tag}`, {
-            stdio: "inherit"
-        });
+        execSync(
+              `git tag -a ${tag} -m "FR Tools ${tag}"`,
+               {
+                 stdio: "inherit"
+               }
+        );
 
         console.log(`✅ Created tag ${tag}`);
         console.log("");
@@ -329,11 +332,7 @@ function gitPush() {
 
     try {
 
-        execSync("git push origin main", {
-            stdio: "inherit"
-        });
-
-        execSync("git push origin --tags", {
+        execSync("git push origin main --follow-tags", {
             stdio: "inherit"
         });
 
