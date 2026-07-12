@@ -270,62 +270,37 @@ createUI() {
             typeof module.settingsUI === "function"
         ) {
 
-            const option = document.createElement(
-                "div"
-            );
-
-
-            option.className =
-                "frtools-module-option";
-
-
-            option.innerHTML =
+            const settings =
                 module.settingsUI();
 
 
-            moduleContainer.appendChild(
-                option
-            );
+            if (settings) {
 
-
-            if (
-                module.id === "exhibitsort"
-            ) {
-
-                const select =
-                    option.querySelector(
-                        "#exhibitsort-direction"
+                const option =
+                    document.createElement(
+                        "div"
                     );
 
 
-                if (select) {
-
-                    select.value =
-                        FRTools.Storage.get(
-                            "exhibitsort_direction",
-                            "asc"
-                        );
+                option.className =
+                    "frtools-module-option";
 
 
-                    select.addEventListener(
-                        "change",
-                        () => {
-
-                            FRTools.Storage.set(
-                                "exhibitsort_direction",
-                                select.value
-                            );
+                option.innerHTML =
+                    settings.html;
 
 
-                            FRTools.GUI.notify(
-                                `${module.name}: ${
-                                    select.value === "asc"
-                                        ? "Ascending"
-                                        : "Descending"
-                                }`
-                            );
+                moduleContainer.appendChild(
+                    option
+                );
 
-                        }
+
+                if (
+                    typeof settings.init === "function"
+                ) {
+
+                    settings.init(
+                        option
                     );
 
                 }

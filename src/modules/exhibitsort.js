@@ -153,28 +153,79 @@ FRTools.Module.register({
     },
 
 
-    settingsUI() {
+        settingsUI() {
 
-        return `
-            <label>
-                Sort Direction:
+            return {
 
-                <select id="exhibitsort-direction">
+                html: `
 
-                    <option value="asc">
-                        Ascending
-                    </option>
+                    <label>
 
-                    <option value="desc">
-                        Descending
-                    </option>
+                        Sort Direction:
 
-                </select>
+                        <select id="exhibitsort-direction">
 
-            </label>
-        `;
+                            <option value="asc">
+                                Ascending
+                            </option>
 
-    },
+                            <option value="desc">
+                                Descending
+                            </option>
+
+                        </select>
+
+                    </label>
+
+                `,
+
+
+                init(container) {
+
+                    const select =
+                        container.querySelector(
+                            "#exhibitsort-direction"
+                        );
+
+
+                    if (!select) {
+                        return;
+                    }
+
+
+                    select.value =
+                        FRTools.Storage.get(
+                            "exhibitsort_direction",
+                            "asc"
+                        );
+
+
+                    select.addEventListener(
+                        "change",
+                        () => {
+
+                            FRTools.Storage.set(
+                                "exhibitsort_direction",
+                                select.value
+                            );
+
+
+                            FRTools.GUI.notify(
+                                `${this.name}: ${
+                                    select.value === "asc"
+                                        ? "Ascending"
+                                        : "Descending"
+                                }`
+                            );
+
+                        }
+                    );
+
+                }
+
+            };
+
+        },
 
 
     init() {

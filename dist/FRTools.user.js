@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.0.12
+// @version      4.0.13
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -449,62 +449,37 @@ createUI() {
             typeof module.settingsUI === "function"
         ) {
 
-            const option = document.createElement(
-                "div"
-            );
-
-
-            option.className =
-                "frtools-module-option";
-
-
-            option.innerHTML =
+            const settings =
                 module.settingsUI();
 
 
-            moduleContainer.appendChild(
-                option
-            );
+            if (settings) {
 
-
-            if (
-                module.id === "exhibitsort"
-            ) {
-
-                const select =
-                    option.querySelector(
-                        "#exhibitsort-direction"
+                const option =
+                    document.createElement(
+                        "div"
                     );
 
 
-                if (select) {
-
-                    select.value =
-                        FRTools.Storage.get(
-                            "exhibitsort_direction",
-                            "asc"
-                        );
+                option.className =
+                    "frtools-module-option";
 
 
-                    select.addEventListener(
-                        "change",
-                        () => {
-
-                            FRTools.Storage.set(
-                                "exhibitsort_direction",
-                                select.value
-                            );
+                option.innerHTML =
+                    settings.html;
 
 
-                            FRTools.GUI.notify(
-                                `${module.name}: ${
-                                    select.value === "asc"
-                                        ? "Ascending"
-                                        : "Descending"
-                                }`
-                            );
+                moduleContainer.appendChild(
+                    option
+                );
 
-                        }
+
+                if (
+                    typeof settings.init === "function"
+                ) {
+
+                    settings.init(
+                        option
                     );
 
                 }
@@ -1326,28 +1301,79 @@ FRTools.Module.register({
     },
 
 
-    settingsUI() {
+        settingsUI() {
 
-        return `
-            <label>
-                Sort Direction:
+            return {
 
-                <select id="exhibitsort-direction">
+                html: `
 
-                    <option value="asc">
-                        Ascending
-                    </option>
+                    <label>
 
-                    <option value="desc">
-                        Descending
-                    </option>
+                        Sort Direction:
 
-                </select>
+                        <select id="exhibitsort-direction">
 
-            </label>
-        `;
+                            <option value="asc">
+                                Ascending
+                            </option>
 
-    },
+                            <option value="desc">
+                                Descending
+                            </option>
+
+                        </select>
+
+                    </label>
+
+                `,
+
+
+                init(container) {
+
+                    const select =
+                        container.querySelector(
+                            "#exhibitsort-direction"
+                        );
+
+
+                    if (!select) {
+                        return;
+                    }
+
+
+                    select.value =
+                        FRTools.Storage.get(
+                            "exhibitsort_direction",
+                            "asc"
+                        );
+
+
+                    select.addEventListener(
+                        "change",
+                        () => {
+
+                            FRTools.Storage.set(
+                                "exhibitsort_direction",
+                                select.value
+                            );
+
+
+                            FRTools.GUI.notify(
+                                `${this.name}: ${
+                                    select.value === "asc"
+                                        ? "Ascending"
+                                        : "Descending"
+                                }`
+                            );
+
+                        }
+                    );
+
+                }
+
+            };
+
+        },
 
 
     init() {
