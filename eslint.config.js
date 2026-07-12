@@ -57,6 +57,11 @@ module.exports = [
 
                 FRTools: "readonly",
                 unsafeWindow: "readonly",
+
+                Blob: "readonly",
+                URL: "readonly",
+                FileReader: "readonly",
+                confirm: "readonly",
             }
         },
 

@@ -28,6 +28,7 @@
 
 
             if (modules[module.id]) {
+
                 console.error(
                     `[FR Tools] Module "${module.id}" already registered.`
                 );
@@ -38,22 +39,30 @@
 
             modules[module.id] = module;
 
+
             console.log(
                 `[FR Tools] Registered module: ${module.id}`
             );
 
+
             return true;
+
         },
 
 
         get(id) {
+
             return modules[id];
+
         },
 
 
         all() {
+
             return Object.values(modules);
+
         },
+
 
         initAll() {
 
@@ -72,8 +81,9 @@
                 ) {
 
                     console.log(
-                        `[FR Tools] Starting module: ${module.id}`
+                        `[FR Tools] Starting module: ${module.name}`
                     );
+
 
                     module.init();
 
@@ -81,12 +91,98 @@
                 else {
 
                     console.log(
-                        `[FR Tools] Disabled module: ${module.id}`
+                        `[FR Tools] Disabled module: ${module.name}`
                     );
 
                 }
 
             });
+
+        },
+
+
+        enable(id) {
+
+            const module = this.get(id);
+
+
+            if (!module) {
+
+                console.error(
+                    `[FR Tools] Module not found: ${id}`
+                );
+
+                return;
+
+            }
+
+
+            FRTools.Settings.setModuleState(
+                id,
+                true
+            );
+
+
+            if (
+                typeof module.init === "function"
+            ) {
+
+                console.log(
+                    `[FR Tools] Starting module: ${module.name}`
+                );
+
+
+                module.init();
+
+            }
+
+
+            FRTools.GUI.notify(
+                `${module.name} enabled`
+            );
+
+        },
+
+
+        disable(id) {
+
+            const module = this.get(id);
+
+
+            if (!module) {
+
+                console.error(
+                    `[FR Tools] Module not found: ${id}`
+                );
+
+                return;
+
+            }
+
+
+            FRTools.Settings.setModuleState(
+                id,
+                false
+            );
+
+
+            if (
+                typeof module.destroy === "function"
+            ) {
+
+                console.log(
+                    `[FR Tools] Stopping module: ${module.name}`
+                );
+
+
+                module.destroy();
+
+            }
+
+
+            FRTools.GUI.notify(
+                `${module.name} disabled`
+            );
 
         }
 

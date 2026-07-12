@@ -14,7 +14,9 @@
 
         Events: {},
 
-        GUI: {},
+        GUI: {
+            notifications: []
+        },
 
         Utils: {},
 
