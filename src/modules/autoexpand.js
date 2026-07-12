@@ -4,6 +4,8 @@ FRTools.Module.register({
 
     name: "Auto Expand",
 
+    description: "Automatically expands hidden table rows.",
+
     version: "1.0.0",
 
     enabledByDefault: true,

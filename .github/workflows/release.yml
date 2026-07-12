@@ -32,6 +32,7 @@ jobs:
           generate_release_notes: true
           files: |
             dist/FRTools.user.js
+            dist/FRTools.meta.js
             
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

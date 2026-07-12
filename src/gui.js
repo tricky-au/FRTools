@@ -164,7 +164,19 @@ FRTools.GUI = {
                         >
 
                         <label>
-                            ${module.name}
+
+                            <strong>
+                                ${module.name}
+                            </strong>
+
+                            <br>
+
+                            <small>
+                                ${module.description || ""}
+                                <br>
+                                Version: ${module.version || "1.0.0"}
+                            </small>
+
                         </label>
 
                     </div>

@@ -2,11 +2,11 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.0.8
+// @version      4.0.9
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
-// @updateURL    https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
+// @updateURL    https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.meta.js
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
@@ -341,7 +341,19 @@ FRTools.GUI = {
                         >
 
                         <label>
-                            ${module.name}
+
+                            <strong>
+                                ${module.name}
+                            </strong>
+
+                            <br>
+
+                            <small>
+                                ${module.description || ""}
+                                <br>
+                                Version: ${module.version || "1.0.0"}
+                            </small>
+
                         </label>
 
                     </div>
@@ -623,6 +635,8 @@ FRTools.Module.register({
     id: "autoexpand",
 
     name: "Auto Expand",
+
+    description: "Automatically expands hidden table rows.",
 
     version: "1.0.0",
 

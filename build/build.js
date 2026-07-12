@@ -7,7 +7,8 @@ const DIST = path.join(ROOT, "dist");
 
 const VERSION_FILE = path.join(ROOT, "version.txt");
 const HEADER_FILE = path.join(SRC, "userscript.header");
-const OUTPUT_FILE = path.join(DIST, "FRTools.user.js");
+const USER_OUTPUT_FILE = path.join(DIST, "FRTools.user.js");
+const META_OUTPUT_FILE = path.join(DIST, "FRTools.meta.js");
 
 console.log("================================");
 console.log("FR Tools Build");
@@ -127,12 +128,20 @@ if (!fs.existsSync(DIST)) {
 }
 
 
-fs.writeFileSync(
-    OUTPUT_FILE,
-    output
-);
+//
+// Write userscript
+//
+
+fs.writeFileSync(USER_OUTPUT_FILE, output);
+
+//
+// Write metadata file
+//
+
+fs.writeFileSync(META_OUTPUT_FILE, header + "\n");
 
 
 console.log("");
 console.log("✅ Build Complete");
-console.log("Output:", OUTPUT_FILE);
+console.log("Userscript:", USER_OUTPUT_FILE);
+console.log("Metadata :", META_OUTPUT_FILE);
