@@ -163,7 +163,13 @@ sortExpandedExhibits() {
         return;
     }
 
+
     this.sorting = true;
+
+
+    console.log(
+        "[FR Tools] Sorting expanded exhibits"
+    );
 
 
     try {
@@ -177,10 +183,12 @@ sortExpandedExhibits() {
             )
             .forEach(row => {
 
+
                 const className =
                     [...row.classList]
                         .find(
-                            c => c.startsWith(
+                            c =>
+                            c.startsWith(
                                 "childRow_Report-"
                             )
                         );
@@ -192,20 +200,30 @@ sortExpandedExhibits() {
 
 
                 if (!groups[className]) {
+
                     groups[className] = [];
+
                 }
 
 
                 groups[className].push(row);
 
+
             });
+
 
 
         Object.values(groups)
             .forEach(rows => {
 
 
-                rows.sort((a,b)=>{
+                if (rows.length < 2) {
+                    return;
+                }
+
+
+                rows.sort((a, b) => {
+
 
                     const aRef =
                         a.textContent.match(
@@ -219,16 +237,36 @@ sortExpandedExhibits() {
                         )?.[0] || "";
 
 
-                    return aRef.localeCompare(bRef);
+                    return aRef.localeCompare(
+                        bRef
+                    );
+
 
                 });
+
+
+                const firstRow = rows[0];
+
+
+                const parent =
+                    firstRow.parentNode;
+
+
+                const fragment =
+                    document.createDocumentFragment();
 
 
                 rows.forEach(row => {
 
-                    row.parentNode.appendChild(row);
+                    fragment.appendChild(row);
 
                 });
+
+
+                parent.insertBefore(
+                    fragment,
+                    firstRow
+                );
 
 
             });
