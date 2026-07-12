@@ -153,6 +153,30 @@ FRTools.Module.register({
     },
 
 
+    settingsUI() {
+
+        return `
+            <label>
+                Sort Direction:
+
+                <select id="exhibitsort-direction">
+
+                    <option value="asc">
+                        Ascending
+                    </option>
+
+                    <option value="desc">
+                        Descending
+                    </option>
+
+                </select>
+
+            </label>
+        `;
+
+    },
+
+
     init() {
 
         console.log(

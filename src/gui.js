@@ -266,69 +266,73 @@ createUI() {
 
         moduleContainer.appendChild(row);
 
-        if (module.id === "exhibitsort") {
+        if (
+            typeof module.settingsUI === "function"
+        ) {
 
-        const option = document.createElement("div");
-
-        option.className = "frtools-module-option";
-
-
-        option.innerHTML = `
-            <label>
-                Sort Direction:
-                <select id="exhibitsort-direction">
-
-                    <option value="asc">
-                        Ascending
-                    </option>
-
-                    <option value="desc">
-                        Descending
-                    </option>
-
-                </select>
-            </label>
-        `;
-
-
-        const select =
-            option.querySelector(
-                "#exhibitsort-direction"
+            const option = document.createElement(
+                "div"
             );
 
 
-        select.value =
-            FRTools.Storage.get(
-                "exhibitsort_direction",
-                "asc"
+            option.className =
+                "frtools-module-option";
+
+
+            option.innerHTML =
+                module.settingsUI();
+
+
+            moduleContainer.appendChild(
+                option
             );
 
 
-        select.addEventListener(
-            "change",
-            () => {
+            if (
+                module.id === "exhibitsort"
+            ) {
 
-                FRTools.Storage.set(
-                    "exhibitsort_direction",
-                    select.value
-                );
+                const select =
+                    option.querySelector(
+                        "#exhibitsort-direction"
+                    );
 
 
-                FRTools.GUI.notify(
-                    `Exhibit Sort: ${
-                        select.value === "asc"
-                            ? "Ascending"
-                            : "Descending"
-                    }`
-                );
+                if (select) {
+
+                    select.value =
+                        FRTools.Storage.get(
+                            "exhibitsort_direction",
+                            "asc"
+                        );
+
+
+                    select.addEventListener(
+                        "change",
+                        () => {
+
+                            FRTools.Storage.set(
+                                "exhibitsort_direction",
+                                select.value
+                            );
+
+
+                            FRTools.GUI.notify(
+                                `${module.name}: ${
+                                    select.value === "asc"
+                                        ? "Ascending"
+                                        : "Descending"
+                                }`
+                            );
+
+                        }
+                    );
+
+                }
 
             }
-        );
 
-
-        moduleContainer.appendChild(option);
-
-    }
+        }
 
     });
 
