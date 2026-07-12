@@ -4,11 +4,9 @@ FRTools.Module.register({
 
     name: "Exhibit Sort",
 
-    description: "Automatically sorts exhibits by PALM number.",
+    description: "Automatically sorts exhibits by PALM number in Requests/Tasks.",
 
     version: "1.0.0",
-
-    author: "FR Tools",
 
     enabledByDefault: true,
 

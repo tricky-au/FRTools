@@ -8,8 +8,6 @@ FRTools.Module.register({
 
     version: "1.2.0",
 
-    author: "FR Tools",
-
     enabledByDefault: false,
 
 

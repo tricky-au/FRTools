@@ -643,32 +643,30 @@ FRTools.GUI = {
             event => {
 
 
-                if (
-                    event.target.matches(
-                        "input[data-module-option]"
-                    )
-                ) {
+            if (
+                event.target.matches(
+                    "[data-module-option]"
+                )
+            ) {
 
+                const value =
+                    event.target.type === "checkbox"
+                        ? event.target.checked
+                        : event.target.value;
 
-                    FRTools.Settings.setModuleOption(
-                        event.target.dataset.moduleOption,
-                        event.target.dataset.option,
-                        event.target.checked
-                    );
+                FRTools.Settings.setModuleOption(
+                    event.target.dataset.moduleOption,
+                    event.target.dataset.option,
+                    value
+                );
 
+                FRTools.GUI.notify(
+                    `${event.target.dataset.option} updated`
+                );
 
-                    FRTools.GUI.notify(
-                        `${event.target.dataset.option}: ${
-                            event.target.checked
-                            ? "Enabled"
-                            : "Disabled"
-                        }`
-                    );
+                return;
 
-
-                    return;
-
-                }
+            }
 
 
 
@@ -811,7 +809,7 @@ FRTools.GUI = {
                         ([optionId, option]) => {
 
 
-                            const optionEnabled =
+                            const optionValue =
                                 FRTools.Settings.getModuleOption(
                                     module.id,
                                     optionId
@@ -828,14 +826,78 @@ FRTools.GUI = {
                                 "frtools-module-option";
 
 
+                            let control = "";
+
+
+                            /*
+                            * Select option
+                            */
+
+                            if (
+                                option.type === "select"
+                            ) {
+
+
+                                const values =
+                                    typeof option.values === "function"
+                                        ? option.values()
+                                        : [];
+
+
+                                control = `
+
+                                    <select
+                                        data-module-option="${module.id}"
+                                        data-option="${optionId}"
+                                    >
+
+                                        ${
+                                            values.map(item => `
+
+                                                <option
+                                                    value="${item.value}"
+                                                    ${
+                                                        optionValue === item.value
+                                                            ? "selected"
+                                                            : ""
+                                                    }
+                                                >
+                                                    ${item.label}
+                                                </option>
+
+                                            `).join("")
+                                        }
+
+                                    </select>
+
+                                `;
+
+                            }
+
+
+                            /*
+                            * Default checkbox option
+                            */
+
+                            else {
+
+                                control = `
+
+                                    <input
+                                        type="checkbox"
+                                        data-module-option="${module.id}"
+                                        data-option="${optionId}"
+                                        ${optionValue ? "checked" : ""}
+                                    >
+
+                                `;
+
+                            }
+
+
                             optionContainer.innerHTML = `
 
-                                <input
-                                    type="checkbox"
-                                    data-module-option="${module.id}"
-                                    data-option="${optionId}"
-                                    ${optionEnabled ? "checked" : ""}
-                                >
+                                ${control}
 
 
                                 <label>
