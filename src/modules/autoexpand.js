@@ -123,39 +123,54 @@ FRTools.Module.register({
 
     expandHiddenRows() {
 
-        document
-            .querySelectorAll(
-                'tr.fr_childrow[style*="display:none"]'
-            )
-            .forEach(row => {
+        if (this.expanding) {
+            return;
+        }
 
-                row.style.display = "";
+        this.expanding = true;
 
-            });
+        try {
 
+            document
+                .querySelectorAll(
+                    'tr.fr_childrow[style*="display:none"]'
+                )
+                .forEach(row => {
 
-        document
-            .querySelectorAll(
-                "tr.fr_childrow"
-            )
-            .forEach(row => {
+                    row.style.display = "";
 
-                const text =
-                    row.textContent
-                        .trim()
-                        .toLowerCase();
+                });
 
 
-                if (
-                    text.includes("exhibits hidden") ||
-                    text.includes("exhibis hidden")
-                ) {
+            document
+                .querySelectorAll(
+                    "tr.fr_childrow"
+                )
+                .forEach(row => {
 
-                    row.style.display = "none";
+                    const text =
+                        row.textContent
+                            .trim()
+                            .toLowerCase();
 
-                }
 
-            });
+                    if (
+                        text.includes("exhibits hidden") ||
+                        text.includes("exhibis hidden")
+                    ) {
+
+                        row.style.display = "none";
+
+                    }
+
+                });
+
+        }
+        finally {
+
+            this.expanding = false;
+
+        }
 
     },
 

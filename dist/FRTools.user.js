@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.0.18
+// @version      4.0.19
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -1671,39 +1671,54 @@ FRTools.Module.register({
 
     expandHiddenRows() {
 
-        document
-            .querySelectorAll(
-                'tr.fr_childrow[style*="display:none"]'
-            )
-            .forEach(row => {
+        if (this.expanding) {
+            return;
+        }
 
-                row.style.display = "";
+        this.expanding = true;
 
-            });
+        try {
 
+            document
+                .querySelectorAll(
+                    'tr.fr_childrow[style*="display:none"]'
+                )
+                .forEach(row => {
 
-        document
-            .querySelectorAll(
-                "tr.fr_childrow"
-            )
-            .forEach(row => {
+                    row.style.display = "";
 
-                const text =
-                    row.textContent
-                        .trim()
-                        .toLowerCase();
+                });
 
 
-                if (
-                    text.includes("exhibits hidden") ||
-                    text.includes("exhibis hidden")
-                ) {
+            document
+                .querySelectorAll(
+                    "tr.fr_childrow"
+                )
+                .forEach(row => {
 
-                    row.style.display = "none";
+                    const text =
+                        row.textContent
+                            .trim()
+                            .toLowerCase();
 
-                }
 
-            });
+                    if (
+                        text.includes("exhibits hidden") ||
+                        text.includes("exhibis hidden")
+                    ) {
+
+                        row.style.display = "none";
+
+                    }
+
+                });
+
+        }
+        finally {
+
+            this.expanding = false;
+
+        }
 
     },
 
