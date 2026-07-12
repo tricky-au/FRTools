@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.1.1
+// @version      4.1.2
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -2588,14 +2588,27 @@ FRTools.Module.register({
 
     getCurrentPageTitle() {
 
-        const path =
+        const file =
             location.pathname
                 .split("/")
                 .pop();
 
 
-        return this.pageTitles[path]
-            || "";
+        if (
+            this.pageTitles[file]
+        ) {
+
+            return this.pageTitles[file];
+
+        }
+
+
+        return file
+            .replace(".cfm", "")
+            .replaceAll("_", " ")
+            .replace(/\b\w/g, c =>
+                c.toUpperCase()
+            );
 
     },
 

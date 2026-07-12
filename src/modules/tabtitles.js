@@ -342,14 +342,27 @@ FRTools.Module.register({
 
     getCurrentPageTitle() {
 
-        const path =
+        const file =
             location.pathname
                 .split("/")
                 .pop();
 
 
-        return this.pageTitles[path]
-            || "";
+        if (
+            this.pageTitles[file]
+        ) {
+
+            return this.pageTitles[file];
+
+        }
+
+
+        return file
+            .replace(".cfm", "")
+            .replaceAll("_", " ")
+            .replace(/\b\w/g, c =>
+                c.toUpperCase()
+            );
 
     },
 
