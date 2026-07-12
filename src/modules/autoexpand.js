@@ -6,24 +6,40 @@ FRTools.Module.register({
 
     description: "Automatically expands hidden exhibit sections on worklists.",
 
-    version: "1.1.0",
+    version: "1.2.0",
 
     author: "FR Tools",
 
     enabledByDefault: false,
 
 
+    options: {
+
+        sortExpandedExhibits: {
+
+            name: "Sort expanded exhibits",
+
+            description:
+                "Sort exhibits after expanding hidden worklist sections.",
+
+            default: false
+
+        }
+
+    },
+
+
     matches(location) {
 
-    return (
-        location.pathname.includes(
-            "/main/worklists/personal_worklist.cfm"
-        )
-        ||
-        location.pathname.includes(
-            "/main/worklists/unit_worklist.cfm"
-        )
-    );
+        return (
+            location.pathname.includes(
+                "/main/worklists/personal_worklist.cfm"
+            )
+            ||
+            location.pathname.includes(
+                "/main/worklists/unit_worklist.cfm"
+            )
+        );
 
     },
 
@@ -34,11 +50,37 @@ FRTools.Module.register({
             "[FR Tools] Auto Expand loaded"
         );
 
+
         this.expandHiddenRows();
+
+
+        if (
+            FRTools.Settings.getModuleOption(
+                this.id,
+                "sortExpandedExhibits"
+            )
+        ) {
+
+            this.sortExpandedExhibits();
+
+        }
+
 
         this.observer = new MutationObserver(() => {
 
             this.expandHiddenRows();
+
+
+            if (
+                FRTools.Settings.getModuleOption(
+                    this.id,
+                    "sortExpandedExhibits"
+                )
+            ) {
+
+                this.sortExpandedExhibits();
+
+            }
 
         });
 
@@ -102,6 +144,79 @@ FRTools.Module.register({
 
     },
 
+
+    sortExpandedExhibits() {
+
+        if (this.sorting) {
+            return;
+        }
+
+        this.sorting = true;
+
+
+        console.log(
+            "[FR Tools] Sorting expanded exhibits"
+        );
+
+
+        document
+            .querySelectorAll(
+                "tr[class*='childRow_Report-']"
+            )
+            .forEach(row => {
+
+                const className =
+                    [...row.classList]
+                        .find(
+                            c =>
+                            c.startsWith(
+                                "childRow_Report-"
+                            )
+                        );
+
+
+                if (!className) {
+                    return;
+                }
+
+
+                const rows =
+                    [
+                        ...document.querySelectorAll(
+                            "." + className
+                        )
+                    ];
+
+
+                rows.sort((a, b) => {
+
+                    const aRef =
+                        a.textContent.match(
+                            /\d{6}-[A-Z]-\d{4}-\d{4}/
+                        )?.[0] || "";
+
+
+                    const bRef =
+                        b.textContent.match(
+                            /\d{6}-[A-Z]-\d{4}-\d{4}/
+                        )?.[0] || "";
+
+
+                    return aRef.localeCompare(bRef);
+
+                });
+
+
+                rows.forEach(r => {
+
+                    r.parentNode.appendChild(r);
+
+                });
+
+
+            });
+        this.sorting = false;
+    },
 
     destroy() {
 

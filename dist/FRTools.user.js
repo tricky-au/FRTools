@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.0.14
+// @version      4.0.15
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -179,42 +179,56 @@
 
 FRTools.GUI = {
 
-        notify(message) {
+    notify(message) {
 
-        let notification = document.getElementById(
-            "frtools-notification"
-        );
+        let notification =
+            document.getElementById(
+                "frtools-notification"
+            );
 
 
         if (!notification) {
 
-            notification = document.createElement("div");
+            notification =
+                document.createElement("div");
 
-            notification.id = "frtools-notification";
+            notification.id =
+                "frtools-notification";
 
-            document.body.appendChild(notification);
+            document.body.appendChild(
+                notification
+            );
 
         }
 
 
-        notification.textContent = message;
+        notification.textContent =
+            message;
 
-        notification.classList.add("show");
+        notification.classList.add(
+            "show"
+        );
 
 
         setTimeout(() => {
 
-            notification.classList.remove("show");
+            notification.classList.remove(
+                "show"
+            );
 
         }, 4500);
 
     },
 
+
     init() {
 
         if (FRTools.state.uiInitialized) {
+
             return;
+
         }
+
 
         this.addStyles();
 
@@ -230,31 +244,52 @@ FRTools.GUI = {
         GM_addStyle(`
 
             #frtools-button {
+
                 position: fixed;
+
                 bottom: 20px;
+
                 right: 20px;
+
                 z-index: 999999;
+
                 background: #1e88e5;
+
                 color: white;
+
                 border: none;
+
                 border-radius: 50px;
+
                 padding: 10px 14px;
+
                 font-size: 13px;
+
                 font-weight: 600;
+
                 cursor: pointer;
-                box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+
+                box-shadow:
+                    0 3px 10px rgba(0,0,0,0.25);
+
             }
 
 
             #frtools-modal {
 
                 position: fixed;
+
                 top: 50%;
+
                 left: 50%;
-                transform: translate(-50%, -50%);
+
+                transform:
+                    translate(-50%, -50%);
 
                 width: 520px;
+
                 max-height: 70vh;
+
                 overflow: auto;
 
                 background: white;
@@ -263,7 +298,8 @@ FRTools.GUI = {
 
                 border-radius: 10px;
 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+                box-shadow:
+                    0 10px 30px rgba(0,0,0,0.4);
 
                 display: none;
 
@@ -278,7 +314,8 @@ FRTools.GUI = {
 
                 inset: 0;
 
-                background: rgba(0,0,0,0.4);
+                background:
+                    rgba(0,0,0,0.4);
 
                 z-index: 999999;
 
@@ -323,7 +360,21 @@ FRTools.GUI = {
 
             }
 
-                #frtools-notification {
+
+            .frtools-module-option {
+
+                margin-left: 28px;
+
+                margin-top: 6px;
+
+                margin-bottom: 10px;
+
+                font-size: 13px;
+
+            }
+
+
+            #frtools-notification {
 
                 position: fixed;
 
@@ -343,11 +394,13 @@ FRTools.GUI = {
 
                 font-size: 13px;
 
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                box-shadow:
+                    0 4px 12px rgba(0,0,0,0.3);
 
                 opacity: 0;
 
-                transition: opacity 0.3s ease;
+                transition:
+                    opacity 0.3s ease;
 
             }
 
@@ -358,433 +411,696 @@ FRTools.GUI = {
 
             }
 
-            .frtools-module-option {
-
-                margin-left: 28px;
-
-                margin-top: 6px;
-
-                margin-bottom: 10px;
-
-                font-size: 13px;
-
-            }
-
 
         `);
 
     },
 
 
-createUI() {
+    createUI() {
 
-    const btn = document.createElement("button");
-    btn.id = "frtools-button";
-    btn.textContent = "FR Tools";
+        const btn =
+            document.createElement(
+                "button"
+            );
 
-    const overlay = document.createElement("div");
-    overlay.id = "frtools-overlay";
+        btn.id =
+            "frtools-button";
 
-    const modal = document.createElement("div");
-    modal.id = "frtools-modal";
+        btn.textContent =
+            "FR Tools";
 
-    // -------------------------
-    // Title
-    // -------------------------
 
-    const title = document.createElement("div");
-    title.className = "frtools-title";
-    title.textContent = "FR Tools";
+        const overlay =
+            document.createElement(
+                "div"
+            );
 
-    modal.appendChild(title);
+        overlay.id =
+            "frtools-overlay";
 
-    // -------------------------
-    // Modules
-    // -------------------------
 
-    const moduleSection = document.createElement("div");
-    moduleSection.className = "frtools-section";
+        const modal =
+            document.createElement(
+                "div"
+            );
 
-    const moduleHeading = document.createElement("strong");
-    moduleHeading.textContent = "Modules";
+        modal.id =
+            "frtools-modal";
 
-    moduleSection.appendChild(moduleHeading);
 
-    const moduleContainer = document.createElement("div");
-    moduleContainer.id = "frtools-modules";
+        const title =
+            document.createElement(
+                "div"
+            );
 
-    FRTools.Module.all().forEach(module => {
+        title.className =
+            "frtools-title";
 
-        const enabled = FRTools.Settings.getModuleState(
-            module.id,
-            module.enabledByDefault !== false
+        title.textContent =
+            "FR Tools";
+
+
+        modal.appendChild(
+            title
         );
 
-        const row = document.createElement("div");
-        row.className = "frtools-module";
 
-        row.innerHTML = `
-            <input
-                type="checkbox"
-                data-module="${module.id}"
-                ${enabled ? "checked" : ""}
-            >
+        const moduleSection =
+            document.createElement(
+                "div"
+            );
 
-            <label>
-                <strong>${module.name}</strong><br>
+        moduleSection.className =
+            "frtools-section";
 
-                <small>
-                    ${module.description || ""}
-                    <br>
-                    Version: ${module.version || "1.0.0"}
-                    <br>
-                    Author: ${module.author || "Unknown"}
-                </small>
-            </label>
+
+        const moduleHeading =
+            document.createElement(
+                "strong"
+            );
+
+        moduleHeading.textContent =
+            "Modules";
+
+
+        moduleSection.appendChild(
+            moduleHeading
+        );
+
+
+        const moduleContainer =
+            document.createElement(
+                "div"
+            );
+
+        moduleContainer.id =
+            "frtools-modules";
+
+
+        modal.appendChild(
+            moduleSection
+        );
+
+
+        moduleSection.appendChild(
+            moduleContainer
+        );
+
+
+        this.renderModules(
+            moduleContainer
+        );
+
+
+        const settingsSection =
+            document.createElement(
+                "div"
+            );
+
+        settingsSection.className =
+            "frtools-section";
+
+
+        settingsSection.innerHTML = `
+
+            <strong>
+                Settings
+            </strong>
+
+            <br><br>
+
+
+            <button id="frtools-export-settings">
+                Export Settings
+            </button>
+
+
+            <br><br>
+
+
+            <button id="frtools-import-settings">
+                Import Settings
+            </button>
+
+
+            <br><br>
+
+
+            <button id="frtools-reset-settings">
+                Reset Settings
+            </button>
+
         `;
 
-        moduleContainer.appendChild(row);
 
-        if (
-            typeof module.settingsUI === "function"
-        ) {
+        modal.appendChild(
+            settingsSection
+        );
 
-            const settings =
-                module.settingsUI();
-
-
-            if (settings) {
-
-                const option =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                option.className =
-                    "frtools-module-option";
-
-
-                option.innerHTML =
-                    settings.html;
-
-
-                moduleContainer.appendChild(
-                    option
-                );
-
-
-                if (
-                    typeof settings.init === "function"
-                ) {
-
-                    settings.init(
-                        option
-                    );
-
-                }
-
-            }
-
-        }
-
-    });
-
-    moduleSection.appendChild(moduleContainer);
-
-    modal.appendChild(moduleSection);
-
-    // -------------------------
-    // Settings
-    // -------------------------
-
-    const settingsSection = document.createElement("div");
-    settingsSection.className = "frtools-section";
-
-    settingsSection.innerHTML = `
-        <strong>Settings</strong>
-        <br><br>
-
-        <button id="frtools-export-settings">
-            Export Settings
-        </button>
-
-        <br><br>
-
-        <button id="frtools-import-settings">
-            Import Settings
-        </button>
-
-        <br><br>
-
-        <button id="frtools-reset-settings">
-            Reset Settings
-        </button>
-    `;
-
-    modal.appendChild(settingsSection);
-
-    settingsSection
-        .querySelector("#frtools-export-settings")
-        .addEventListener("click", () => {
-
-            const json = FRTools.Settings.exportSettings();
-
-            const blob = new Blob(
-                [json],
-                {
-                    type: "application/json"
-                }
+        const importInput =
+            document.createElement(
+                "input"
             );
 
-            const url = URL.createObjectURL(blob);
+        importInput.type =
+            "file";
 
-            const link = document.createElement("a");
+        importInput.accept =
+            "application/json";
 
-            link.href = url;
-            link.download = "FRTools-Settings.json";
+        importInput.style.display =
+            "none";
 
-            document.body.appendChild(link);
 
-            link.click();
-
-            document.body.removeChild(link);
-
-            URL.revokeObjectURL(url);
-
-            FRTools.GUI.notify(
-                "Settings exported"
-            );
-
-        });
-
-        const importInput = document.createElement("input");
-
-        importInput.type = "file";
-        importInput.accept = "application/json";
-        importInput.style.display = "none";
-
-        document.body.appendChild(importInput);
+        document.body.appendChild(
+            importInput
+        );
 
 
         settingsSection
-            .querySelector("#frtools-import-settings")
-            .addEventListener("click", () => {
+            .querySelector(
+                "#frtools-export-settings"
+            )
+            .addEventListener(
+                "click",
+                () => {
 
-                importInput.click();
-
-            });
-
-
-        importInput.addEventListener("change", event => {
-
-            const file = event.target.files[0];
-
-            if (!file) {
-                return;
-            }
+                    const json =
+                        FRTools.Settings.exportSettings();
 
 
-            const reader = new FileReader();
+                    const blob =
+                        new Blob(
+                            [
+                                json
+                            ],
+                            {
+                                type:
+                                    "application/json"
+                            }
+                        );
 
 
-            reader.onload = () => {
+                    const url =
+                        URL.createObjectURL(
+                            blob
+                        );
 
-                try {
+
+                    const link =
+                        document.createElement(
+                            "a"
+                        );
+
+
+                    link.href =
+                        url;
+
+
+                    link.download =
+                        "FRTools-Settings.json";
+
+
+                    document.body.appendChild(
+                        link
+                    );
+
+
+                    link.click();
+
+
+                    document.body.removeChild(
+                        link
+                    );
+
+
+                    URL.revokeObjectURL(
+                        url
+                    );
+
+
+                    FRTools.GUI.notify(
+                        "Settings exported"
+                    );
+
+                }
+            );
+
+
+        settingsSection
+            .querySelector(
+                "#frtools-import-settings"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    importInput.click();
+
+                }
+            );
+
+
+        importInput.addEventListener(
+            "change",
+            event => {
+
+                const file =
+                    event.target.files[0];
+
+
+                if (!file) {
+
+                    return;
+
+                }
+
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload = () => {
+
+                    try {
 
                         FRTools.Settings.importSettings(
                             reader.result
                         );
 
-                        refreshModules();
+
+                        this.renderModules(
+                            document.getElementById(
+                                "frtools-modules"
+                            )
+                        );
+
 
                         FRTools.GUI.notify(
                             "Settings imported"
                         );
 
-                }
-                catch(error) {
 
-                    console.error(
-                        "[FR Tools] Import failed",
-                        error
+                    }
+                    catch(error) {
+
+                        console.error(
+                            "[FR Tools] Import failed",
+                            error
+                        );
+
+
+                        FRTools.GUI.notify(
+                            "Import failed"
+                        );
+
+                    }
+
+                };
+
+
+                reader.readAsText(
+                    file
+                );
+
+            }
+        );
+
+
+        settingsSection
+            .querySelector(
+                "#frtools-reset-settings"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    const confirmed =
+                        confirm(
+                            "Reset FR Tools settings?\n\nThis will restore all modules to their default state."
+                        );
+
+
+                    if (!confirmed) {
+
+                        return;
+
+                    }
+
+
+                    FRTools.Settings.resetSettings();
+
+
+                    this.renderModules(
+                        document.getElementById(
+                            "frtools-modules"
+                        )
+                    );
+
+
+                    FRTools.GUI.notify(
+                        "Settings reset"
+                    );
+
+                }
+            );
+
+
+        function open() {
+
+            overlay.style.display =
+                "block";
+
+
+            modal.style.display =
+                "block";
+
+
+            FRTools.state.uiOpen =
+                true;
+
+        }
+
+
+        function close() {
+
+            overlay.style.display =
+                "none";
+
+
+            modal.style.display =
+                "none";
+
+
+            FRTools.state.uiOpen =
+                false;
+
+        }
+
+
+        btn.addEventListener(
+            "click",
+            () => {
+
+                FRTools.state.uiOpen
+                    ? close()
+                    : open();
+
+            }
+        );
+
+
+        overlay.addEventListener(
+            "click",
+            close
+        );
+
+
+        modal.addEventListener(
+            "change",
+            event => {
+
+
+                if (
+                    event.target.matches(
+                        "input[data-module-option]"
+                    )
+                ) {
+
+
+                    FRTools.Settings.setModuleOption(
+                        event.target.dataset.moduleOption,
+                        event.target.dataset.option,
+                        event.target.checked
+                    );
+
+
+                    FRTools.GUI.notify(
+                        `${event.target.dataset.option}: ${
+                            event.target.checked
+                            ? "Enabled"
+                            : "Disabled"
+                        }`
+                    );
+
+
+                    return;
+
+                }
+
+
+
+                if (
+                    !event.target.matches(
+                        "input[data-module]"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                const moduleId =
+                    event.target.dataset.module;
+
+
+                if (event.target.checked) {
+
+                    FRTools.Module.enable(
+                        moduleId
+                    );
+
+                }
+                else {
+
+                    FRTools.Module.disable(
+                        moduleId
                     );
 
                 }
 
-            };
+
+            }
+        );
 
 
-            reader.readAsText(file);
+        document.body.appendChild(
+            btn
+        );
 
-        });
 
-        settingsSection
-            .querySelector("#frtools-reset-settings")
-            .addEventListener("click", () => {
+        document.body.appendChild(
+            overlay
+        );
 
-                const confirmed = confirm(
-                    "Reset FR Tools settings?\n\nThis will restore all modules to their default state."
+
+        document.body.appendChild(
+            modal
+        );
+
+    },
+
+
+    renderModules(container) {
+
+        if (!container) {
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            "";
+
+
+        FRTools.Module.all()
+            .forEach(module => {
+
+
+                const enabled =
+                    FRTools.Settings.getModuleState(
+                        module.id,
+                        module.enabledByDefault !== false
+                    );
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "frtools-module";
+
+
+                row.innerHTML = `
+
+                    <input
+                        type="checkbox"
+                        data-module="${module.id}"
+                        ${enabled ? "checked" : ""}
+                    >
+
+
+                    <label>
+
+                        <strong>
+                            ${module.name}
+                        </strong>
+
+
+                        <br>
+
+
+                        <small>
+
+                            ${module.description || ""}
+
+                            <br>
+
+                            Version:
+                            ${module.version || "1.0.0"}
+
+                            <br>
+
+                            Author:
+                            ${module.author || "Unknown"}
+
+                        </small>
+
+                    </label>
+
+                `;
+
+
+                container.appendChild(
+                    row
                 );
 
+                if (module.options) {
 
-                if (!confirmed) {
-                    return;
+                    Object.entries(
+                        module.options
+                    )
+                    .forEach(
+                        ([optionId, option]) => {
+
+
+                            const optionEnabled =
+                                FRTools.Settings.getModuleOption(
+                                    module.id,
+                                    optionId
+                                );
+
+
+                            const optionContainer =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            optionContainer.className =
+                                "frtools-module-option";
+
+
+                            optionContainer.innerHTML = `
+
+                                <input
+                                    type="checkbox"
+                                    data-module-option="${module.id}"
+                                    data-option="${optionId}"
+                                    ${optionEnabled ? "checked" : ""}
+                                >
+
+
+                                <label>
+
+                                    <strong>
+                                        ${option.name}
+                                    </strong>
+
+
+                                    <br>
+
+
+                                    <small>
+                                        ${option.description || ""}
+                                    </small>
+
+                                </label>
+
+                            `;
+
+
+                            container.appendChild(
+                                optionContainer
+                            );
+
+
+                        }
+                    );
+
                 }
 
 
-                FRTools.Settings.resetSettings();
 
-                refreshModules();
+                if (
+                    typeof module.settingsUI === "function"
+                ) {
 
 
-                FRTools.GUI.notify(
-                    "Settings reset"
-                );
+                    const settings =
+                        module.settingsUI();
+
+
+                    if (settings) {
+
+
+                        const option =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        option.className =
+                            "frtools-module-option";
+
+
+                        option.innerHTML =
+                            settings.html;
+
+
+                        container.appendChild(
+                            option
+                        );
+
+
+                        if (
+                            typeof settings.init === "function"
+                        ) {
+
+
+                            settings.init(
+                                option
+                            );
+
+
+                        }
+
+                    }
+
+                }
+
 
             });
 
-        function refreshModules() {
-
-        const container = modal.querySelector(
-            "#frtools-modules"
-        );
-
-        if (!container) {
-            return;
-        }
-
-
-        container.innerHTML = "";
-
-
-        FRTools.Module.all().forEach(module => {
-
-            const enabled =
-                FRTools.Settings.getModuleState(
-                    module.id,
-                    module.enabledByDefault !== false
-                );
-
-
-            const row = document.createElement("div");
-
-            row.className = "frtools-module";
-
-
-            row.innerHTML = `
-
-                <input
-                    type="checkbox"
-                    data-module="${module.id}"
-                    ${enabled ? "checked" : ""}
-                >
-
-                <label>
-
-                    <strong>
-                        ${module.name}
-                    </strong>
-
-                    <br>
-
-                <small>
-                    ${module.description || ""}
-                    <br>
-                    Version: ${module.version || "1.0.0"}
-                    <br>
-                    Author: ${module.author || "Unknown"}
-                </small>
-
-                </label>
-
-            `;
-
-
-            container.appendChild(row);
-
-        });
 
     }
 
-    // -------------------------
-    // Open / Close
-    // -------------------------
-
-    function open() {
-
-        overlay.style.display = "block";
-        modal.style.display = "block";
-
-        FRTools.state.uiOpen = true;
-
-    }
-
-    function close() {
-
-        overlay.style.display = "none";
-        modal.style.display = "none";
-
-        FRTools.state.uiOpen = false;
-
-    }
-
-    btn.addEventListener("click", () => {
-
-        FRTools.state.uiOpen
-            ? close()
-            : open();
-
-    });
-
-    overlay.addEventListener("click", close);
-
-    // -------------------------
-    // Module toggle
-    // -------------------------
-
-    modal.addEventListener("change", event => {
-
-        if (!event.target.matches("input[data-module]")) {
-            return;
-        }
-
-
-        const moduleId = event.target.dataset.module;
-
-        const module = FRTools.Module.all()
-            .find(m => m.id === moduleId);
-
-        const moduleName = module
-            ? module.name
-            : moduleId;
-
-        const enabled = event.target.checked;
-
-
-        if (enabled) {
-
-            FRTools.Module.enable(
-                moduleId
-            );
-
-        }
-        else {
-
-            FRTools.Module.disable(
-                moduleId
-            );
-
-        }
-
-
-    });
-
-    document.body.appendChild(btn);
-    document.body.appendChild(overlay);
-    document.body.appendChild(modal);
-
-}
 
 };
 
@@ -1031,76 +1347,183 @@ FRTools.Settings = {
 
     },
 
+
+    getModuleOption(id, option) {
+
+        const module =
+            FRTools.Module.get(id);
+
+
+        if (
+            !module ||
+            !module.options ||
+            !module.options[option]
+        ) {
+
+            console.warn(
+                `[FR Tools] Unknown module option: ${id}.${option}`
+            );
+
+            return undefined;
+
+        }
+
+
+        const key =
+            `module_${id}_option_${option}`;
+
+
+        return FRTools.Storage.get(
+            key,
+            module.options[option].default ?? false
+        );
+
+    },
+
+
+    setModuleOption(id, option, value) {
+
+        const key =
+            `module_${id}_option_${option}`;
+
+
+        FRTools.Storage.set(
+            key,
+            value
+        );
+
+    },
+
+
     exportSettings() {
 
-    const settings = {
+        const settings = {
 
-        version: 1,
+            version: 1,
 
-        modules: {}
+            modules: {},
 
-    };
+            options: {}
+
+        };
 
 
-    FRTools.Module.all().forEach(module => {
+        FRTools.Module.all().forEach(module => {
 
-        settings.modules[module.id] =
-            this.getModuleState(
+            settings.modules[module.id] =
+                this.getModuleState(
+                    module.id,
+                    module.enabledByDefault !== false
+                );
+
+
+            if (module.options) {
+
+                settings.options[module.id] = {};
+
+
+                Object.keys(module.options)
+                    .forEach(option => {
+
+                        settings.options[module.id][option] =
+                            this.getModuleOption(
+                                module.id,
+                                option
+                            );
+
+                    });
+
+            }
+
+        });
+
+
+        return JSON.stringify(
+            settings,
+            null,
+            2
+        );
+
+    },
+
+
+    importSettings(json) {
+
+        const settings =
+            JSON.parse(json);
+
+
+        if (!settings.modules) {
+
+            throw new Error(
+                "Invalid settings file."
+            );
+
+        }
+
+
+        Object.entries(settings.modules)
+            .forEach(([id, enabled]) => {
+
+                this.setModuleState(
+                    id,
+                    enabled
+                );
+
+            });
+
+
+        if (settings.options) {
+
+            Object.entries(settings.options)
+                .forEach(([id, options]) => {
+
+                    Object.entries(options)
+                        .forEach(([option, value]) => {
+
+                            this.setModuleOption(
+                                id,
+                                option,
+                                value
+                            );
+
+                        });
+
+                });
+
+        }
+
+    },
+
+
+    resetSettings() {
+
+        FRTools.Module.all().forEach(module => {
+
+            this.setModuleState(
                 module.id,
                 module.enabledByDefault !== false
             );
 
-    });
 
+            if (module.options) {
 
-    return JSON.stringify(
-        settings,
-        null,
-        2
-    );
+                Object.keys(module.options)
+                    .forEach(option => {
 
-},
+                        this.setModuleOption(
+                            module.id,
+                            option,
+                            module.options[option].default ?? false
+                        );
 
+                    });
 
-importSettings(json) {
-
-    const settings = JSON.parse(json);
-
-
-    if (!settings.modules) {
-
-        throw new Error(
-            "Invalid settings file."
-        );
-
-    }
-
-
-    Object.entries(settings.modules)
-        .forEach(([id, enabled]) => {
-
-            this.setModuleState(
-                id,
-                enabled
-            );
+            }
 
         });
 
-},
-
-
-resetSettings() {
-
-    FRTools.Module.all().forEach(module => {
-
-        this.setModuleState(
-            module.id,
-            module.enabledByDefault !== false
-        );
-
-    });
-
-}
+    }
 
 };
 
@@ -1131,24 +1554,40 @@ FRTools.Module.register({
 
     description: "Automatically expands hidden exhibit sections on worklists.",
 
-    version: "1.1.0",
+    version: "1.2.0",
 
     author: "FR Tools",
 
     enabledByDefault: false,
 
 
+    options: {
+
+        sortExpandedExhibits: {
+
+            name: "Sort expanded exhibits",
+
+            description:
+                "Sort exhibits after expanding hidden worklist sections.",
+
+            default: false
+
+        }
+
+    },
+
+
     matches(location) {
 
-    return (
-        location.pathname.includes(
-            "/main/worklists/personal_worklist.cfm"
-        )
-        ||
-        location.pathname.includes(
-            "/main/worklists/unit_worklist.cfm"
-        )
-    );
+        return (
+            location.pathname.includes(
+                "/main/worklists/personal_worklist.cfm"
+            )
+            ||
+            location.pathname.includes(
+                "/main/worklists/unit_worklist.cfm"
+            )
+        );
 
     },
 
@@ -1159,11 +1598,37 @@ FRTools.Module.register({
             "[FR Tools] Auto Expand loaded"
         );
 
+
         this.expandHiddenRows();
+
+
+        if (
+            FRTools.Settings.getModuleOption(
+                this.id,
+                "sortExpandedExhibits"
+            )
+        ) {
+
+            this.sortExpandedExhibits();
+
+        }
+
 
         this.observer = new MutationObserver(() => {
 
             this.expandHiddenRows();
+
+
+            if (
+                FRTools.Settings.getModuleOption(
+                    this.id,
+                    "sortExpandedExhibits"
+                )
+            ) {
+
+                this.sortExpandedExhibits();
+
+            }
 
         });
 
@@ -1227,6 +1692,79 @@ FRTools.Module.register({
 
     },
 
+
+    sortExpandedExhibits() {
+
+        if (this.sorting) {
+            return;
+        }
+
+        this.sorting = true;
+
+
+        console.log(
+            "[FR Tools] Sorting expanded exhibits"
+        );
+
+
+        document
+            .querySelectorAll(
+                "tr[class*='childRow_Report-']"
+            )
+            .forEach(row => {
+
+                const className =
+                    [...row.classList]
+                        .find(
+                            c =>
+                            c.startsWith(
+                                "childRow_Report-"
+                            )
+                        );
+
+
+                if (!className) {
+                    return;
+                }
+
+
+                const rows =
+                    [
+                        ...document.querySelectorAll(
+                            "." + className
+                        )
+                    ];
+
+
+                rows.sort((a, b) => {
+
+                    const aRef =
+                        a.textContent.match(
+                            /\d{6}-[A-Z]-\d{4}-\d{4}/
+                        )?.[0] || "";
+
+
+                    const bRef =
+                        b.textContent.match(
+                            /\d{6}-[A-Z]-\d{4}-\d{4}/
+                        )?.[0] || "";
+
+
+                    return aRef.localeCompare(bRef);
+
+                });
+
+
+                rows.forEach(r => {
+
+                    r.parentNode.appendChild(r);
+
+                });
+
+
+            });
+        this.sorting = false;
+    },
 
     destroy() {
 
