@@ -50,7 +50,10 @@ FRTools.Module.register({
             "[FR Tools] Auto Expand loaded"
         );
 
+
         this.sorting = false;
+
+
         this.expandHiddenRows();
 
 
@@ -66,36 +69,36 @@ FRTools.Module.register({
         }
 
 
-let sortTimer = null;
+        let sortTimer = null;
 
 
-this.observer = new MutationObserver(() => {
+        this.observer = new MutationObserver(() => {
 
 
-    this.expandHiddenRows();
+            this.expandHiddenRows();
 
 
-    if (
-        FRTools.Settings.getModuleOption(
-            this.id,
-            "sortExpandedExhibits"
-        )
-    ) {
+            if (
+                FRTools.Settings.getModuleOption(
+                    this.id,
+                    "sortExpandedExhibits"
+                )
+            ) {
 
 
-        clearTimeout(sortTimer);
+                clearTimeout(sortTimer);
 
 
-        sortTimer = setTimeout(() => {
+                sortTimer = setTimeout(() => {
 
-            this.sortExpandedExhibits();
+                    this.sortExpandedExhibits();
 
-        }, 500);
+                }, 500);
 
-    }
+            }
 
 
-});
+        });
 
 
         const tbody =
@@ -109,7 +112,7 @@ this.observer = new MutationObserver(() => {
             this.observer.observe(
                 tbody,
                 {
-                    childList: true,
+                    childList: true
                 }
             );
 
@@ -157,133 +160,147 @@ this.observer = new MutationObserver(() => {
     },
 
 
-sortExpandedExhibits() {
+    sortExpandedExhibits() {
 
-    if (this.sorting) {
-        return;
-    }
-
-
-    this.sorting = true;
+        if (this.sorting) {
+            return;
+        }
 
 
-    console.log(
-        "[FR Tools] Sorting expanded exhibits"
-    );
+        this.sorting = true;
 
 
-    try {
-
-        const groups = {};
-
-
-        document
-            .querySelectorAll(
-                "tr[class*='childRow_Report-']"
-            )
-            .forEach(row => {
+        console.log(
+            "[FR Tools] Sorting expanded exhibits"
+        );
 
 
-                const className =
-                    [...row.classList]
-                        .find(
-                            c =>
-                            c.startsWith(
-                                "childRow_Report-"
-                            )
+        try {
+
+            const groups = {};
+
+
+            document
+                .querySelectorAll(
+                    "tr[class*='childRow_Report-']"
+                )
+                .forEach(row => {
+
+
+                    const className =
+                        [...row.classList]
+                            .find(
+                                c =>
+                                c.startsWith(
+                                    "childRow_Report-"
+                                )
+                            );
+
+
+                    if (!className) {
+                        return;
+                    }
+
+
+                    if (!groups[className]) {
+
+                        groups[className] = [];
+
+                    }
+
+
+                    groups[className].push(row);
+
+
+                });
+
+
+
+            Object.values(groups)
+                .forEach(rows => {
+
+
+                    if (rows.length < 2) {
+                        return;
+                    }
+
+
+                    rows.sort((a, b) => {
+
+
+                        const aRef =
+                            a.textContent.match(
+                                /\d{6}-[A-Z]-\d{4}-\d{4}/
+                            )?.[0] || "";
+
+
+                        const bRef =
+                            b.textContent.match(
+                                /\d{6}-[A-Z]-\d{4}-\d{4}/
+                            )?.[0] || "";
+
+
+                        return aRef.localeCompare(
+                            bRef
                         );
 
 
-                if (!className) {
-                    return;
-                }
-
-
-                if (!groups[className]) {
-
-                    groups[className] = [];
-
-                }
-
-
-                groups[className].push(row);
-
-
-            });
+                    });
 
 
 
-        Object.values(groups)
-            .forEach(rows => {
+                    const parent =
+                        rows[0].parentNode;
 
 
-                if (rows.length < 2) {
-                    return;
-                }
+                    const placeholder =
+                        document.createComment(
+                            "FR Tools exhibit sort"
+                        );
 
 
-                rows.sort((a, b) => {
-
-
-                    const aRef =
-                        a.textContent.match(
-                            /\d{6}-[A-Z]-\d{4}-\d{4}/
-                        )?.[0] || "";
-
-
-                    const bRef =
-                        b.textContent.match(
-                            /\d{6}-[A-Z]-\d{4}-\d{4}/
-                        )?.[0] || "";
-
-
-                    return aRef.localeCompare(
-                        bRef
+                    parent.insertBefore(
+                        placeholder,
+                        rows[0]
                     );
 
 
+                    const fragment =
+                        document.createDocumentFragment();
+
+
+                    rows.forEach(row => {
+
+                        fragment.appendChild(row);
+
+                    });
+
+
+                    placeholder.parentNode.insertBefore(
+                        fragment,
+                        placeholder
+                    );
+
+
+                    placeholder.remove();
+
+
                 });
 
 
-                const firstRow = rows[0];
+        }
+        finally {
 
+            setTimeout(() => {
 
-                const parent =
-                    firstRow.parentNode;
+                this.sorting = false;
 
+            }, 1000);
 
-                const fragment =
-                    document.createDocumentFragment();
+        }
 
+    },
 
-                rows.forEach(row => {
-
-                    fragment.appendChild(row);
-
-                });
-
-
-                parent.insertBefore(
-                    fragment,
-                    firstRow
-                );
-
-
-            });
-
-
-    }
-    finally {
-
-        setTimeout(() => {
-
-            this.sorting = false;
-
-        }, 1000);
-
-    }
-
-},
 
     destroy() {
 
