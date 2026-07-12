@@ -75,24 +75,40 @@
                     );
 
 
+                if (!enabled) {
+
+                    console.log(
+                        `[FR Tools] Disabled module: ${module.id}`
+                    );
+
+                    return;
+
+                }
+
+
                 if (
-                    enabled &&
+                    typeof module.matches === "function" &&
+                    !module.matches(window.location)
+                ) {
+
+                    console.log(
+                        `[FR Tools] Skipping module (page mismatch): ${module.id}`
+                    );
+
+                    return;
+
+                }
+
+
+                if (
                     typeof module.init === "function"
                 ) {
 
                     console.log(
-                        `[FR Tools] Starting module: ${module.name}`
+                        `[FR Tools] Starting module: ${module.id}`
                     );
-
 
                     module.init();
-
-                }
-                else {
-
-                    console.log(
-                        `[FR Tools] Disabled module: ${module.name}`
-                    );
 
                 }
 

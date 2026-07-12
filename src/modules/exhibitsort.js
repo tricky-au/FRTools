@@ -155,6 +155,8 @@ FRTools.Module.register({
 
         settingsUI() {
 
+            const moduleName = this.name;
+
             return {
 
                 html: `
@@ -211,7 +213,7 @@ FRTools.Module.register({
 
 
                             FRTools.GUI.notify(
-                                `${this.name}: ${
+                                `${moduleName}: ${
                                     select.value === "asc"
                                         ? "Ascending"
                                         : "Descending"
