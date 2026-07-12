@@ -12,8 +12,13 @@ FRTools.Module.register({
 
     enabledByDefault: true,
 
-
     observer: null,
+
+    settings: {
+
+    direction: "asc"
+
+        },
 
 
     getSortKey(row) {
@@ -42,12 +47,27 @@ FRTools.Module.register({
         ];
 
 
-        rows.sort((a, b) =>
-            this.getSortKey(a)
-                .localeCompare(
-                    this.getSortKey(b)
-                )
-        );
+        const direction =
+            FRTools.Storage.get(
+                "exhibitsort_direction",
+                "asc"
+            );
+
+
+        rows.sort((a, b) => {
+
+            const result =
+                this.getSortKey(a)
+                    .localeCompare(
+                        this.getSortKey(b)
+                    );
+
+
+            return direction === "desc"
+                ? -result
+                : result;
+
+        });
 
 
         rows.forEach(row => {

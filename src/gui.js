@@ -179,6 +179,18 @@ FRTools.GUI = {
 
             }
 
+            .frtools-module-option {
+
+                margin-left: 28px;
+
+                margin-top: 6px;
+
+                margin-bottom: 10px;
+
+                font-size: 13px;
+
+            }
+
 
         `);
 
@@ -243,16 +255,80 @@ createUI() {
                 <strong>${module.name}</strong><br>
 
                 <small>
-                ${module.description || ""}
-                <br>
-                Version: ${module.version || "1.0.0"}
-                <br>
-                Author: ${module.author || "Unknown"}
+                    ${module.description || ""}
+                    <br>
+                    Version: ${module.version || "1.0.0"}
+                    <br>
+                    Author: ${module.author || "Unknown"}
                 </small>
             </label>
         `;
 
         moduleContainer.appendChild(row);
+
+        if (module.id === "exhibitsort") {
+
+        const option = document.createElement("div");
+
+        option.className = "frtools-module-option";
+
+
+        option.innerHTML = `
+            <label>
+                Sort Direction:
+                <select id="exhibitsort-direction">
+
+                    <option value="asc">
+                        Ascending
+                    </option>
+
+                    <option value="desc">
+                        Descending
+                    </option>
+
+                </select>
+            </label>
+        `;
+
+
+        const select =
+            option.querySelector(
+                "#exhibitsort-direction"
+            );
+
+
+        select.value =
+            FRTools.Storage.get(
+                "exhibitsort_direction",
+                "asc"
+            );
+
+
+        select.addEventListener(
+            "change",
+            () => {
+
+                FRTools.Storage.set(
+                    "exhibitsort_direction",
+                    select.value
+                );
+
+
+                FRTools.GUI.notify(
+                    `Exhibit Sort: ${
+                        select.value === "asc"
+                            ? "Ascending"
+                            : "Descending"
+                    }`
+                );
+
+            }
+        );
+
+
+        moduleContainer.appendChild(option);
+
+    }
 
     });
 
