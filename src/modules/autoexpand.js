@@ -50,7 +50,7 @@ FRTools.Module.register({
             "[FR Tools] Auto Expand loaded"
         );
 
-
+        this.sorting = false;
         this.expandHiddenRows();
 
 
@@ -66,23 +66,36 @@ FRTools.Module.register({
         }
 
 
-        this.observer = new MutationObserver(() => {
-
-            this.expandHiddenRows();
+let sortTimer = null;
 
 
-            if (
-                FRTools.Settings.getModuleOption(
-                    this.id,
-                    "sortExpandedExhibits"
-                )
-            ) {
+this.observer = new MutationObserver(() => {
 
-                this.sortExpandedExhibits();
 
-            }
+    this.expandHiddenRows();
 
-        });
+
+    if (
+        FRTools.Settings.getModuleOption(
+            this.id,
+            "sortExpandedExhibits"
+        )
+    ) {
+
+
+        clearTimeout(sortTimer);
+
+
+        sortTimer = setTimeout(() => {
+
+            this.sortExpandedExhibits();
+
+        }, 500);
+
+    }
+
+
+});
 
 
         const tbody =
@@ -97,7 +110,6 @@ FRTools.Module.register({
                 tbody,
                 {
                     childList: true,
-                    subtree: true
                 }
             );
 
@@ -145,18 +157,18 @@ FRTools.Module.register({
     },
 
 
-    sortExpandedExhibits() {
+sortExpandedExhibits() {
 
-        if (this.sorting) {
-            return;
-        }
+    if (this.sorting) {
+        return;
+    }
 
-        this.sorting = true;
+    this.sorting = true;
 
 
-        console.log(
-            "[FR Tools] Sorting expanded exhibits"
-        );
+    try {
+
+        const groups = {};
 
 
         document
@@ -168,8 +180,7 @@ FRTools.Module.register({
                 const className =
                     [...row.classList]
                         .find(
-                            c =>
-                            c.startsWith(
+                            c => c.startsWith(
                                 "childRow_Report-"
                             )
                         );
@@ -180,15 +191,21 @@ FRTools.Module.register({
                 }
 
 
-                const rows =
-                    [
-                        ...document.querySelectorAll(
-                            "." + className
-                        )
-                    ];
+                if (!groups[className]) {
+                    groups[className] = [];
+                }
 
 
-                rows.sort((a, b) => {
+                groups[className].push(row);
+
+            });
+
+
+        Object.values(groups)
+            .forEach(rows => {
+
+
+                rows.sort((a,b)=>{
 
                     const aRef =
                         a.textContent.match(
@@ -207,16 +224,28 @@ FRTools.Module.register({
                 });
 
 
-                rows.forEach(r => {
+                rows.forEach(row => {
 
-                    r.parentNode.appendChild(r);
+                    row.parentNode.appendChild(row);
 
                 });
 
 
             });
-        this.sorting = false;
-    },
+
+
+    }
+    finally {
+
+        setTimeout(() => {
+
+            this.sorting = false;
+
+        }, 1000);
+
+    }
+
+},
 
     destroy() {
 
