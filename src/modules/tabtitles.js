@@ -118,7 +118,6 @@ FRTools.Module.register({
             default:
                 "F,O",
 
-
             values() {
 
                 return [
@@ -134,9 +133,16 @@ FRTools.Module.register({
                     label:
                         format
                             .split(",")
-                            .map(key =>
-                                this.reportFields[key].label
-                            )
+                            .map(key => {
+
+                                const labels = {
+                                    F: "FR Number",
+                                    O: "OP Name"
+                                };
+
+                                return labels[key] || key;
+
+                            })
                             .join(" | ")
 
                 }));
