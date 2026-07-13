@@ -11,7 +11,9 @@ FRTools.GUI = {
         if (!notification) {
 
             notification =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             notification.id =
                 "frtools-notification";
@@ -25,6 +27,7 @@ FRTools.GUI = {
 
         notification.textContent =
             message;
+
 
         notification.classList.add(
             "show"
@@ -64,6 +67,22 @@ FRTools.GUI = {
 
         GM_addStyle(`
 
+
+            :root {
+
+                --fr-dark:
+                    rgb(26,38,50);
+
+                --fr-grey:
+                    rgb(235,235,235);
+
+                --fr-white:
+                    rgb(255,255,255);
+
+            }
+
+
+
             #frtools-button {
 
                 position: fixed;
@@ -74,26 +93,63 @@ FRTools.GUI = {
 
                 z-index: 999999;
 
-                background: #1e88e5;
 
-                color: white;
+                background:
+                    rgb(26,38,50);
 
-                border: none;
 
-                border-radius: 50px;
+                color:
+                    white;
 
-                padding: 10px 14px;
 
-                font-size: 13px;
+                border:
+                    none;
 
-                font-weight: 600;
 
-                cursor: pointer;
+                border-radius:
+                    8px;
+
+
+                padding:
+                    12px 18px;
+
+
+                font-size:
+                    14px;
+
+
+                font-weight:
+                    600;
+
+
+                cursor:
+                    pointer;
+
 
                 box-shadow:
-                    0 3px 10px rgba(0,0,0,0.25);
+                    0 4px 14px rgba(0,0,0,0.3);
+
+
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
 
             }
+
+
+
+            #frtools-button:hover {
+
+                transform:
+                    translateY(-2px);
+
+
+                box-shadow:
+                    0 6px 18px rgba(0,0,0,0.35);
+
+            }
+
+
 
 
             #frtools-modal {
@@ -104,121 +160,388 @@ FRTools.GUI = {
 
                 left: 50%;
 
+
                 transform:
                     translate(-50%, -50%);
 
-                width: 520px;
 
-                max-height: 70vh;
+                width:
+                    560px;
 
-                overflow: auto;
 
-                background: white;
+                max-height:
+                    75vh;
 
-                z-index: 1000000;
 
-                border-radius: 10px;
+                overflow:
+                    auto;
+
+
+                background:
+                    rgb(255,255,255);
+
+
+                z-index:
+                    1000000;
+
+
+                border-radius:
+                    12px;
+
 
                 box-shadow:
-                    0 10px 30px rgba(0,0,0,0.4);
+                    0 12px 35px rgba(0,0,0,0.45);
 
-                display: none;
 
-                padding: 16px;
+                display:
+                    none;
+
+
+                padding:
+                    0;
 
             }
+
+
+
+
+            #frtools-modal-header {
+
+                background:
+                    rgb(26,38,50);
+
+
+                color:
+                    white;
+
+
+                padding:
+                    16px 20px;
+
+
+                font-size:
+                    18px;
+
+
+                font-weight:
+                    700;
+
+
+                border-radius:
+                    12px 12px 0 0;
+
+            }
+
+
+
+
+            #frtools-modal-content {
+
+                padding:
+                    18px;
+
+            }
+
+
 
 
             #frtools-overlay {
 
-                position: fixed;
+                position:
+                    fixed;
 
-                inset: 0;
+
+                inset:
+                    0;
+
 
                 background:
-                    rgba(0,0,0,0.4);
-
-                z-index: 999999;
-
-                display: none;
-
-            }
+                    rgba(0,0,0,0.45);
 
 
-            .frtools-title {
+                z-index:
+                    999999;
 
-                font-size: 16px;
 
-                font-weight: 700;
-
-                margin-bottom: 10px;
+                display:
+                    none;
 
             }
+
+
 
 
             .frtools-section {
 
-                margin-top: 10px;
+                margin-bottom:
+                    16px;
 
-                padding: 10px;
 
-                border: 1px solid #ddd;
+                padding:
+                    14px;
 
-                border-radius: 6px;
+
+                background:
+                    rgb(235,235,235);
+
+
+                border:
+                    1px solid #ccc;
+
+
+                border-radius:
+                    8px;
 
             }
+
+
+
+
+            .frtools-section-title {
+
+                font-size:
+                    15px;
+
+
+                font-weight:
+                    700;
+
+
+                color:
+                    rgb(26,38,50);
+
+
+                margin-bottom:
+                    12px;
+
+            }
+
+
 
 
             .frtools-module {
 
-                display: flex;
+                background:
+                    white;
 
-                align-items: center;
 
-                gap: 8px;
+                border:
+                    1px solid #d0d0d0;
 
-                margin: 8px 0;
+
+                border-radius:
+                    8px;
+
+
+                padding:
+                    12px;
+
+
+                margin:
+                    10px 0;
+
+
+                display:
+                    flex;
+
+
+                align-items:
+                    flex-start;
+
+
+                gap:
+                    10px;
 
             }
+
+
+
+
+            .frtools-module:hover {
+
+                border-color:
+                    rgb(26,38,50);
+
+            }
+
+
+
+
+            .frtools-module label {
+
+                cursor:
+                    pointer;
+
+            }
+
+
+
+
+            .frtools-module-description {
+
+                margin-top:
+                    4px;
+
+
+                color:
+                    #555;
+
+
+                font-size:
+                    13px;
+
+            }
+
+
 
 
             .frtools-module-option {
 
-                margin-left: 28px;
+                margin-left:
+                    28px;
 
-                margin-top: 6px;
 
-                margin-bottom: 10px;
+                margin-top:
+                    8px;
 
-                font-size: 13px;
+
+                margin-bottom:
+                    14px;
+
+
+                padding:
+                    10px;
+
+
+                background:
+                    white;
+
+
+                border-radius:
+                    6px;
+
+
+                border:
+                    1px solid #ddd;
+
+
+                font-size:
+                    13px;
 
             }
 
 
+
+
+            .frtools-option-group {
+
+                margin-top:
+                    14px;
+
+
+                padding-top:
+                    8px;
+
+
+                border-top:
+                    1px solid #ddd;
+
+            }
+
+
+
+
+            .frtools-option-group-title {
+
+                font-weight:
+                    700;
+
+
+                color:
+                    rgb(26,38,50);
+
+
+                margin-bottom:
+                    5px;
+
+            }
+
+
+
+
+            select {
+
+                padding:
+                    5px 8px;
+
+
+                border-radius:
+                    5px;
+
+
+                border:
+                    1px solid #aaa;
+
+            }
+
+
+
+
+            button {
+
+                cursor:
+                    pointer;
+
+            }
+
+
+
+
             #frtools-notification {
 
-                position: fixed;
+                position:
+                    fixed;
 
-                bottom: 80px;
 
-                right: 20px;
+                bottom:
+                    80px;
 
-                z-index: 1000001;
 
-                background: #333;
+                right:
+                    20px;
 
-                color: white;
 
-                padding: 12px 16px;
+                z-index:
+                    1000001;
 
-                border-radius: 6px;
 
-                font-size: 13px;
+                background:
+                    rgb(26,38,50);
+
+
+                color:
+                    white;
+
+
+                padding:
+                    12px 18px;
+
+
+                border-radius:
+                    8px;
+
+
+                font-size:
+                    13px;
+
 
                 box-shadow:
                     0 4px 12px rgba(0,0,0,0.3);
 
-                opacity: 0;
+
+                opacity:
+                    0;
+
 
                 transition:
                     opacity 0.3s ease;
@@ -226,9 +549,34 @@ FRTools.GUI = {
             }
 
 
+
+
             #frtools-notification.show {
 
-                opacity: 1;
+                opacity:
+                    1;
+
+            }
+
+
+
+
+            .frtools-footer {
+
+                text-align:
+                    center;
+
+
+                padding:
+                    12px;
+
+
+                color:
+                    #555;
+
+
+                font-size:
+                    12px;
 
             }
 
@@ -237,7 +585,6 @@ FRTools.GUI = {
 
     },
 
-
     createUI() {
 
         const btn =
@@ -245,11 +592,14 @@ FRTools.GUI = {
                 "button"
             );
 
+
         btn.id =
             "frtools-button";
 
+
         btn.textContent =
             "FR Tools";
+
 
 
         const overlay =
@@ -257,8 +607,10 @@ FRTools.GUI = {
                 "div"
             );
 
+
         overlay.id =
             "frtools-overlay";
+
 
 
         const modal =
@@ -266,25 +618,55 @@ FRTools.GUI = {
                 "div"
             );
 
+
         modal.id =
             "frtools-modal";
 
 
-        const title =
+
+        const header =
             document.createElement(
                 "div"
             );
 
-        title.className =
-            "frtools-title";
 
-        title.textContent =
-            "FR Tools";
+        header.id =
+            "frtools-modal-header";
+
+
+        header.innerHTML = `
+
+            FR Tools
+
+        `;
+
+
+
+        const content =
+            document.createElement(
+                "div"
+            );
+
+
+        content.id =
+            "frtools-modal-content";
+
 
 
         modal.appendChild(
-            title
+            header
         );
+
+
+        modal.appendChild(
+            content
+        );
+
+
+
+        /*
+            Modules section
+        */
 
 
         const moduleSection =
@@ -292,22 +674,22 @@ FRTools.GUI = {
                 "div"
             );
 
+
         moduleSection.className =
             "frtools-section";
 
 
-        const moduleHeading =
-            document.createElement(
-                "strong"
-            );
 
-        moduleHeading.textContent =
-            "Modules";
+        moduleSection.innerHTML = `
 
+            <div class="frtools-section-title">
 
-        moduleSection.appendChild(
-            moduleHeading
-        );
+                Modules
+
+            </div>
+
+        `;
+
 
 
         const moduleContainer =
@@ -315,13 +697,10 @@ FRTools.GUI = {
                 "div"
             );
 
+
         moduleContainer.id =
             "frtools-modules";
 
-
-        modal.appendChild(
-            moduleSection
-        );
 
 
         moduleSection.appendChild(
@@ -329,9 +708,23 @@ FRTools.GUI = {
         );
 
 
+
+        content.appendChild(
+            moduleSection
+        );
+
+
+
         this.renderModules(
             moduleContainer
         );
+
+
+
+
+        /*
+            Configuration section
+        */
 
 
         const settingsSection =
@@ -339,64 +732,138 @@ FRTools.GUI = {
                 "div"
             );
 
+
         settingsSection.className =
             "frtools-section";
 
 
+
         settingsSection.innerHTML = `
 
-            <strong>
-                Settings
-            </strong>
 
-            <br><br>
+            <div class="frtools-section-title">
+
+                Configuration
+
+            </div>
+
 
 
             <button id="frtools-export-settings">
+
                 Export Settings
+
             </button>
 
 
             <br><br>
+
 
 
             <button id="frtools-import-settings">
+
                 Import Settings
+
             </button>
 
 
             <br><br>
 
 
+
             <button id="frtools-reset-settings">
+
                 Reset Settings
+
             </button>
+
 
         `;
 
 
-        modal.appendChild(
+
+        content.appendChild(
             settingsSection
         );
+
+
+
+
+        /*
+            About section
+        */
+
+
+        const aboutSection =
+            document.createElement(
+                "div"
+            );
+
+
+        aboutSection.className =
+            "frtools-footer";
+
+
+
+        const version =
+            FRTools.version ||
+            "Unknown";
+
+
+
+        aboutSection.innerHTML = `
+
+
+            FR Tools v${version}
+
+
+        `;
+
+
+
+        content.appendChild(
+            aboutSection
+        );
+
+
+
+
+
+        /*
+            Hidden import file input
+        */
+
 
         const importInput =
             document.createElement(
                 "input"
             );
 
+
         importInput.type =
             "file";
 
+
         importInput.accept =
             "application/json";
+
 
         importInput.style.display =
             "none";
 
 
+
         document.body.appendChild(
             importInput
         );
+
+
+
+
+
+        /*
+            Export settings
+        */
 
 
         settingsSection
@@ -407,8 +874,10 @@ FRTools.GUI = {
                 "click",
                 () => {
 
+
                     const json =
                         FRTools.Settings.exportSettings();
+
 
 
                     const blob =
@@ -423,10 +892,12 @@ FRTools.GUI = {
                         );
 
 
+
                     const url =
                         URL.createObjectURL(
                             blob
                         );
+
 
 
                     const link =
@@ -435,12 +906,15 @@ FRTools.GUI = {
                         );
 
 
+
                     link.href =
                         url;
 
 
+
                     link.download =
                         "FRTools-Settings.json";
+
 
 
                     document.body.appendChild(
@@ -448,7 +922,9 @@ FRTools.GUI = {
                     );
 
 
+
                     link.click();
+
 
 
                     document.body.removeChild(
@@ -456,17 +932,28 @@ FRTools.GUI = {
                     );
 
 
+
                     URL.revokeObjectURL(
                         url
                     );
+
 
 
                     FRTools.GUI.notify(
                         "Settings exported"
                     );
 
+
                 }
             );
+
+
+
+
+
+        /*
+            Import settings
+        */
 
 
         settingsSection
@@ -483,12 +970,15 @@ FRTools.GUI = {
             );
 
 
+
         importInput.addEventListener(
             "change",
             event => {
 
+
                 const file =
                     event.target.files[0];
+
 
 
                 if (!file) {
@@ -498,17 +988,22 @@ FRTools.GUI = {
                 }
 
 
+
                 const reader =
                     new FileReader();
 
 
+
                 reader.onload = () => {
 
+
                     try {
+
 
                         FRTools.Settings.importSettings(
                             reader.result
                         );
+
 
 
                         this.renderModules(
@@ -516,6 +1011,7 @@ FRTools.GUI = {
                                 "frtools-modules"
                             )
                         );
+
 
 
                         FRTools.GUI.notify(
@@ -526,27 +1022,41 @@ FRTools.GUI = {
                     }
                     catch(error) {
 
+
                         console.error(
                             "[FR Tools] Import failed",
                             error
                         );
 
 
+
                         FRTools.GUI.notify(
                             "Import failed"
                         );
 
+
                     }
 
+
                 };
+
 
 
                 reader.readAsText(
                     file
                 );
 
+
             }
         );
+
+
+
+
+
+        /*
+            Reset settings
+        */
 
 
         settingsSection
@@ -557,10 +1067,12 @@ FRTools.GUI = {
                 "click",
                 () => {
 
+
                     const confirmed =
                         confirm(
                             "Reset FR Tools settings?\n\nThis will restore all modules to their default state."
                         );
+
 
 
                     if (!confirmed) {
@@ -570,7 +1082,9 @@ FRTools.GUI = {
                     }
 
 
+
                     FRTools.Settings.resetSettings();
+
 
 
                     this.renderModules(
@@ -580,56 +1094,81 @@ FRTools.GUI = {
                     );
 
 
+
                     FRTools.GUI.notify(
                         "Settings reset"
                     );
+
 
                 }
             );
 
 
+
+
+
+
         function open() {
+
 
             overlay.style.display =
                 "block";
 
 
+
             modal.style.display =
                 "block";
+
 
 
             FRTools.state.uiOpen =
                 true;
 
+
         }
+
+
+
 
 
         function close() {
 
+
             overlay.style.display =
                 "none";
+
 
 
             modal.style.display =
                 "none";
 
 
+
             FRTools.state.uiOpen =
                 false;
 
+
         }
+
+
+
 
 
         btn.addEventListener(
             "click",
             () => {
 
+
                 FRTools.state.uiOpen
                     ? close()
                     : open();
 
+
             }
         );
+
+
+
 
 
         overlay.addEventListener(
@@ -638,35 +1177,48 @@ FRTools.GUI = {
         );
 
 
+
+
+
         modal.addEventListener(
             "change",
             event => {
 
 
-            if (
-                event.target.matches(
-                    "[data-module-option]"
-                )
-            ) {
 
-                const value =
-                    event.target.type === "checkbox"
-                        ? event.target.checked
-                        : event.target.value;
+                if (
+                    event.target.matches(
+                        "[data-module-option]"
+                    )
+                ) {
 
-                FRTools.Settings.setModuleOption(
-                    event.target.dataset.moduleOption,
-                    event.target.dataset.option,
-                    value
-                );
 
-                FRTools.GUI.notify(
-                    `${event.target.dataset.option} updated`
-                );
+                    const value =
+                        event.target.type === "checkbox"
+                            ? event.target.checked
+                            : event.target.value;
 
-                return;
 
-            }
+
+                    FRTools.Settings.setModuleOption(
+                        event.target.dataset.moduleOption,
+                        event.target.dataset.option,
+                        value
+                    );
+
+
+
+                    FRTools.GUI.notify(
+                        `${event.target.dataset.option} updated`
+                    );
+
+
+
+                    return;
+
+                }
+
+
 
 
 
@@ -681,22 +1233,31 @@ FRTools.GUI = {
                 }
 
 
+
+
                 const moduleId =
                     event.target.dataset.module;
 
 
-                if (event.target.checked) {
+
+                if (
+                    event.target.checked
+                ) {
+
 
                     FRTools.Module.enable(
                         moduleId
                     );
 
+
                 }
                 else {
+
 
                     FRTools.Module.disable(
                         moduleId
                     );
+
 
                 }
 
@@ -705,9 +1266,13 @@ FRTools.GUI = {
         );
 
 
+
+
+
         document.body.appendChild(
             btn
         );
+
 
 
         document.body.appendChild(
@@ -715,12 +1280,13 @@ FRTools.GUI = {
         );
 
 
+
         document.body.appendChild(
             modal
         );
 
-    },
 
+    },
 
     renderModules(container) {
 
@@ -735,8 +1301,10 @@ FRTools.GUI = {
             "";
 
 
+
         FRTools.Module.all()
             .forEach(module => {
+
 
 
                 const enabled =
@@ -744,6 +1312,7 @@ FRTools.GUI = {
                         module.id,
                         module.enabledByDefault !== false
                     );
+
 
 
                 const row =
@@ -756,7 +1325,9 @@ FRTools.GUI = {
                     "frtools-module";
 
 
+
                 row.innerHTML = `
+
 
                     <input
                         type="checkbox"
@@ -765,48 +1336,56 @@ FRTools.GUI = {
                     >
 
 
+
                     <label>
 
+
                         <strong>
+
                             ${module.name}
+
                         </strong>
 
 
-                        <br>
 
-
-                        <small>
+                        <div class="frtools-module-description">
 
                             ${module.description || ""}
 
-                            <br>
+                        </div>
 
-                            Version:
-                            ${module.version || "1.0.0"}
 
-                            <br>
-
-                            Author:
-                            ${module.author || "Unknown"}
-
-                        </small>
 
                     </label>
 
+
                 `;
+
 
 
                 container.appendChild(
                     row
                 );
 
+
+
+
+
+
+                /*
+                    Module options
+                */
+
+
                 if (module.options) {
+
 
                     Object.entries(
                         module.options
                     )
                     .forEach(
                         ([optionId, option]) => {
+
 
 
                             const optionValue =
@@ -816,107 +1395,180 @@ FRTools.GUI = {
                                 );
 
 
+
+
                             const optionContainer =
                                 document.createElement(
                                     "div"
                                 );
 
 
+
                             optionContainer.className =
                                 "frtools-module-option";
 
 
-                            let control = "";
+
+
+
+                            let control =
+                                "";
+
+
+
 
 
                             /*
-                            * Select option
+                                Select control
                             */
+
 
                             if (
                                 option.type === "select"
                             ) {
 
 
+
                                 const values =
                                     typeof option.values === "function"
+
                                         ? option.values()
+
                                         : [];
 
 
+
+
+
                                 control = `
 
+
                                     <select
+
                                         data-module-option="${module.id}"
+
                                         data-option="${optionId}"
+
                                     >
 
+
+
                                         ${
-                                            values.map(item => `
+                                            values
+                                            .map(item => `
+
 
                                                 <option
+
                                                     value="${item.value}"
+
                                                     ${
                                                         optionValue === item.value
-                                                            ? "selected"
-                                                            : ""
+
+                                                        ? "selected"
+
+                                                        : ""
+
                                                     }
+
                                                 >
+
                                                     ${item.label}
+
                                                 </option>
 
-                                            `).join("")
+
+                                            `)
+                                            .join("")
                                         }
+
+
 
                                     </select>
 
+
+
                                 `;
 
+
+
                             }
+
+
+
+
 
 
                             /*
-                            * Default checkbox option
+                                Checkbox control
                             */
+
 
                             else {
 
+
+
                                 control = `
 
+
                                     <input
+
                                         type="checkbox"
+
                                         data-module-option="${module.id}"
+
                                         data-option="${optionId}"
+
                                         ${optionValue ? "checked" : ""}
+
                                     >
+
+
 
                                 `;
 
+
                             }
+
+
+
+
 
 
                             optionContainer.innerHTML = `
 
-                                ${control}
 
 
-                                <label>
+                                <div class="frtools-option-group">
 
-                                    <strong>
+
+                                    <div class="frtools-option-group-title">
+
                                         ${option.name}
-                                    </strong>
+
+                                    </div>
 
 
-                                    <br>
+
+                                    ${control}
 
 
-                                    <small>
+
+                                    <div class="frtools-module-description">
+
                                         ${option.description || ""}
-                                    </small>
 
-                                </label>
+                                    </div>
+
+
+
+                                </div>
+
 
                             `;
+
+
+
 
 
                             container.appendChild(
@@ -924,11 +1576,21 @@ FRTools.GUI = {
                             );
 
 
+
                         }
                     );
 
+
                 }
 
+
+
+
+
+
+                /*
+                    Custom module settings UI
+                */
 
 
                 if (
@@ -936,11 +1598,15 @@ FRTools.GUI = {
                 ) {
 
 
+
                     const settings =
                         module.settingsUI();
 
 
+
+
                     if (settings) {
+
 
 
                         const option =
@@ -949,17 +1615,22 @@ FRTools.GUI = {
                             );
 
 
+
                         option.className =
                             "frtools-module-option";
+
 
 
                         option.innerHTML =
                             settings.html;
 
 
+
                         container.appendChild(
                             option
                         );
+
+
 
 
                         if (
@@ -974,9 +1645,12 @@ FRTools.GUI = {
 
                         }
 
+
                     }
 
+
                 }
+
 
 
             });
