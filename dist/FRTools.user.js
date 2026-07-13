@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.2.0
+// @version      4.2.1
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -260,7 +260,75 @@ FRTools.GUI = {
 
             }
 
+            #frtools-modal::-webkit-scrollbar {
 
+                width: 10px;
+
+            }
+
+
+            #frtools-modal::-webkit-scrollbar-track {
+
+                background: #ebebeb;
+
+                border-radius: 10px;
+
+            }
+
+
+            #frtools-modal::-webkit-scrollbar-thumb {
+
+                background: #1a2632;
+
+                border-radius: 10px;
+
+                border: 2px solid #ebebeb;
+
+            }
+
+
+            #frtools-modal::-webkit-scrollbar-thumb:hover {
+
+                background: #263746;
+
+            }
+
+                        .frtools-option-header {
+
+                display: flex;
+
+                align-items: flex-start;
+
+                gap: 8px;
+
+            }
+
+
+            .frtools-option-header input {
+
+                margin-top: 3px;
+
+            }
+
+
+            .frtools-option-group-title {
+
+                font-weight: 600;
+
+                font-size: 13px;
+
+            }
+
+
+            .frtools-module-description {
+
+                font-size: 12px;
+
+                color: #555;
+
+                margin-top: 3px;
+
+            }
 
             #frtools-button {
 
@@ -386,10 +454,13 @@ FRTools.GUI = {
 
             #frtools-modal-header {
 
+            text-align: center;
+
                 background:
                     rgb(26,38,50);
 
-
+                padding-top: 20px;
+                
                 color:
                     white;
 
@@ -481,6 +552,8 @@ FRTools.GUI = {
                 font-size:
                     15px;
 
+                text-align: center;
+
 
                 font-weight:
                     700;
@@ -500,41 +573,106 @@ FRTools.GUI = {
 
             .frtools-module {
 
-                background:
-                    white;
+                display: flex;
 
+                align-items: flex-start;
 
-                border:
-                    1px solid #d0d0d0;
+                gap: 10px;
 
+                margin: 10px 0;
 
-                border-radius:
-                    8px;
+                padding: 12px;
 
+                background: #ffffff;
 
-                padding:
-                    12px;
+                border: 1px solid #ebebeb;
 
+                border-radius: 8px;
 
-                margin:
-                    10px 0;
-
-
-                display:
-                    flex;
-
-
-                align-items:
-                    flex-start;
-
-
-                gap:
-                    10px;
+                transition:
+                    border-color 0.2s ease,
+                    box-shadow 0.2s ease;
 
             }
 
 
+            .frtools-module:hover {
 
+                border-color: #1a2632;
+
+                box-shadow:
+                    0 2px 8px rgba(0,0,0,0.12);
+
+            }
+
+
+            .frtools-module input[type="checkbox"] {
+
+                margin-top: 3px;
+
+            }
+
+            .frtools-config-buttons {
+
+                display: flex;
+
+                justify-content: center;
+
+                gap: 10px;
+
+                margin-top: 10px;
+
+            }
+
+
+            .frtools-config-buttons button {
+
+                padding: 6px 12px;
+
+                font-size: 12px;
+
+                border-radius: 5px;
+
+                border: 1px solid #ccc;
+
+                background: #1a2632;
+
+                color: white;
+
+                cursor: pointer;
+
+            }
+
+
+            .frtools-config-buttons button:hover {
+
+                opacity: 0.85;
+
+            }
+
+
+            .frtools-module small {
+
+                font-size: 11px;
+
+                color: #555;
+
+                line-height: 1.3;
+
+            }
+
+
+            .frtools-module-description {
+
+                color: #555;
+
+                font-size: 12px;
+
+                line-height: 1.4;
+
+                margin-top: 4px;
+
+            }
 
             .frtools-module:hover {
 
@@ -567,7 +705,7 @@ FRTools.GUI = {
 
 
                 font-size:
-                    13px;
+                    12px;
 
             }
 
@@ -576,41 +714,76 @@ FRTools.GUI = {
 
             .frtools-module-option {
 
-                margin-left:
-                    28px;
+                margin-left: 32px;
 
+                margin-top: 8px;
 
-                margin-top:
-                    8px;
+                margin-bottom: 12px;
 
+                padding-left: 12px;
+                
+                font-size: 11px;
 
-                margin-bottom:
-                    14px;
+                color: #666;
 
+                border-left:
 
-                padding:
-                    10px;
-
-
-                background:
-                    white;
-
-
-                border-radius:
-                    6px;
-
-
-                border:
-                    1px solid #ddd;
-
-
-                font-size:
-                    13px;
+                    3px solid #ebebeb;
 
             }
 
 
+            .frtools-module-option select {
 
+                margin-top: 6px;
+
+                padding: 5px 8px;
+
+                min-width: 260px;
+
+                border-radius: 5px;
+
+                border: 1px solid #ccc;
+
+                background: white;
+
+                color: #1a2632;
+
+                font-size: 12px;
+
+            }
+
+            #frtools-modal-header {
+
+            background: #1a2632;
+
+            text-align: center;
+
+            color: white;
+
+            padding: 12px 16px;
+
+            padding-top: 20px;
+
+            margin: -16px -16px 16px -16px;
+
+            border-radius:
+
+                10px 10px 0 0;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+        }
+
+            .frtools-module-option select:focus {
+
+                outline:
+
+                    2px solid #1a2632;
+
+            }
 
             .frtools-option-group {
 
@@ -928,33 +1101,23 @@ FRTools.GUI = {
 
 
 
+           <div class="frtools-config-buttons">
+
             <button id="frtools-export-settings">
-
                 Export Settings
-
             </button>
-
-
-            <br><br>
-
 
 
             <button id="frtools-import-settings">
-
                 Import Settings
-
             </button>
-
-
-            <br><br>
-
 
 
             <button id="frtools-reset-settings">
-
                 Reset Settings
-
             </button>
+
+        </div>
 
 
         `;
@@ -985,7 +1148,7 @@ FRTools.GUI = {
 
 
         const version =
-            FRTools.version ||
+            GM_info.script.version ||
             "Unknown";
 
 
@@ -1714,37 +1877,42 @@ FRTools.GUI = {
 
 
 
-                            optionContainer.innerHTML = `
+                           optionContainer.innerHTML = `
 
 
-
-                                <div class="frtools-option-group">
-
-
-                                    <div class="frtools-option-group-title">
-
-                                        ${option.name}
-
-                                    </div>
+                            <div class="frtools-option-group">
 
 
+                                <div class="frtools-option-header">
 
                                     ${control}
 
 
+                                    <div>
 
-                                    <div class="frtools-module-description">
+                                        <div class="frtools-option-group-title">
 
-                                        ${option.description || ""}
+                                            ${option.name}
+
+                                        </div>
+
+
+                                        <div class="frtools-module-description">
+
+                                            ${option.description || ""}
+
+                                        </div>
 
                                     </div>
-
 
 
                                 </div>
 
 
-                            `;
+                            </div>
+
+
+                        `;
 
 
 

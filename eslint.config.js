@@ -62,6 +62,8 @@ module.exports = [
                 URL: "readonly",
                 FileReader: "readonly",
                 confirm: "readonly",
+                GM_info: "readonly",
+                GM_addStyle: "readonly",
             }
         },
 
