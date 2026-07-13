@@ -124,12 +124,24 @@ FRTools.GUI = {
 
                 gap: 20px;
 
+                width: 100%;
+
             }
+
+            .frtools-option-header > div {
+
+    min-width: 0;
+
+}
 
 
 .frtools-option-header select {
 
-    width: 260px;
+width: auto;
+
+min-width: 300px;
+
+max-width: 100%;
 
     flex-shrink: 0;
 
@@ -246,7 +258,7 @@ FRTools.GUI = {
 
 
                 width:
-                    650px;
+                    700px;
 
                 max-width: 90vw;
 
@@ -255,8 +267,11 @@ FRTools.GUI = {
                     75vh;
 
 
-                overflow:
+                overflow-y:
                     auto;
+
+                overflow-x:
+                    hidden;
 
 
                 background:
