@@ -120,7 +120,7 @@ FRTools.GUI = {
 
                 align-items: center;
 
-                justify-content: space-between;
+                justify-content: flex-start;
 
                 gap: 20px;
 
@@ -1716,7 +1716,7 @@ FRTools.GUI = {
 
 
                                 <div class="frtools-option-header">
-
+                                ${control}
 
                                     <div>
 
@@ -1736,7 +1736,7 @@ FRTools.GUI = {
                                     </div>
 
 
-                                    ${control}
+                                    
 
 
                                 </div>
