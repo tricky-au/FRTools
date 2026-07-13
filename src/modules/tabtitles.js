@@ -5,9 +5,11 @@ FRTools.Module.register({
     name: "Tab Titles",
 
     description:
-        "Customise browser tab title for better visibility of what page you're on.",
+        "Customise browser tab titles for better visibility of what page you're on.",
 
-    version: "1.1.0",
+    version: "1.2.0",
+
+    enabledByDefault: false,
 
 
     fields: {
@@ -15,19 +17,6 @@ FRTools.Module.register({
         P: {
             label: "Property Item ID"
         },
-
-        F: {
-            label: "FR Number"
-        },
-
-        O: {
-            label: "OP Name"
-        }
-
-    },
-
-
-    reportFields: {
 
         F: {
             label: "FR Number"
@@ -51,33 +40,35 @@ FRTools.Module.register({
         "exhibit_record_move.cfm":
             "Move Exhibit",
 
+        "exhibit_record_transfer.cfm":
+            "Transfer Exhibit",
+
         "exhibit_record.cfm":
             "Exhibit Record",
 
         "report_record.cfm":
-            "Report Record"
+            "Report Record",
+
+        "exam_record.cfm":
+            "Examination Record"
 
     },
 
 
-    enabledByDefault: false,
-
-
     options: {
-
 
         exhibitFormat: {
 
             type: "select",
 
-            name: "Exhibit Record Format",
+            name:
+                "Exhibit Record Format",
 
             description:
                 "Choose how exhibit record tab titles are displayed.",
 
             default:
                 "P,F,O",
-
 
             values() {
 
@@ -86,15 +77,18 @@ FRTools.Module.register({
                         "tabtitles"
                     );
 
-
                 return module
-                    .getAvailableFormats()
+                    .getFormats([
+                        "P",
+                        "F",
+                        "O"
+                    ])
                     .map(format => ({
 
                         value: format,
 
                         label:
-                            module.formatToLabel(
+                            module.getLabels(
                                 format
                             )
 
@@ -120,32 +114,68 @@ FRTools.Module.register({
 
             values() {
 
-                return [
-                    "F",
-                    "O",
-                    "F,O",
-                    "O,F"
+                const module =
+                    FRTools.Module.get(
+                        "tabtitles"
+                    );
 
-                ].map(format => ({
+                return module
+                    .getFormats([
+                        "F",
+                        "O"
+                    ])
+                    .map(format => ({
 
-                    value: format,
+                        value: format,
 
-                    label:
-                        format
-                            .split(",")
-                            .map(key => {
+                        label:
+                            module.getLabels(
+                                format
+                            )
 
-                                const labels = {
-                                    F: "FR Number",
-                                    O: "OP Name"
-                                };
+                    }));
 
-                                return labels[key] || key;
+            }
 
-                            })
-                            .join(" | ")
+        },
 
-                }));
+
+        examinationFormat: {
+
+            type: "select",
+
+            name:
+                "Examination Record Format",
+
+            description:
+                "Choose how examination record tab titles are displayed.",
+
+            default:
+                "P,F,O",
+
+            values() {
+
+                const module =
+                    FRTools.Module.get(
+                        "tabtitles"
+                    );
+
+                return module
+                    .getFormats([
+                        "P",
+                        "F",
+                        "O"
+                    ])
+                    .map(format => ({
+
+                        value: format,
+
+                        label:
+                            module.getLabels(
+                                format
+                            )
+
+                    }));
 
             }
 
@@ -157,16 +187,14 @@ FRTools.Module.register({
             type: "checkbox",
 
             name:
-                "Enable generic page titles",
+                "Enable Generic Page Titles",
 
             description:
                 "Replace generic Forensic Register page titles with useful page names.",
 
-            default:
-                true
+            default: true
 
         }
-
 
     },
 
@@ -195,6 +223,8 @@ FRTools.Module.register({
         this.observeChanges();
 
     },
+
+
     getPropertyItemId() {
 
         const label =
@@ -210,6 +240,36 @@ FRTools.Module.register({
             ?.nextElementSibling
             ?.textContent
             .trim() || "";
+
+    },
+
+
+    getExaminationPropertyItemId() {
+
+        const match =
+            document.querySelector(
+                "#exhibitsExaminedTable td.fr_width_1-5"
+            );
+
+
+        if (!match) {
+
+            return "";
+
+        }
+
+
+        const lines =
+            match.innerText
+                .trim()
+                .split("\n")
+                .map(v => v.trim())
+                .filter(Boolean);
+
+
+        return lines.length > 1
+            ? lines[1]
+            : "";
 
     },
 
@@ -231,19 +291,17 @@ FRTools.Module.register({
 
     },
 
-
-    getFieldLabel(key) {
-
-        return this.fields[key]?.label || key;
-
-    },
-
-
     getFieldValue(key) {
 
         switch (key) {
 
             case "P":
+
+                if (this.isExaminationPage()) {
+
+                    return this.getExaminationPropertyItemId();
+
+                }
 
                 return this.getPropertyItemId();
 
@@ -267,11 +325,7 @@ FRTools.Module.register({
     },
 
 
-    getAvailableFormats() {
-
-        const keys =
-            Object.keys(this.fields);
-
+    getFormats(keys) {
 
         const results = [];
 
@@ -280,7 +334,6 @@ FRTools.Module.register({
             current,
             remaining
         ) => {
-
 
             if (current.length) {
 
@@ -291,50 +344,57 @@ FRTools.Module.register({
             }
 
 
-            remaining.forEach(
-                (key, index) => {
+            remaining.forEach((key, index) => {
 
+                permute(
 
-                    permute(
+                    [...current, key],
 
-                        [
-                            ...current,
-                            key
-                        ],
+                    remaining.filter(
+                        (_, i) => i !== index
+                    )
 
-                        remaining.filter(
-                            (_, i) =>
-                                i !== index
-                        )
+                );
 
-                    );
-
-
-                }
-            );
-
+            });
 
         };
 
 
-        permute(
-            [],
-            keys
-        );
-
+        permute([], keys);
 
         return results;
 
     },
 
 
-    formatToLabel(format) {
+    getLabels(format) {
 
         return format
+
             .split(",")
+
             .map(key =>
-                this.getFieldLabel(key)
+                this.fields[key].label
             )
+
+            .join(" | ");
+
+    },
+
+
+    getFormattedTitle(format) {
+
+        return format
+
+            .split(",")
+
+            .map(key =>
+                this.getFieldValue(key)
+            )
+
+            .filter(Boolean)
+
             .join(" | ");
 
     },
@@ -343,13 +403,18 @@ FRTools.Module.register({
     getCurrentPageTitle() {
 
         const file =
+
             location.pathname
+
                 .split("/")
+
                 .pop();
 
 
         if (
+
             this.pageTitles[file]
+
         ) {
 
             return this.pageTitles[file];
@@ -358,8 +423,11 @@ FRTools.Module.register({
 
 
         return file
+
             .replace(".cfm", "")
+
             .replaceAll("_", " ")
+
             .replace(/\b\w/g, c =>
                 c.toUpperCase()
             );
@@ -370,7 +438,9 @@ FRTools.Module.register({
     isExhibitPage() {
 
         return location.pathname.includes(
+
             "/main/exhibit/exhibit_record.cfm"
+
         );
 
     },
@@ -379,7 +449,20 @@ FRTools.Module.register({
     isReportPage() {
 
         return location.pathname.includes(
+
             "/main/report/report_record.cfm"
+
+        );
+
+    },
+
+
+    isExaminationPage() {
+
+        return location.pathname.includes(
+
+            "/main/exam/exam_record.cfm"
+
         );
 
     },
@@ -387,118 +470,107 @@ FRTools.Module.register({
 
     updateTitle() {
 
-
         let title = "";
 
 
-
-        /*
-            Priority 1:
-            Exhibit custom titles
-        */
-
         if (
+
             this.isExhibitPage()
+
         ) {
 
+            title = this.getFormattedTitle(
 
-            const format =
                 FRTools.Settings.getModuleOption(
+
                     this.id,
+
                     "exhibitFormat"
-                );
 
+                )
 
-            title =
-                format
-                    .split(",")
-                    .map(key =>
-                        this.getFieldValue(key)
-                    )
-                    .filter(Boolean)
-                    .join(" | ");
-
+            );
 
         }
-
-
-
-        /*
-            Priority 2:
-            Report custom titles
-        */
 
         else if (
+
             this.isReportPage()
+
         ) {
 
+            title = this.getFormattedTitle(
 
-            const format =
                 FRTools.Settings.getModuleOption(
+
                     this.id,
+
                     "reportFormat"
-                );
 
+                )
 
-            title =
-                format
-                    .split(",")
-                    .map(key =>
-                        this.getFieldValue(key)
-                    )
-                    .filter(Boolean)
-                    .join(" | ");
-
+            );
 
         }
 
+        else if (
 
+            this.isExaminationPage()
 
-        /*
-            Priority 3:
-            Generic friendly titles
-        */
+        ) {
+
+            title = this.getFormattedTitle(
+
+                FRTools.Settings.getModuleOption(
+
+                    this.id,
+
+                    "examinationFormat"
+
+                )
+
+            );
+
+        }
 
         else if (
 
             FRTools.Settings.getModuleOption(
+
                 this.id,
+
                 "enableGenericTitles"
+
             )
 
         ) {
 
-
-            title =
-                this.getCurrentPageTitle();
-
+            title = this.getCurrentPageTitle();
 
         }
-
 
 
         if (
+
             title &&
+
             document.title !== title
+
         ) {
 
-            document.title =
-                title;
+            document.title = title;
 
         }
 
-
     },
-    observeChanges() {
 
+    observeChanges() {
 
         let updateTimer = null;
 
 
-
         this.titleObserver =
             new MutationObserver(() => {
-
 
                 clearTimeout(
                     updateTimer
@@ -508,15 +580,11 @@ FRTools.Module.register({
                 updateTimer =
                     setTimeout(() => {
 
-
                         this.updateTitle();
-
 
                     }, 1000);
 
-
             });
-
 
 
         this.titleObserver.observe(
@@ -534,40 +602,45 @@ FRTools.Module.register({
         );
 
 
-
         /*
-            Refresh title when settings change
+            Refresh title immediately
+            when settings change.
         */
 
-        const controls =
-            document.querySelectorAll(
-                '[data-module-option="tabtitles"]'
-            );
+        document.addEventListener(
 
+            "change",
 
-        controls.forEach(control => {
+            event => {
 
+                if (
 
-            control.addEventListener(
-                "change",
-                () => {
+                    event.target.matches(
+
+                        '[data-module-option="tabtitles"]'
+
+                    )
+
+                ) {
 
                     this.updateTitle();
 
                 }
-            );
 
+            }
 
-        });
-
+        );
 
     },
 
 
     destroy() {
 
+        if (
 
-        if (this.titleObserver) {
+            this.titleObserver
+
+        ) {
 
             this.titleObserver.disconnect();
 
@@ -576,13 +649,12 @@ FRTools.Module.register({
         }
 
 
-
         console.log(
+
             "[FR Tools] Tab Titles stopped"
+
         );
 
-
     }
-
 
 });
