@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      4.2.5
+// @version      4.2.6
 // @description  Modular Tampermonkey toolkit for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -316,11 +316,11 @@ FRTools.GUI = {
 
 .frtools-option-header select {
 
-width: auto;
+width: 320px;
 
-min-width: 300px;
+min-width: 320px;
 
-max-width: 100%;
+max-width: 320px;
 
     flex-shrink: 0;
 

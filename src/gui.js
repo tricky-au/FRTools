@@ -137,11 +137,11 @@ FRTools.GUI = {
 
 .frtools-option-header select {
 
-width: auto;
+width: 320px;
 
-min-width: 300px;
+min-width: 320px;
 
-max-width: 100%;
+max-width: 320px;
 
     flex-shrink: 0;
 
