@@ -234,7 +234,9 @@ FRTools.GUI = {
 
 
                 width:
-                    560px;
+                    650px;
+
+                max-width: 90vw;
 
 
                 max-height:
@@ -281,7 +283,7 @@ FRTools.GUI = {
                     rgb(26,38,50);
 
                 padding-top: 20px;
-                
+
                 color:
                     white;
 
