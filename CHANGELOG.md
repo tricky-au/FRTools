@@ -10,15 +10,16 @@ All notable changes to FR Tools are documented in this file.
 
 ### Changes
 
-- Initial release of FR Tools for use
+Initial release of FR Tools for use
+
 Added:
-- - Modular userscript
-- - Dynamic tab titles 
-- - Dynamic favicons
-- - Settings GUI
-- - Import/Export of settings
-- - Automatic updates via vscode and git
-- - Automated build and release
+- Modular userscript
+- Dynamic tab titles 
+- Dynamic favicons
+- Settings GUI
+- Import/Export of settings
+- Automatic updates via vscode and git
+- Automated build and release
 
 ---
 
