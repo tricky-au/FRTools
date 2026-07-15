@@ -39,6 +39,7 @@ function showBanner() {
     console.log("Current Version :", currentVersion);
     console.log("");
 
+    console.log(`0) First Release → 1.0.0`);
     console.log(`1) Patch  → ${major}.${minor}.${patch + 1}`);
     console.log(`2) Minor  → ${major}.${minor + 1}.0`);
     console.log(`3) Major  → ${major + 1}.0.0`);
@@ -58,23 +59,45 @@ function chooseVersion() {
 
         switch (answer.trim()) {
 
-            case "1":
-                newVersion = `${major}.${minor}.${patch + 1}`;
+            case "0":
+
+                newVersion = "1.0.0";
+
                 break;
+
+
+            case "1":
+
+                newVersion =
+                    `${major}.${minor}.${patch + 1}`;
+
+                break;
+
 
             case "2":
-                newVersion = `${major}.${minor + 1}.0`;
+
+                newVersion =
+                    `${major}.${minor + 1}.0`;
+
                 break;
+
 
             case "3":
-                newVersion = `${major + 1}.0.0`;
+
+                newVersion =
+                    `${major + 1}.0.0`;
+
                 break;
 
+
             default:
+
                 console.log("");
                 console.log("❌ Invalid selection.");
                 console.log("");
+
                 return chooseVersion();
+
         }
 
         getReleaseTitle();
