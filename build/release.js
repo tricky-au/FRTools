@@ -5,6 +5,14 @@ const { execSync } = require("child_process");
 
 const VERSION_FILE = path.join(__dirname, "..", "version.txt");
 
+const CHANGELOG_FILE = path.join(
+    __dirname,
+    "..",
+    "CHANGELOG.md"
+);
+
+let generatedReleaseBody = "";
+
 let currentVersion;
 let newVersion;
 let releaseTitle = "";
@@ -122,7 +130,115 @@ function getReleaseNotes() {
 
 }
 
+function formatDate() {
 
+    return new Date().toLocaleDateString(
+        "en-AU",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function createChangelogEntry() {
+
+    const lines =
+        releaseNotes
+            .split("\n")
+            .filter(Boolean);
+
+    const bulletList =
+        lines.length
+            ? lines.map(line => `- ${line}`).join("\n")
+            : "- No release notes.";
+
+    return `## v${newVersion} — ${releaseTitle}
+
+**Released:** ${formatDate()}
+
+### Changes
+
+${bulletList}
+
+---
+
+`;
+
+}
+
+
+function updateChangelog() {
+
+    console.log("");
+    console.log("📝 Updating CHANGELOG.md...");
+    console.log("");
+
+    const entry =
+        createChangelogEntry();
+
+    generatedReleaseBody =
+        entry.replace(/\n---\n$/, "").trim();
+
+    let existing = "";
+
+    if (
+        fs.existsSync(
+            CHANGELOG_FILE
+        )
+    ) {
+
+        existing =
+            fs.readFileSync(
+                CHANGELOG_FILE,
+                "utf8"
+            );
+
+    }
+
+    const header =
+`# FR Tools Changelog
+
+All notable changes to FR Tools are documented in this file.
+
+---
+
+`;
+
+    const body =
+        existing.startsWith("# FR Tools Changelog")
+            ? existing.replace(header, "")
+            : existing;
+
+    fs.writeFileSync(
+
+        CHANGELOG_FILE,
+
+        header +
+        entry +
+        body
+
+    );
+
+    fs.writeFileSync(
+
+    path.join(
+        __dirname,
+        "..",
+        "release-notes.md"
+    ),
+
+    generatedReleaseBody
+
+    );
+
+    console.log("✅ CHANGELOG.md updated");
+    console.log("");
+
+}
 
 function confirmRelease() {
 
@@ -201,10 +317,15 @@ function runLint() {
 
 function updateVersion() {
 
-    fs.writeFileSync(VERSION_FILE, newVersion);
+    fs.writeFileSync(
+        VERSION_FILE,
+        newVersion
+    );
 
     console.log("✅ Updated version.txt");
     console.log("");
+
+    updateChangelog();
 
     build();
 
@@ -327,20 +448,46 @@ function gitTag() {
 function gitPush() {
 
     console.log("");
-    console.log("🚀 Pushing to GitHub...");
+    console.log("🚀 Pushing changes to GitHub...");
     console.log("");
+
+    const tag =
+        `v${newVersion}`;
 
     try {
 
-        execSync("git push origin main --follow-tags", {
-            stdio: "inherit"
-        });
+        execSync(
+            "git push origin main",
+            {
+                stdio: "inherit"
+            }
+        );
+
 
         console.log("");
-        console.log("✅ Push complete");
+        console.log("✅ Branch pushed");
+        console.log("");
+
+
+        console.log(
+            `🏷️ Pushing tag ${tag}...`
+        );
+
+
+        execSync(
+            `git push origin ${tag}`,
+            {
+                stdio: "inherit"
+            }
+        );
+
+
+        console.log("");
+        console.log("✅ Tag pushed");
         console.log("");
 
         finish();
+
 
     }
     catch (err) {
@@ -348,8 +495,11 @@ function gitPush() {
         console.log("");
         console.log("❌ Push failed");
         console.log("");
-        console.log("Your commit and tag still exist locally.");
-        console.log("You can push them later.");
+
+        console.log(
+            "Your commit and tag still exist locally."
+        );
+
         console.log("");
 
         rl.close();

@@ -8,31 +8,70 @@ on:
 permissions:
   contents: write
 
+
 jobs:
+
   release:
+
     runs-on: ubuntu-latest
 
+
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@v4
+
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
+
       - name: Build FR Tools
         run: node build/build.js
 
+
+      - name: Read Release Notes
+        id: notes
+        shell: bash
+        run: |
+
+          if [ -f release-notes.md ]; then
+
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            cat release-notes.md >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+
+          else
+
+            echo "notes=FR Tools ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+
+          fi
+
+
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+
         with:
-          tag_name: ${{ github.ref_name }}
-          name: FR Tools ${{ github.ref_name }}
-          generate_release_notes: true
+
+          tag_name:
+            ${{ github.ref_name }}
+
+          name:
+            FR Tools ${{ github.ref_name }}
+
+          body:
+            ${{ steps.notes.outputs.notes }}
+
           files: |
+
             dist/FRTools.user.js
             dist/FRTools.meta.js
-            
+
+
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          GITHUB_TOKEN:
+            ${{ secrets.GITHUB_TOKEN }}
