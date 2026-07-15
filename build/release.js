@@ -174,10 +174,22 @@ function createChangelogEntry() {
             .split("\n")
             .filter(Boolean);
 
-    const bulletList =
-        lines.length
-            ? lines.map(line => `- ${line}`).join("\n")
-            : "- No release notes.";
+const bulletList =
+    lines
+        .map(line => {
+
+            if (
+                line.endsWith(":")
+            ) {
+
+                return line;
+
+            }
+
+            return `- ${line}`;
+
+        })
+        .join("\n");
 
     return `## v${newVersion} — ${releaseTitle}
 
@@ -231,10 +243,12 @@ All notable changes to FR Tools are documented in this file.
 
 `;
 
-    const body =
-        existing.startsWith("# FR Tools Changelog")
-            ? existing.replace(header, "")
-            : existing;
+const body =
+    existing
+        .replace(
+            /^# FR Tools Changelog[\s\S]*?---\s*/m,
+            ""
+        );
 
     fs.writeFileSync(
 

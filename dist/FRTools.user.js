@@ -3,7 +3,7 @@
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
 // @version      1.0.0
-// @description  Modular Tampermonkey toolkit for the Forensic Register
+// @description  Modular Tampermonkey scripts for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
 // @updateURL    https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.meta.js
@@ -25,21 +25,14 @@
     const FRTools = {
 
         Version: "__VERSION__",
-
         Module: {},
-
         Storage: {},
-
         Settings: {},
-
         Events: {},
-
         GUI: {
             notifications: []
         },
-
         Utils: {},
-
         state: {
             uiOpen: false,
             uiInitialized: false
@@ -202,7 +195,6 @@ FRTools.GUI = {
             );
 
         }
-
 
         notification.textContent =
             message;
@@ -2041,7 +2033,6 @@ max-width: 320px;
     "use strict";
 
     const modules = {};
-
     const FRTools = window.FRTools;
 
     if (!FRTools) {
@@ -2275,7 +2266,6 @@ FRTools.Settings = {
 
     },
 
-
     getModuleOption(id, option) {
 
         const module =
@@ -2460,14 +2450,14 @@ FRTools.Settings = {
 // shortcuts.js
 // ======================================
 
-
+//
 
 
 // ======================================
 // timestamp.js
 // ======================================
 
-
+//
 
 
 // ======================================
@@ -2477,13 +2467,9 @@ FRTools.Settings = {
 FRTools.Module.register({
 
     id: "autoexpand",
-
     name: "Auto Expand",
-
     description: "Automatically expands hidden exhibit sections on worklists.",
-
     version: "1.2.0",
-
     enabledByDefault: false,
 
 
@@ -2818,19 +2804,12 @@ FRTools.Module.register({
 FRTools.Module.register({
 
     id: "exhibitsort",
-
     name: "Exhibit Sort",
-
     description: "Automatically sorts exhibits by PALM number in Requests/Tasks.",
-
     version: "1.0.0",
-
     enabledByDefault: true,
-
     observer: null,
-
     settings: {
-
     direction: "asc"
 
         },
@@ -3113,14 +3092,10 @@ FRTools.Module.register({
 FRTools.Module.register({
 
     id: "favicons",
-
     name: "Dynamic Favicons",
-
     description:
         "Replace page favicons with icons based on the current page.",
-
     version: "1.2.0",
-
     enabledByDefault: false,
 
 
@@ -3562,16 +3537,11 @@ ${this.getSymbol(icon)}
 FRTools.Module.register({
 
     id: "tabtitles",
-
     name: "Tab Titles",
-
     description:
         "Customise browser tab titles for better visibility of what page you're on.",
-
     version: "1.2.0",
-
     enabledByDefault: false,
-
 
     fields: {
 
@@ -4293,7 +4263,6 @@ FRTools.Module.register({
     "use strict";
 
     console.log("[FR Tools] Starting...");
-
     console.log(
         "[FR Tools] Registered Modules:",
         FRTools.Module.all()

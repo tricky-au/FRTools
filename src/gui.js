@@ -24,7 +24,6 @@ FRTools.GUI = {
 
         }
 
-
         notification.textContent =
             message;
 

@@ -39,11 +39,8 @@ let output = header + "\n\n";
 const sourceFiles = fs.readdirSync(SRC)
 
     .filter(file => file.endsWith(".js"))
-
     .filter(file => file !== "main.js")
-
     .filter(file => file !== "header.js")
-
     .sort();
 
 

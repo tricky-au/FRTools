@@ -23,7 +23,6 @@ FRTools.Settings = {
 
     },
 
-
     getModuleOption(id, option) {
 
         const module =

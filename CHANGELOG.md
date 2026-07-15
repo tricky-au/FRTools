@@ -10,18 +10,15 @@ All notable changes to FR Tools are documented in this file.
 
 ### Changes
 
-- Added:
-- - Modular userscript architecture
-- - Dynamic tab titles
+- Initial release of FR Tools for use
+Added:
+- - Modular userscript
+- - Dynamic tab titles 
 - - Dynamic favicons
 - - Settings GUI
-- - Import/export settings
-- - Automatic update workflow
+- - Import/Export of settings
+- - Automatic updates via vscode and git
+- - Automated build and release
 
 ---
 
-# FR Tools Changelog
-
-All notable changes to FR Tools are documented in this file.
-
----

@@ -1,14 +1,10 @@
 FRTools.Module.register({
 
     id: "favicons",
-
     name: "Dynamic Favicons",
-
     description:
         "Replace page favicons with icons based on the current page.",
-
     version: "1.2.0",
-
     enabledByDefault: false,
 
 

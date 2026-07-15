@@ -2,7 +2,6 @@
     "use strict";
 
     const modules = {};
-
     const FRTools = window.FRTools;
 
     if (!FRTools) {

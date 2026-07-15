@@ -1,16 +1,11 @@
 FRTools.Module.register({
 
     id: "tabtitles",
-
     name: "Tab Titles",
-
     description:
         "Customise browser tab titles for better visibility of what page you're on.",
-
     version: "1.2.0",
-
     enabledByDefault: false,
-
 
     fields: {
 

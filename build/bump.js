@@ -5,7 +5,6 @@ const { execSync } = require("child_process");
 const versionFile = path.join(__dirname, "..", "version.txt");
 
 let version = fs.readFileSync(versionFile, "utf8").trim();
-
 let [major, minor, patch] = version.split(".").map(Number);
 
 const type = process.argv[2] || "patch";

@@ -5,21 +5,14 @@
     const FRTools = {
 
         Version: "__VERSION__",
-
         Module: {},
-
         Storage: {},
-
         Settings: {},
-
         Events: {},
-
         GUI: {
             notifications: []
         },
-
         Utils: {},
-
         state: {
             uiOpen: false,
             uiInitialized: false

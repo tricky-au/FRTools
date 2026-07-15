@@ -1,13 +1,9 @@
 FRTools.Module.register({
 
     id: "autoexpand",
-
     name: "Auto Expand",
-
     description: "Automatically expands hidden exhibit sections on worklists.",
-
     version: "1.2.0",
-
     enabledByDefault: false,
 
 

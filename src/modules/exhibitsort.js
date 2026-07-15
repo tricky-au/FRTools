@@ -1,19 +1,12 @@
 FRTools.Module.register({
 
     id: "exhibitsort",
-
     name: "Exhibit Sort",
-
     description: "Automatically sorts exhibits by PALM number in Requests/Tasks.",
-
     version: "1.0.0",
-
     enabledByDefault: true,
-
     observer: null,
-
     settings: {
-
     direction: "asc"
 
         },
