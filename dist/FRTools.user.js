@@ -2,7 +2,7 @@
 // @name         FR Tools
 // @author       Nick Filipovic (DFU)
 // @namespace    FRTOOLS
-// @version      1.0.0
+// @version      1.0.1
 // @description  Modular Tampermonkey scripts for the Forensic Register
 // @match        https://vicpol.forensic-register.app/*
 // @downloadURL  https://github.com/tricky-au/FRTools/releases/latest/download/FRTools.user.js
@@ -3096,7 +3096,7 @@ FRTools.Module.register({
     description:
         "Replace page favicons with icons based on the current page.",
     version: "1.2.0",
-    enabledByDefault: false,
+    enabledByDefault: true,
 
 
     options: {
@@ -3541,7 +3541,7 @@ FRTools.Module.register({
     description:
         "Customise browser tab titles for better visibility of what page you're on.",
     version: "1.2.0",
-    enabledByDefault: false,
+    enabledByDefault: true,
 
     fields: {
 

@@ -4,6 +4,18 @@ All notable changes to FR Tools are documented in this file.
 
 ---
 
+## v1.0.1 — Settings Enabled by Default
+
+**Released:** 15 July 2026
+
+### Changes
+
+- Enabled Favicon module by default
+- Enabled Tabtitles module by default
+- Disabled Autoexpand module by default
+
+---
+
 ## v1.0.0 — FR Tools Initial Release
 
 **Released:** 15 July 2026
