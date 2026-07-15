@@ -5,7 +5,7 @@ FRTools.Module.register({
     description:
         "Replace page favicons with icons based on the current page.",
     version: "1.2.0",
-    enabledByDefault: false,
+    enabledByDefault: true,
 
 
     options: {
