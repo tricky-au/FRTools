@@ -252,24 +252,40 @@ FRTools.Module.register({
             );
 
 
-        if (!match) {
+        if (match) {
 
-            return "";
+            const lines =
+                match.innerText
+                    .trim()
+                    .split("\n")
+                    .map(v => v.trim())
+                    .filter(Boolean);
+
+
+            if (lines.length > 1) {
+
+                const reference =
+                    lines[1];
+
+                this.cacheExamReference(
+                    reference
+                );
+
+                return reference;
+
+            }
 
         }
 
 
-        const lines =
-            match.innerText
-                .trim()
-                .split("\n")
-                .map(v => v.trim())
-                .filter(Boolean);
+        /*
+            Edit page:
+            the PALM reference
+            isn't present, so use
+            the cached value.
+        */
 
-
-        return lines.length > 1
-            ? lines[1]
-            : "";
+        return this.getCachedExamReference();
 
     },
 
@@ -288,6 +304,54 @@ FRTools.Module.register({
         return document.querySelector(
             ".fr_operation_name"
         )?.textContent.trim() || "";
+
+    },
+
+
+    getExaminationId() {
+
+    return new URLSearchParams(
+        location.search
+    ).get("ExaminationID") || "";
+
+    },
+
+
+    cacheExamReference(reference) {
+
+        const examId =
+            this.getExaminationId();
+
+        if (
+            examId &&
+            reference
+        ) {
+
+            FRTools.Storage.set(
+                `examReference_${examId}`,
+                reference
+            );
+
+        }
+
+    },
+
+
+    getCachedExamReference() {
+
+        const examId =
+            this.getExaminationId();
+
+        if (!examId) {
+
+            return "";
+
+        }
+
+        return FRTools.Storage.get(
+            `examReference_${examId}`,
+            ""
+        );
 
     },
 

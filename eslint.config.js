@@ -64,6 +64,7 @@ module.exports = [
                 confirm: "readonly",
                 GM_info: "readonly",
                 GM_addStyle: "readonly",
+                URLSearchParams: "readonly",
             }
         },
 
