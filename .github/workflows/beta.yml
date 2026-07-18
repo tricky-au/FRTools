@@ -30,7 +30,5 @@ jobs:
           host: ${{ secrets.BETA_HOST }}
           username: ${{ secrets.BETA_USER }}
           key: ${{ secrets.BETA_KEY }}
-          source: |
-            dist/FRTools.user.js
-            dist/FRTools.meta.js
+          source: "dist/FRTools.user.js,dist/FRTools.meta.js"
           target: /var/www/frtools-beta
