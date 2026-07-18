@@ -38,7 +38,11 @@ console.log("================================");
 // Read Version
 //
 
-const version = fs.readFileSync(VERSION_FILE, "utf8").trim();
+let version = fs.readFileSync(VERSION_FILE, "utf8").trim();
+
+if (branch === "development") {
+    version += "-beta";
+}
 
 console.log("Version:", version);
 
