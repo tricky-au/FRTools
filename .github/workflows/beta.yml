@@ -24,11 +24,17 @@ jobs:
       - name: Build Beta
         run: node build/build.js
 
+      - name: Prepare Beta Deploy
+        run: |
+          mkdir beta-deploy
+          cp dist/FRTools.user.js beta-deploy/
+          cp dist/FRTools.meta.js beta-deploy/
+
       - name: Deploy Beta Files
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.BETA_HOST }}
           username: ${{ secrets.BETA_USER }}
           key: ${{ secrets.BETA_KEY }}
-          source: "dist/*"
+          source: "beta-deploy/*"
           target: /var/www/frtools-beta
