@@ -38,3 +38,4 @@ jobs:
           key: ${{ secrets.BETA_KEY }}
           source: "beta-deploy/*"
           target: /var/www/frtools-beta
+          strip_components: 1
