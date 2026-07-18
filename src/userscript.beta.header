@@ -1,0 +1,14 @@
+// ==UserScript==
+// @name         FR Tools Beta
+// @author       Nick Filipovic (DFU)
+// @namespace    FRTOOLS
+// @version      {{VERSION}}
+// @description  Modular Tampermonkey scripts for the Forensic Register
+// @match        https://vicpol.forensic-register.app/*
+// @updateURL    https://beta.filipovic.com.au/FRTools.meta.js
+// @downloadURL  https://beta.filipovic.com.au/FRTools.user.js
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_addStyle
+// @grant        unsafeWindow
+// ==/UserScript==

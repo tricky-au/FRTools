@@ -1,0 +1,36 @@
+name: Deploy FR Tools Beta
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: read
+
+jobs:
+  beta:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build Beta
+        run: node build/build.js
+
+      - name: Deploy Beta Files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.BETA_HOST }}
+          username: ${{ secrets.BETA_USER }}
+          key: ${{ secrets.BETA_KEY }}
+          source: |
+            dist/FRTools.user.js
+            dist/FRTools.meta.js
+          target: /var/www/frtools-beta

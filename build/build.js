@@ -6,7 +6,27 @@ const SRC = path.join(ROOT, "src");
 const DIST = path.join(ROOT, "dist");
 
 const VERSION_FILE = path.join(ROOT, "version.txt");
-const HEADER_FILE = path.join(SRC, "userscript.header");
+
+const branch =
+    process.env.GITHUB_REF_NAME ||
+    process.env.BRANCH_NAME ||
+    "";
+
+const headerFileName =
+    branch === "development"
+        ? "userscript.beta.header"
+        : "userscript.header";
+
+const HEADER_FILE =
+    path.join(SRC, headerFileName);
+
+console.log(
+    "Build Mode:",
+    branch === "development" ? "BETA" : "PRODUCTION"
+);
+
+console.log("Header:", headerFileName);
+
 const USER_OUTPUT_FILE = path.join(DIST, "FRTools.user.js");
 const META_OUTPUT_FILE = path.join(DIST, "FRTools.meta.js");
 
