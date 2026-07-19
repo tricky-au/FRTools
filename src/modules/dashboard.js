@@ -538,6 +538,11 @@ ${this.renderStatSection(
     stats.categories
 )}
 
+${this.renderStatSection(
+    "Forensic Offence Categories",
+    stats.offences
+)}
+
 `;
 
 
@@ -918,32 +923,30 @@ getOffenceStats(jobs) {
 
     const offences = {};
 
-
     jobs.forEach(job => {
 
         const offence =
             (job.FORENSICOFFENCECATEGORY || "Unknown").trim();
-
 
         offences[offence] =
             (offences[offence] || 0) + 1;
 
     });
 
-
     return Object
         .entries(offences)
         .sort(
             (a, b) => b[1] - a[1]
         )
-        .map(
-            ([name, count]) => ({
+        .reduce(
+            (obj, [name, count]) => {
 
-                name,
+                obj[name] = count;
 
-                count
+                return obj;
 
-            })
+            },
+            {}
         );
 
 },
