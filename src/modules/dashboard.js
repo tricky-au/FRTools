@@ -601,6 +601,56 @@ FRTools.Module.register({
     </div>
 
 
+    <div class="frtools-dashboard-card">
+
+    <div class="frtools-dashboard-card-title">
+        Oldest Unassigned
+    </div>
+
+    <div class="frtools-dashboard-card-value">
+
+        ${stats.oldestUnassigned.reportNo}
+
+    </div>
+
+    <div style="font-size:12px; margin-top:8px;">
+
+        ${stats.oldestUnassigned.date}
+
+    </div>
+
+    /div>
+
+    <div class="frtools-dashboard-card">
+
+    <div class="frtools-dashboard-card-title">
+        Oldest Active
+    </div>
+
+
+    <div class="frtools-dashboard-card-value">
+
+        ${stats.oldestActive.reportNo}
+
+    </div>
+
+
+    <div style="font-size:12px; margin-top:8px;">
+
+        ${stats.oldestActive.date}
+
+    </div>
+
+
+    <div style="font-size:12px;">
+
+        ${stats.oldestActive.status}
+
+    </div>
+
+    </div>
+
+
 </div>
 
 
@@ -623,22 +673,8 @@ FRTools.Module.register({
             }
         )}
 
-
-
         ${this.renderStatSection(
-            "Priority Breakdown",
-            {
-                "No Priority": stats.priorities.none,
-                "CAT A": stats.priorities.catA,
-                "CAT B": stats.priorities.catB,
-                "CAT C": stats.priorities.catC
-            }
-        )}
-
-
-
-        ${this.renderStatSection(
-            "Queue Breakdown",
+            "Unallocated Queue Breakdown",
             {
                 "Total Queue": stats.queue.total,
                 "CAT A": stats.queue.catA,
@@ -647,6 +683,15 @@ FRTools.Module.register({
             }
         )}
 
+        ${this.renderStatSection(
+            "Total Backlog Breakdown",
+            {
+                "No Priority": stats.priorities.none,
+                "CAT A": stats.priorities.catA,
+                "CAT B": stats.priorities.catB,
+                "CAT C": stats.priorities.catC
+            }
+        )}
 
 
         ${this.renderStatSection(
@@ -948,6 +993,16 @@ getStats() {
                 jobs
             ),
 
+        oldestUnassigned:
+            this.getOldestUnassignedRequest(
+                jobs
+            ),
+
+        oldestActive:
+            this.getOldestActiveRequest(
+                jobs
+            ),
+
         priorities:
             this.getPriorityStats(
                 jobs
@@ -1106,6 +1161,231 @@ if (job.REPORTDATE) {
                 : 0,
 
     };
+
+},
+
+
+getOldestUnassignedRequest(jobs) {
+
+    let oldest = null;
+
+
+    jobs.forEach(job => {
+
+
+        const status =
+            (job.BACKGROUNDCOLOR || "")
+                .toLowerCase();
+
+
+        if (status !== "orange") {
+
+            return;
+
+        }
+
+
+        if (!job.REPORTDATE) {
+
+            return;
+
+        }
+
+
+        const reportDate =
+            new Date(
+                job.REPORTDATE
+                    .replace(
+                        " +00:00",
+                        "Z"
+                    )
+                    .replace(
+                        " ",
+                        "T"
+                    )
+            );
+
+
+        if (isNaN(reportDate)) {
+
+            return;
+
+        }
+
+
+        if (
+            !oldest ||
+            reportDate < oldest.date
+        ) {
+
+
+            oldest = {
+
+                reportNo:
+                    job.REPORTNO,
+
+                date:
+                    reportDate
+
+            };
+
+
+        }
+
+
+    });
+
+
+    if (!oldest) {
+
+        return {
+
+            reportNo:
+                "None",
+
+            date:
+                "N/A"
+
+        };
+
+    }
+
+
+    return {
+
+        reportNo:
+            oldest.reportNo,
+
+        date:
+            oldest.date.toLocaleDateString(
+                "en-AU",
+                {
+                    timeZone:
+                        "Australia/Melbourne"
+                }
+            )
+
+    };
+
+
+},
+
+getOldestActiveRequest(jobs) {
+
+    let oldest = null;
+
+
+    jobs.forEach(job => {
+
+
+        const status =
+            (job.BACKGROUNDCOLOR || "")
+                .toLowerCase();
+
+
+        // Ignore completed requests
+        if (status === "grey") {
+
+            return;
+
+        }
+
+
+        if (!job.REPORTDATE) {
+
+            return;
+
+        }
+
+
+        const reportDate =
+            new Date(
+                job.REPORTDATE
+                    .replace(
+                        " +00:00",
+                        "Z"
+                    )
+                    .replace(
+                        " ",
+                        "T"
+                    )
+            );
+
+
+        if (isNaN(reportDate)) {
+
+            return;
+
+        }
+
+
+        if (
+            !oldest ||
+            reportDate < oldest.date
+        ) {
+
+
+            oldest = {
+
+                reportNo:
+                    job.REPORTNO,
+
+                date:
+                    reportDate,
+
+                status:
+                    status
+
+            };
+
+
+        }
+
+
+    });
+
+
+
+    if (!oldest) {
+
+        return {
+
+            reportNo:
+                "None",
+
+            date:
+                "N/A",
+
+            status:
+                ""
+
+        };
+
+    }
+
+
+
+    return {
+
+        reportNo:
+            oldest.reportNo,
+
+
+        date:
+            oldest.date.toLocaleDateString(
+                "en-AU",
+                {
+                    timeZone:
+                        "Australia/Melbourne"
+                }
+            ),
+
+
+        status:
+            oldest.status
+
+    };
+
 
 },
 
