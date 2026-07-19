@@ -533,6 +533,11 @@ ${this.renderStatSection(
     }
 )}
 
+${this.renderStatSection(
+    "Exhibit Categories",
+    stats.categories
+)}
+
 `;
 
 
@@ -680,6 +685,11 @@ ${this.renderStatSection(
             capabilities:
                 this.getCapabilityStats(
                     jobs
+                ),
+
+            categories:
+                this.getCategoryStats(
+                     jobs
                 ),
 
             exhibits:
@@ -845,6 +855,60 @@ getCapabilityStats(jobs) {
                 count
 
             })
+        );
+
+},
+
+getCategoryStats(jobs) {
+
+    const categories = {};
+
+    jobs.forEach(job => {
+
+        if (!job.ATTACHEDEXHIBITS) {
+
+            return;
+
+        }
+
+        try {
+
+            const exhibits =
+                JSON.parse(job.ATTACHEDEXHIBITS);
+
+            exhibits.forEach(exhibit => {
+
+                const category =
+                    (exhibit.CategoryName || "Unknown").trim();
+
+                categories[category] =
+                    (categories[category] || 0) + 1;
+
+            });
+
+        }
+        catch {
+
+            // Ignore malformed exhibit JSON
+
+        }
+
+    });
+
+    return Object
+        .entries(categories)
+        .sort(
+            (a, b) => b[1] - a[1]
+        )
+        .reduce(
+            (obj, [name, count]) => {
+
+                obj[name] = count;
+
+                return obj;
+
+            },
+            {}
         );
 
 },
