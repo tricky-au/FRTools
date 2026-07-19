@@ -526,25 +526,126 @@ FRTools.Module.register({
 
 
 
-    getStats() {
+getStats() {
 
 
-        const jobs =
-            this.getJobs();
+    const jobs =
+        this.getJobs();
+
+
+    const stats = {
+
+        totalRequests: jobs.length,
+
+        assigned: 0,
+
+        queue: 0,
+
+        issues: 0,
+
+        priorities: {},
+
+        requestTypes: {},
+
+        capabilities: {}
+
+    };
 
 
 
-        return {
+    jobs.forEach(job => {
 
 
-            totalJobs:
-                jobs.length
+
+        /*
+            Status colours
+        */
+
+        switch (
+            (job.BACKGROUNDCOLOR || "")
+            .toLowerCase()
+        ) {
 
 
-        };
+            case "green":
+
+                stats.assigned++;
+
+                break;
 
 
-    },
+            case "yellow":
+            case "orange":
+
+                stats.queue++;
+
+                break;
+
+
+            case "red":
+
+                stats.issues++;
+
+                break;
+
+
+        }
+
+
+
+        /*
+            Priority
+        */
+
+        const priority =
+            job.PRIORITY || "Unknown";
+
+
+        stats.priorities[priority] =
+            (
+                stats.priorities[priority] || 0
+            ) + 1;
+
+
+
+        /*
+            Request Type
+        */
+
+        const type =
+            job.REQUESTTYPE || "Unknown";
+
+
+        stats.requestTypes[type] =
+            (
+                stats.requestTypes[type] || 0
+            ) + 1;
+
+
+
+        /*
+            Capability
+        */
+
+        const capability =
+            job.CAPABILITIESCSV || "Unknown";
+
+
+        stats.capabilities[capability] =
+            (
+                stats.capabilities[capability] || 0
+            ) + 1;
+
+
+
+    });
+
+
+
+    return stats;
+
+
+},
 
 
 });
