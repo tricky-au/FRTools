@@ -591,7 +591,7 @@ FRTools.Module.register({
     <div class="frtools-dashboard-card">
 
         <div class="frtools-dashboard-card-title">
-            Avg Request Age
+            Average Request Age
         </div>
 
         <div class="frtools-dashboard-card-value">
@@ -1025,27 +1025,56 @@ getSummaryStats(jobs) {
     exhibitCount += Number(job.EXHIBITCOUNT || 0);
 
 
-    if (job.REPORTDATE) {
+if (job.REPORTDATE) {
 
-        const requestDate =
-            new Date(job.REPORTDATE);
+    const requestDate =
+        new Date(
+            job.REPORTDATE
+                .replace(" ", "T")
+        );
 
-        const today =
-            new Date();
 
-        const age =
-            Math.floor(
-                (
-                    today - requestDate
-                )
-                /
-                (1000 * 60 * 60 * 24)
-            );
+    const melbourneDate =
+        new Date(
+            requestDate.toLocaleString(
+                "en-AU",
+                {
+                    timeZone:
+                        "Australia/Melbourne"
+                }
+            )
+        );
 
+
+    const today =
+        new Date(
+            new Date().toLocaleString(
+                "en-AU",
+                {
+                    timeZone:
+                        "Australia/Melbourne"
+                }
+            )
+        );
+
+
+    const age =
+        Math.floor(
+            (
+                today - melbourneDate
+            )
+            /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    if (age >= 0) {
 
         totalAge += age;
 
     }
+
+}
 
 
 });
@@ -1069,7 +1098,12 @@ getSummaryStats(jobs) {
         averageExhibits:
             jobs.length
                 ? (exhibitCount / jobs.length).toFixed(2)
-                : "0.00"
+                : "0.00",
+
+        averageAge:
+            jobs.length
+                ? Math.round(totalAge / jobs.length)
+                : 0,
 
     };
 
@@ -1136,30 +1170,54 @@ getCapabilityStats(jobs) {
 
     jobs.forEach(job => {
 
-        const capability =
-            (job.CAPABILITIESCSV || "Unknown").trim();
+
+        const capabilityCSV =
+            job.CAPABILITIESCSV || "";
 
 
-        capabilities[capability] =
-            (capabilities[capability] || 0) + 1;
+        if (!capabilityCSV.trim()) {
+
+            return;
+
+        }
+
+
+        capabilityCSV
+            .split(",")
+            .forEach(item => {
+
+
+                const capability =
+                    item.trim();
+
+
+                if (!capability) {
+
+                    return;
+
+                }
+
+
+                capabilities[capability] =
+                    (capabilities[capability] || 0) + 1;
+
+
+            });
+
 
     });
 
 
-    return Object
-        .entries(capabilities)
-        .sort(
-            (a, b) => b[1] - a[1]
-        )
-        .map(
-            ([name, count]) => ({
+    return Object.fromEntries(
 
-                name,
+        Object.entries(capabilities)
+            .sort(
+                (a, b) =>
+                    b[1] - a[1]
+            )
 
-                count
+    );
 
-            })
-        );
 
 },
 
