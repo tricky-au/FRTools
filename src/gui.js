@@ -1496,26 +1496,32 @@ max-width: 320px;
             "click",
             () => {
 
+                const dashboard =
+                    FRTools.Module.all()
+                        .find(
+                            module =>
+                                module.id === "dashboard"
+                        );
+
+
                 if (
-                    typeof FRTools.Dashboard !== "undefined"
-                    &&
-                    typeof FRTools.Dashboard.open === "function"
+                    dashboard &&
+                    typeof dashboard.openDashboard === "function"
                 ) {
 
-                    FRTools.Dashboard.open();
+                    dashboard.openDashboard();
 
                 }
                 else {
 
                     console.error(
-                        "[FR Tools] Dashboard unavailable"
+                        "[FR Tools] Dashboard module unavailable"
                     );
 
                 }
 
             }
         );
-
 
 
         overlay.addEventListener(
