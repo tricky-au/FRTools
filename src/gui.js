@@ -904,6 +904,104 @@ max-width: 320px;
 
     }
 
+        .frtools-dashboard-grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(4, 1fr);
+
+        gap: 12px;
+
+        padding: 20px;
+
+    }
+
+
+    .frtools-dashboard-card {
+
+        background: #ebebeb;
+
+        border-radius: 10px;
+
+        padding: 15px;
+
+        text-align: center;
+
+        border: 1px solid #ccc;
+
+    }
+
+
+    .frtools-dashboard-card-title {
+
+        font-size: 12px;
+
+        color: #555;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    .frtools-dashboard-card-value {
+
+        font-size: 28px;
+
+        font-weight: 700;
+
+        color: #1a2632;
+
+    }
+
+
+
+    .frtools-dashboard-section {
+
+        margin: 20px;
+
+        padding: 15px;
+
+        background: #ebebeb;
+
+        border-radius: 10px;
+
+    }
+
+
+
+    .frtools-dashboard-section-title {
+
+        font-weight: 700;
+
+        font-size: 15px;
+
+        color: #1a2632;
+
+        margin-bottom: 12px;
+
+    }
+
+
+
+    .frtools-dashboard-row {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        padding: 6px 0;
+
+        border-bottom: 1px solid #ddd;
+
+    }
+
+
+    .frtools-dashboard-status {
+
+        font-weight: 600;
+
+    }
+
 
         `);
 

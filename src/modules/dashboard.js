@@ -422,22 +422,176 @@ FRTools.Module.register({
 
 
 
-        modal.querySelector(
+       modal.querySelector(
             ".frtools-dashboard-content"
         )
         .innerHTML = `
 
 
-            <div>
+        <div class="frtools-dashboard-grid">
 
-                Total Jobs:
 
-                <strong>
-                    ${stats.totalJobs}
-                </strong>
+            <div class="frtools-dashboard-card">
 
+                <div class="frtools-dashboard-card-title">
+
+                    Requests
+
+                </div>
+
+                <div class="frtools-dashboard-card-value">
+
+                    ${stats.totalRequests}
+
+                </div>
 
             </div>
+
+
+
+            <div class="frtools-dashboard-card">
+
+                <div class="frtools-dashboard-card-title">
+
+                    Assigned
+
+                </div>
+
+                <div class="frtools-dashboard-card-value">
+
+                    ${stats.assigned}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="frtools-dashboard-card">
+
+                <div class="frtools-dashboard-card-title">
+
+                    Queue
+
+                </div>
+
+                <div class="frtools-dashboard-card-value">
+
+                    ${stats.queue}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="frtools-dashboard-card">
+
+                <div class="frtools-dashboard-card-title">
+
+                    Issues
+
+                </div>
+
+                <div class="frtools-dashboard-card-value">
+
+                    ${stats.issues}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="frtools-dashboard-section">
+
+
+        <div class="frtools-dashboard-section-title">
+
+            Status Overview
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>🟢 Assigned</span>
+
+            <strong>${stats.assigned}</strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>🟠 Queue</span>
+
+            <strong>${stats.queue}</strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>🔴 Issues</span>
+
+            <strong>${stats.issues}</strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>⚪ Complete</span>
+
+            <strong>${stats.completed}</strong>
+
+        </div>
+
+
+        </div>
+
+
+
+
+        <div class="frtools-dashboard-section">
+
+
+        <div class="frtools-dashboard-section-title">
+
+            Priority Breakdown
+
+        </div>
+
+
+        ${
+            Object.entries(
+                stats.priorities
+            )
+            .map(
+                ([priority,count]) => `
+
+
+                <div class="frtools-dashboard-row">
+
+                    <span>${priority}</span>
+
+                    <strong>${count}</strong>
+
+                </div>
+
+
+                `
+            )
+            .join("")
+        }
+
+
+        </div>
 
 
         `;
@@ -543,6 +697,8 @@ getStats() {
 
         issues: 0,
 
+        completed: 0,
+
         priorities: {},
 
         requestTypes: {},
@@ -574,7 +730,6 @@ getStats() {
                 break;
 
 
-            case "yellow":
             case "orange":
 
                 stats.queue++;
@@ -589,6 +744,13 @@ getStats() {
                 break;
 
 
+            case "grey":
+
+                stats.completed++;
+
+                break;
+
+
         }
 
 
@@ -597,14 +759,56 @@ getStats() {
             Priority
         */
 
-        const priority =
-            job.PRIORITY || "Unknown";
+let priorityLabel;
 
 
-        stats.priorities[priority] =
-            (
-                stats.priorities[priority] || 0
-            ) + 1;
+switch (
+    Number(job.PRIORITY)
+) {
+
+
+    case 0:
+
+        priorityLabel = "No Priority";
+
+        break;
+
+
+    case 6:
+
+        priorityLabel = "Cat A";
+
+        break;
+
+
+    case 4:
+
+        priorityLabel = "Cat B";
+
+        break;
+
+
+    case 2:
+
+        priorityLabel = "Cat C";
+
+        break;
+
+
+    default:
+
+        priorityLabel = "Unknown";
+
+        break;
+
+}
+
+
+
+stats.priorities[priorityLabel] =
+    (
+        stats.priorities[priorityLabel] || 0
+    ) + 1;
 
 
 
