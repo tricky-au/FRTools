@@ -30,11 +30,19 @@ FRTools.Module.register({
 
     },
 
+    getTable() {
+
+        return jQuery("#UnitWorklistTable").DataTable();
+
+    },
+
     getJobs() {
 
-    const table = $("#UnitWorklistTable").DataTable();
-
-    return table.rows().data().toArray();
+        return this
+            .getTable()
+            .rows()
+            .data()
+            .toArray();
 
     },
 

@@ -66,6 +66,7 @@ module.exports = [
                 GM_info: "readonly",
                 GM_addStyle: "readonly",
                 URLSearchParams: "readonly",
+                jQuery: "readonly",
             }
         },
 
