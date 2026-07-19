@@ -161,9 +161,9 @@ FRTools.Module.register({
 
             #frtools-dashboard-modal {
 
-                width: 700px;
+                width: 1100px;
 
-                max-width: 90vw;
+                max-width: 95vw;
 
                 max-height: 85vh;
 
@@ -228,6 +228,88 @@ FRTools.Module.register({
                 overflow-y: auto;
 
                 flex: 1;
+
+            }
+
+            .frtools-dashboard-columns {
+
+                display: grid;
+
+                grid-template-columns: 1fr 1fr;
+
+                gap: 16px;
+
+            }
+
+
+            .frtools-dashboard-column {
+
+                min-width: 0;
+
+            }
+
+
+            .frtools-dashboard-section {
+
+                background:
+                    rgb(235,235,235);
+
+                border:
+                    1px solid #ccc;
+
+                border-radius:
+                    8px;
+
+                padding:
+                    14px;
+
+                margin-bottom:
+                    16px;
+
+            }
+
+
+            .frtools-dashboard-section-title {
+
+                font-size:
+                    15px;
+
+                font-weight:
+                    700;
+
+                color:
+                    rgb(26,38,50);
+
+                text-align:
+                    center;
+
+                margin-bottom:
+                    12px;
+
+            }
+
+
+            .frtools-dashboard-row {
+
+                display:
+                    flex;
+
+                justify-content:
+                    space-between;
+
+                padding:
+                    6px 0;
+
+                border-bottom:
+                    1px solid #ddd;
+
+            }
+
+
+            .frtools-dashboard-row:last-child {
+
+                border-bottom:
+                    none;
 
             }
 
@@ -456,6 +538,7 @@ FRTools.Module.register({
 
     </div>
 
+
     <div class="frtools-dashboard-card">
 
         <div class="frtools-dashboard-card-title">
@@ -467,6 +550,7 @@ FRTools.Module.register({
         </div>
 
     </div>
+
 
     <div class="frtools-dashboard-card">
 
@@ -480,6 +564,7 @@ FRTools.Module.register({
 
     </div>
 
+
     <div class="frtools-dashboard-card">
 
         <div class="frtools-dashboard-card-title">
@@ -492,56 +577,95 @@ FRTools.Module.register({
 
     </div>
 
+
 </div>
 
-${this.renderStatSection(
-    "Status Overview",
-    {
-        "🟢 Assigned": stats.summary.assigned,
-        "🟠 Queue": stats.summary.queue,
-        "🔴 Issues": stats.summary.problems,
-        "⚪ Complete": stats.summary.complete
-    }
-)}
 
-${this.renderStatSection(
-    "Priority Breakdown",
-    {
-        "No Priority": stats.priorities.none,
-        "CAT A": stats.priorities.catA,
-        "CAT B": stats.priorities.catB,
-        "CAT C": stats.priorities.catC
-    }
-)}
 
-${this.renderStatSection(
-    "Queue Breakdown",
-    {
-        "Total Queue": stats.queue.total,
-        "CAT A": stats.queue.catA,
-        "CAT B": stats.queue.catB,
-        "CAT C": stats.queue.catC
-    }
-)}
+<div class="frtools-dashboard-columns">
 
-${this.renderStatSection(
-    "Exhibit Statistics",
-    {
-        "Total Exhibits": stats.summary.exhibitCount,
-        "Average / Request": stats.summary.averageExhibits,
-        "Examination Complete": stats.summary.examComplete
-    }
-)}
 
-${this.renderStatSection(
-    "Exhibit Categories",
-    stats.categories
-)}
+    <!-- LEFT COLUMN -->
 
-${this.renderStatSection(
-    "Forensic Offence Categories",
-    stats.offences
-)}
+    <div class="frtools-dashboard-column">
+
+
+        ${this.renderStatSection(
+            "Status Overview",
+            {
+                "🟢 Assigned": stats.summary.assigned,
+                "🟠 Queue": stats.summary.queue,
+                "🔴 Issues": stats.summary.problems,
+                "⚪ Complete": stats.summary.complete
+            }
+        )}
+
+
+
+        ${this.renderStatSection(
+            "Priority Breakdown",
+            {
+                "No Priority": stats.priorities.none,
+                "CAT A": stats.priorities.catA,
+                "CAT B": stats.priorities.catB,
+                "CAT C": stats.priorities.catC
+            }
+        )}
+
+
+
+        ${this.renderStatSection(
+            "Queue Breakdown",
+            {
+                "Total Queue": stats.queue.total,
+                "CAT A": stats.queue.catA,
+                "CAT B": stats.queue.catB,
+                "CAT C": stats.queue.catC
+            }
+        )}
+
+
+
+        ${this.renderStatSection(
+            "Exhibit Statistics",
+            {
+                "Total Exhibits": stats.summary.exhibitCount,
+                "Average / Request": stats.summary.averageExhibits,
+                "Examination Complete": stats.summary.examComplete
+            }
+        )}
+
+
+    </div>
+
+
+
+
+
+    <!-- RIGHT COLUMN -->
+
+    <div class="frtools-dashboard-column">
+
+
+        ${this.renderStatSection(
+            "Exhibit Categories",
+            stats.categories
+        )}
+
+
+
+        ${this.renderStatSection(
+            "Forensic Offence Categories",
+            stats.offences
+        )}
+
+
+    </div>
+
+
+
+</div>
+
 
 `;
 
@@ -627,6 +751,125 @@ ${this.renderStatSection(
 
 },
 
+renderStatusOverview(stats) {
+
+    return `
+
+    <div class="frtools-dashboard-section">
+
+        <div class="frtools-dashboard-section-title">
+
+            Status Overview
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>🟢 Assigned</span>
+
+            <strong>${stats.summary.assigned}</strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>🟠 Queue</span>
+
+            <strong>${stats.summary.queue}</strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>🔴 Issues</span>
+
+            <strong>${stats.summary.problems}</strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>⚪ Complete</span>
+
+            <strong>${stats.summary.complete}</strong>
+
+        </div>
+
+
+    </div>
+
+    `;
+
+},
+
+renderPriorityBreakdown(stats) {
+
+    return `
+
+    <div class="frtools-dashboard-section">
+
+
+        <div class="frtools-dashboard-section-title">
+
+            Priority Breakdown
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>No Priority</span>
+
+            <strong>
+                ${stats.priorities.none}
+            </strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>Cat A</span>
+
+            <strong>
+                ${stats.priorities.catA}
+            </strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>Cat B</span>
+
+            <strong>
+                ${stats.priorities.catB}
+            </strong>
+
+        </div>
+
+
+        <div class="frtools-dashboard-row">
+
+            <span>Cat C</span>
+
+            <strong>
+                ${stats.priorities.catC}
+            </strong>
+
+        </div>
+
+
+    </div>
+
+    `;
+
+},
+
     escapeHandler(event) {
 
 
@@ -663,74 +906,33 @@ ${this.renderStatSection(
 
     },
 
-getUniqueRequests(jobs) {
 
-    const requests =
-        new Map();
-
-    jobs.forEach(job => {
-
-        if (
-            !requests.has(
-                job.REPORTNO
-            )
-        ) {
-
-            requests.set(
-                job.REPORTNO,
-                job
-            );
-
-        }
-
-    });
-
-    return [
-        ...requests.values()
-    ];
-
-},
 
 getStats() {
 
     const jobs =
         this.getJobs();
 
-    const requests =
-        this.getUniqueRequests(
-            jobs
-        );
-
-        console.log(
-            "Rows:",
-            jobs.length
-        );
-
-        console.log(
-            "Requests:",
-            requests.length
-        );
-        
     return {
 
         summary:
             this.getSummaryStats(
-                requests
+                jobs
             ),
 
         priorities:
             this.getPriorityStats(
-                requests
+                jobs
             ),
 
         queue:
             this.getQueuePriorityStats(
-                requests
+                jobs
             ),
 
         capabilities:
             this.getCapabilityStats(
-                requests
+                jobs
             ),
 
         categories:
@@ -745,7 +947,7 @@ getStats() {
 
         offences:
             this.getOffenceStats(
-                requests
+                jobs
             ),
 
     };
