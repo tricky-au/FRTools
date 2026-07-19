@@ -1027,52 +1027,52 @@ getSummaryStats(jobs) {
 
 if (job.REPORTDATE) {
 
+
     const requestDate =
         new Date(
             job.REPORTDATE
-                .replace(" ", "T")
+                .replace(
+                    " +00:00",
+                    "Z"
+                )
+                .replace(
+                    " ",
+                    "T"
+                )
         );
 
 
-    const melbourneDate =
-        new Date(
-            requestDate.toLocaleString(
-                "en-AU",
-                {
-                    timeZone:
-                        "Australia/Melbourne"
-                }
-            )
-        );
+    if (!isNaN(requestDate)) {
 
 
-    const today =
-        new Date(
-            new Date().toLocaleString(
-                "en-AU",
-                {
-                    timeZone:
-                        "Australia/Melbourne"
-                }
-            )
-        );
+        const today =
+            new Date();
 
 
-    const age =
-        Math.floor(
-            (
-                today - melbourneDate
-            )
-            /
-            (1000 * 60 * 60 * 24)
-        );
+        const age =
+            Math.floor(
+                (
+                    today - requestDate
+                )
+                /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                )
+            );
 
 
-    if (age >= 0) {
+        if (age >= 0) {
 
-        totalAge += age;
+            totalAge += age;
+
+        }
+
 
     }
+
 
 }
 
