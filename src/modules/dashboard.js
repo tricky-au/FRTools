@@ -161,23 +161,34 @@ FRTools.Module.register({
 
             #frtools-dashboard-modal {
 
-                width: 1100px;
 
-                max-width: 95vw;
+                width:
+                    1100px;
 
-                max-height: 85vh;
 
-                display: flex;
+                max-width:
+                    95vw;
 
-                flex-direction: column;
 
-                background: white;
+                max-height:
+                    80vh;
 
-                border-radius: 12px;
 
-                box-shadow: 0 12px 35px rgba(0,0,0,0.45);
+                overflow:
+                    auto;
 
-                overflow: hidden;
+
+                background:
+                    white;
+
+
+                border-radius:
+                    12px;
+
+
+                box-shadow:
+                    0 12px 35px rgba(0,0,0,0.45);
+
 
             }
 
