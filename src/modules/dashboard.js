@@ -242,38 +242,90 @@ loadPDFLibrary() {
 
 
 
-            .frtools-dashboard-header {
+.frtools-dashboard-header {
+
+    background:
+        rgb(26,38,50);
+
+    color:
+        white;
+
+    text-align:
+        center;
+
+    padding:
+        16px 20px;
+
+    font-size:
+        18px;
+
+    font-weight:
+        700;
+
+    border-radius:
+        12px 12px 0 0;
+
+    position:
+        relative;
+
+}
 
 
-                background:
-                    rgb(26,38,50);
+#frtools-dashboard-export {
+
+    position:
+        absolute;
+
+    right:
+        12px;
+
+    top:
+        50%;
+
+    transform:
+        translateY(-50%);
 
 
-                color:
-                    white;
+    background:
+        white;
+
+    color:
+        rgb(26,38,50);
 
 
-                text-align:
-                    center;
+    border:
+        none;
 
 
-                padding:
-                    16px 20px;
+    border-radius:
+        5px;
 
 
-                font-size:
-                    18px;
+    padding:
+        4px 8px;
 
 
-                font-weight:
-                    700;
+    font-size:
+        11px;
 
 
-                border-radius:
-                    12px 12px 0 0;
+    font-weight:
+        700;
 
 
-            }
+    cursor:
+        pointer;
+
+
+}
+
+
+#frtools-dashboard-export:hover {
+
+    opacity:
+        0.85;
+
+}
 
 
 
@@ -1108,12 +1160,18 @@ exportDashboardPDF() {
         },
 
 
-        html2canvas: {
+html2canvas: {
 
-            scale:
-                2
+    scale:
+        2,
 
-        },
+    scrollY:
+        0,
+
+    useCORS:
+        true
+
+},
 
 
         jsPDF: {
@@ -1132,10 +1190,36 @@ exportDashboardPDF() {
     };
 
 
-    html2pdf()
-        .set(options)
-        .from(modal)
-        .save();
+const originalHeight =
+    modal.style.height;
+
+const originalOverflow =
+    modal.style.overflow;
+
+
+modal.style.height =
+    "auto";
+
+modal.style.overflow =
+    "visible";
+
+
+html2pdf()
+    .set(options)
+    .from(modal)
+    .save()
+    .then(() => {
+
+
+        modal.style.height =
+            originalHeight;
+
+
+        modal.style.overflow =
+            originalOverflow;
+
+
+    });
 
 
 },
