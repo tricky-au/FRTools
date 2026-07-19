@@ -845,6 +845,65 @@ max-width: 320px;
 
             }
 
+        #frtools-dashboard-modal {
+
+        position: fixed;
+
+        top: 50%;
+
+        left: 50%;
+
+        transform:
+            translate(-50%, -50%);
+
+        width: 650px;
+
+        max-width: 90vw;
+
+        background: white;
+
+        z-index: 1000002;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 12px 35px rgba(0,0,0,0.45);
+
+        overflow: hidden;
+
+    }
+
+
+    .frtools-dashboard-header {
+
+        background:
+            rgb(26,38,50);
+
+        color:
+            white;
+
+        padding:
+            16px;
+
+        text-align:
+            center;
+
+        font-size:
+            18px;
+
+        font-weight:
+            700;
+
+    }
+
+
+    .frtools-dashboard-content {
+
+        padding:
+            20px;
+
+    }
+
 
         `);
 
