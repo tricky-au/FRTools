@@ -161,34 +161,23 @@ FRTools.Module.register({
 
             #frtools-dashboard-modal {
 
+                width: 700px;
 
-                width:
-                    700px;
+                max-width: 90vw;
 
+                max-height: 85vh;
 
-                max-width:
-                    90vw;
+                display: flex;
 
+                flex-direction: column;
 
-                max-height:
-                    75vh;
+                background: white;
 
+                border-radius: 12px;
 
-                overflow:
-                    auto;
+                box-shadow: 0 12px 35px rgba(0,0,0,0.45);
 
-
-                background:
-                    white;
-
-
-                border-radius:
-                    12px;
-
-
-                box-shadow:
-                    0 12px 35px rgba(0,0,0,0.45);
-
+                overflow: hidden;
 
             }
 
@@ -230,21 +219,47 @@ FRTools.Module.register({
 
 
 
-
             .frtools-dashboard-content {
 
+                padding: 20px;
 
-                padding:
-                    20px;
+                font-size: 14px;
 
+                overflow-y: auto;
 
-                font-size:
-                    14px;
-
+                flex: 1;
 
             }
 
+            .frtools-dashboard-content::-webkit-scrollbar {
 
+                width: 10px;
+
+            }
+
+            .frtools-dashboard-content::-webkit-scrollbar-track {
+
+                background: #ebebeb;
+
+                border-radius: 10px;
+
+            }
+
+            .frtools-dashboard-content::-webkit-scrollbar-thumb {
+
+                background: rgb(26,38,50);
+
+                border-radius: 10px;
+
+                border: 2px solid #ebebeb;
+
+            }
+
+            .frtools-dashboard-content::-webkit-scrollbar-thumb:hover {
+
+                background: #263746;
+
+            }
 
             .frtools-dashboard-card {
 
