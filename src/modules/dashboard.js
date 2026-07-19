@@ -619,7 +619,7 @@ FRTools.Module.register({
 
     </div>
 
-    /div>
+    </div>
 
     <div class="frtools-dashboard-card">
 
