@@ -703,6 +703,11 @@ FRTools.Module.register({
             stats.examinerWorkload
             )}
 
+        ${this.renderStatSection(
+            "Request Age",
+            stats.ageBuckets
+        )}
+
 
         ${this.renderStatSection(
             "Exhibit Statistics",
@@ -1045,6 +1050,11 @@ getStats() {
         examinerWorkload:
         this.getExaminerWorkloadStats(
                 jobs
+            ),
+
+        ageBuckets:
+        this.getAgeBucketStats(
+            jobs
             ),
 
     };
@@ -1730,6 +1740,97 @@ getExaminerWorkloadStats(jobs) {
             },
             {}
         );
+
+
+},
+
+getAgeBucketStats(jobs) {
+
+    const buckets = {
+
+        "0-30 Days": 0,
+
+        "31-60 Days": 0,
+
+        "61-90 Days": 0,
+
+        "90+ Days": 0
+
+    };
+
+
+    jobs.forEach(job => {
+
+
+        if (!job.REPORTDATE) {
+
+            return;
+
+        }
+
+
+        const reportDate =
+            new Date(
+                job.REPORTDATE
+                    .replace(
+                        " +00:00",
+                        "Z"
+                    )
+                    .replace(
+                        " ",
+                        "T"
+                    )
+            );
+
+
+        if (isNaN(reportDate)) {
+
+            return;
+
+        }
+
+
+        const age =
+            Math.floor(
+                (
+                    new Date() - reportDate
+                )
+                /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                )
+            );
+
+
+        if (age <= 30) {
+
+            buckets["0-30 Days"]++;
+
+        }
+        else if (age <= 60) {
+
+            buckets["31-60 Days"]++;
+
+        }
+        else if (age <= 90) {
+
+            buckets["61-90 Days"]++;
+
+        }
+        else {
+
+            buckets["90+ Days"]++;
+
+        }
+
+
+    });
+
+
+    return buckets;
 
 
 },
