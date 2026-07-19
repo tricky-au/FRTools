@@ -422,179 +422,103 @@ FRTools.Module.register({
 
 
 
-       modal.querySelector(
-            ".frtools-dashboard-content"
-        )
-        .innerHTML = `
+   modal.querySelector(
+    ".frtools-dashboard-content"
+)
+.innerHTML = `
 
+<div class="frtools-dashboard-grid">
 
-        <div class="frtools-dashboard-grid">
+    <div class="frtools-dashboard-card">
 
-
-            <div class="frtools-dashboard-card">
-
-                <div class="frtools-dashboard-card-title">
-
-                    Requests
-
-                </div>
-
-                <div class="frtools-dashboard-card-value">
-
-                    ${stats.totalRequests}
-
-                </div>
-
-            </div>
-
-
-
-            <div class="frtools-dashboard-card">
-
-                <div class="frtools-dashboard-card-title">
-
-                    Assigned
-
-                </div>
-
-                <div class="frtools-dashboard-card-value">
-
-                    ${stats.assigned}
-
-                </div>
-
-            </div>
-
-
-
-            <div class="frtools-dashboard-card">
-
-                <div class="frtools-dashboard-card-title">
-
-                    Queue
-
-                </div>
-
-                <div class="frtools-dashboard-card-value">
-
-                    ${stats.queue}
-
-                </div>
-
-            </div>
-
-
-
-            <div class="frtools-dashboard-card">
-
-                <div class="frtools-dashboard-card-title">
-
-                    Issues
-
-                </div>
-
-                <div class="frtools-dashboard-card-value">
-
-                    ${stats.issues}
-
-                </div>
-
-            </div>
-
-
+        <div class="frtools-dashboard-card-title">
+            Requests
         </div>
 
-
-
-
-        <div class="frtools-dashboard-section">
-
-
-        <div class="frtools-dashboard-section-title">
-
-            Status Overview
-
+        <div class="frtools-dashboard-card-value">
+            ${stats.summary.totalJobs}
         </div>
 
+    </div>
 
-        <div class="frtools-dashboard-row">
+    <div class="frtools-dashboard-card">
 
-            <span>🟢 Assigned</span>
-
-            <strong>${stats.assigned}</strong>
-
+        <div class="frtools-dashboard-card-title">
+            Assigned
         </div>
 
-
-        <div class="frtools-dashboard-row">
-
-            <span>🟠 Queue</span>
-
-            <strong>${stats.queue}</strong>
-
+        <div class="frtools-dashboard-card-value">
+            ${stats.summary.assigned}
         </div>
 
+    </div>
 
-        <div class="frtools-dashboard-row">
+    <div class="frtools-dashboard-card">
 
-            <span>🔴 Issues</span>
-
-            <strong>${stats.issues}</strong>
-
+        <div class="frtools-dashboard-card-title">
+            Queue
         </div>
 
-
-        <div class="frtools-dashboard-row">
-
-            <span>⚪ Complete</span>
-
-            <strong>${stats.completed}</strong>
-
+        <div class="frtools-dashboard-card-value">
+            ${stats.summary.queue}
         </div>
 
+    </div>
 
+    <div class="frtools-dashboard-card">
+
+        <div class="frtools-dashboard-card-title">
+            Issues
         </div>
 
-
-
-
-        <div class="frtools-dashboard-section">
-
-
-        <div class="frtools-dashboard-section-title">
-
-            Priority Breakdown
-
+        <div class="frtools-dashboard-card-value">
+            ${stats.summary.problems}
         </div>
 
+    </div>
 
-        ${
-            Object.entries(
-                stats.priorities
-            )
-            .map(
-                ([priority,count]) => `
+</div>
 
+${this.renderStatSection(
+    "Status Overview",
+    {
+        "🟢 Assigned": stats.summary.assigned,
+        "🟠 Queue": stats.summary.queue,
+        "🔴 Issues": stats.summary.problems,
+        "⚪ Complete": stats.summary.complete
+    }
+)}
 
-                <div class="frtools-dashboard-row">
+${this.renderStatSection(
+    "Priority Breakdown",
+    {
+        "No Priority": stats.priorities.none,
+        "CAT A": stats.priorities.catA,
+        "CAT B": stats.priorities.catB,
+        "CAT C": stats.priorities.catC
+    }
+)}
 
-                    <span>${priority}</span>
+${this.renderStatSection(
+    "Queue Breakdown",
+    {
+        "Total Queue": stats.queue.total,
+        "CAT A": stats.queue.catA,
+        "CAT B": stats.queue.catB,
+        "CAT C": stats.queue.catC
+    }
+)}
 
-                    <strong>${count}</strong>
+${this.renderStatSection(
+    "Exhibit Statistics",
+    {
+        "Total Exhibits": stats.summary.exhibitCount,
+        "Average / Request": stats.summary.averageExhibits,
+        "Examination Complete": stats.summary.examComplete
+    }
+)}
 
-                </div>
-
-
-                `
-            )
-            .join("")
-        }
-
-
-        </div>
-
-
-        `;
+`;
 
 
 
@@ -642,6 +566,42 @@ FRTools.Module.register({
     },
 
 
+    renderStatSection(title, data) {
+
+    return `
+
+        <div class="frtools-dashboard-section">
+
+            <div class="frtools-dashboard-section-title">
+
+                ${title}
+
+            </div>
+
+            ${
+                Object.entries(data)
+                    .map(
+                        ([name, value]) => `
+
+                            <div class="frtools-dashboard-row">
+
+                                <span>${name}</span>
+
+                                <strong>${value}</strong>
+
+                            </div>
+
+                        `
+                    )
+                    .join("")
+            }
+
+        </div>
+
+    `;
+
+},
+
     escapeHandler(event) {
 
 
@@ -680,174 +640,314 @@ FRTools.Module.register({
 
 
 
-getStats() {
+    getStats() {
 
+        const jobs =
+            this.getJobs();
 
-    const jobs =
-        this.getJobs();
+        return {
 
+            summary:
+                this.getSummaryStats(
+                    jobs
+                ),
 
-    const stats = {
+            priorities:
+                this.getPriorityStats(
+                    jobs
+                ),
+            queue:
 
-        totalRequests: jobs.length,
+                this.getQueuePriorityStats(
+                    jobs
+                ),
 
-        assigned: 0,
+            capabilities:
+                this.getCapabilityStats(
+                    jobs
+                ),
 
-        queue: 0,
+            exhibits:
+                this.getExhibitStats(
+                    jobs
+                ),
 
-        issues: 0,
+            offences:
+                this.getOffenceStats(
+                    jobs
+                ),
+        };
 
-        completed: 0,
+    },
 
-        priorities: {},
+getSummaryStats(jobs) {
 
-        requestTypes: {},
+    let assigned = 0;
+    let queue = 0;
+    let problems = 0;
+    let complete = 0;
+    let examComplete = 0;
+    let exhibitCount = 0;
 
-        capabilities: {}
+    jobs.forEach(job => {
+
+        switch ((job.BACKGROUNDCOLOR || "").toLowerCase()) {
+
+            case "green":
+                assigned++;
+                break;
+
+            case "orange":
+                queue++;
+                break;
+
+            case "red":
+                problems++;
+                break;
+
+            case "grey":
+                complete++;
+                break;
+
+        }
+
+        if (Number(job.REQUESTSTATUS1) === 1) {
+
+            examComplete++;
+
+        }
+
+        exhibitCount += Number(job.EXHIBITCOUNT || 0);
+
+    });
+
+    return {
+
+        totalJobs: jobs.length,
+
+        assigned,
+
+        queue,
+
+        problems,
+
+        complete,
+
+        examComplete,
+
+        exhibitCount,
+
+        averageExhibits:
+            jobs.length
+                ? (exhibitCount / jobs.length).toFixed(2)
+                : "0.00"
+
+    };
+
+},
+
+getPriorityStats(jobs) {
+
+    const priorities = {
+
+        none: 0,
+
+        catA: 0,
+
+        catB: 0,
+
+        catC: 0
 
     };
 
 
-
     jobs.forEach(job => {
 
-
-
-        /*
-            Status colours
-        */
-
         switch (
-            (job.BACKGROUNDCOLOR || "")
-            .toLowerCase()
+            Number(job.PRIORITY)
         ) {
 
+            case 6:
 
-            case "green":
-
-                stats.assigned++;
-
-                break;
-
-
-            case "orange":
-
-                stats.queue++;
+                priorities.catA++;
 
                 break;
 
+            case 4:
 
-            case "red":
-
-                stats.issues++;
-
-                break;
-
-
-            case "grey":
-
-                stats.completed++;
+                priorities.catB++;
 
                 break;
 
+            case 2:
+
+                priorities.catC++;
+
+                break;
+
+            default:
+
+                priorities.none++;
+
+                break;
 
         }
-
-
-
-        /*
-            Priority
-        */
-
-let priorityLabel;
-
-
-switch (
-    Number(job.PRIORITY)
-) {
-
-
-    case 0:
-
-        priorityLabel = "No Priority";
-
-        break;
-
-
-    case 6:
-
-        priorityLabel = "Cat A";
-
-        break;
-
-
-    case 4:
-
-        priorityLabel = "Cat B";
-
-        break;
-
-
-    case 2:
-
-        priorityLabel = "Cat C";
-
-        break;
-
-
-    default:
-
-        priorityLabel = "Unknown";
-
-        break;
-
-}
-
-
-
-stats.priorities[priorityLabel] =
-    (
-        stats.priorities[priorityLabel] || 0
-    ) + 1;
-
-
-
-        /*
-            Request Type
-        */
-
-        const type =
-            job.REQUESTTYPE || "Unknown";
-
-
-        stats.requestTypes[type] =
-            (
-                stats.requestTypes[type] || 0
-            ) + 1;
-
-
-
-        /*
-            Capability
-        */
-
-        const capability =
-            job.CAPABILITIESCSV || "Unknown";
-
-
-        stats.capabilities[capability] =
-            (
-                stats.capabilities[capability] || 0
-            ) + 1;
-
-
 
     });
 
 
+    return priorities;
 
-    return stats;
+},
 
+getCapabilityStats(jobs) {
+
+    const capabilities = {};
+
+
+    jobs.forEach(job => {
+
+        const capability =
+            (job.CAPABILITIESCSV || "Unknown").trim();
+
+
+        capabilities[capability] =
+            (capabilities[capability] || 0) + 1;
+
+    });
+
+
+    return Object
+        .entries(capabilities)
+        .sort(
+            (a, b) => b[1] - a[1]
+        )
+        .map(
+            ([name, count]) => ({
+
+                name,
+
+                count
+
+            })
+        );
+
+},
+
+
+getOffenceStats(jobs) {
+
+    const offences = {};
+
+
+    jobs.forEach(job => {
+
+        const offence =
+            (job.FORENSICOFFENCECATEGORY || "Unknown").trim();
+
+
+        offences[offence] =
+            (offences[offence] || 0) + 1;
+
+    });
+
+
+    return Object
+        .entries(offences)
+        .sort(
+            (a, b) => b[1] - a[1]
+        )
+        .map(
+            ([name, count]) => ({
+
+                name,
+
+                count
+
+            })
+        );
+
+},
+
+getExhibitStats(jobs) {
+
+    let total = 0;
+
+
+    jobs.forEach(job => {
+
+        total +=
+            Number(job.EXHIBITCOUNT) || 0;
+
+    });
+
+
+    return {
+
+        total
+
+    };
+
+},
+
+
+getQueuePriorityStats(jobs) {
+
+    const queue = {
+
+        catA: 0,
+
+        catB: 0,
+
+        catC: 0,
+
+        total: 0
+
+    };
+
+
+    jobs.forEach(job => {
+
+        if (
+            String(job.BACKGROUNDCOLOR).toLowerCase() !== "orange"
+        ) {
+
+            return;
+
+        }
+
+
+        queue.total++;
+
+
+        switch (
+            Number(job.PRIORITY)
+        ) {
+
+            case 6:
+
+                queue.catA++;
+
+                break;
+
+            case 4:
+
+                queue.catB++;
+
+                break;
+
+            case 2:
+
+                queue.catC++;
+
+                break;
+
+        }
+
+    });
+
+
+    return queue;
 
 },
 
