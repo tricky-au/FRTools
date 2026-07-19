@@ -588,6 +588,18 @@ FRTools.Module.register({
 
     </div>
 
+    <div class="frtools-dashboard-card">
+
+        <div class="frtools-dashboard-card-title">
+            Avg Request Age
+        </div>
+
+        <div class="frtools-dashboard-card-value">
+            ${stats.summary.averageAge}
+        </div>
+
+    </div>
+
 
 </div>
 
@@ -644,6 +656,11 @@ FRTools.Module.register({
                 "Average / Request": stats.summary.averageExhibits,
                 "Examination Complete": stats.summary.examComplete
             }
+        )}
+
+        ${this.renderStatSection(
+            "Capabilities",
+            stats.capabilities
         )}
 
 
@@ -973,38 +990,65 @@ getSummaryStats(jobs) {
     let complete = 0;
     let examComplete = 0;
     let exhibitCount = 0;
+    let totalAge = 0;
 
     jobs.forEach(job => {
 
-        switch ((job.BACKGROUNDCOLOR || "").toLowerCase()) {
+    switch ((job.BACKGROUNDCOLOR || "").toLowerCase()) {
 
-            case "green":
-                assigned++;
-                break;
+        case "green":
+            assigned++;
+            break;
 
-            case "orange":
-                queue++;
-                break;
+        case "orange":
+            queue++;
+            break;
 
-            case "red":
-                problems++;
-                break;
+        case "red":
+            problems++;
+            break;
 
-            case "grey":
-                complete++;
-                break;
+        case "grey":
+            complete++;
+            break;
 
-        }
+    }
 
-        if (Number(job.REQUESTSTATUS1) === 1) {
 
-            examComplete++;
+    if (Number(job.REQUESTSTATUS1) === 1) {
 
-        }
+        examComplete++;
 
-        exhibitCount += Number(job.EXHIBITCOUNT || 0);
+    }
 
-    });
+
+    exhibitCount += Number(job.EXHIBITCOUNT || 0);
+
+
+    if (job.REPORTDATE) {
+
+        const requestDate =
+            new Date(job.REPORTDATE);
+
+        const today =
+            new Date();
+
+        const age =
+            Math.floor(
+                (
+                    today - requestDate
+                )
+                /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        totalAge += age;
+
+    }
+
+
+});
 
     return {
 
