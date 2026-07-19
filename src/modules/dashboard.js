@@ -22,6 +22,20 @@ FRTools.Module.register({
             "[FR Tools] Dashboard loaded"
         );
 
-    }
+        const jobs = this.getJobs();
+
+        console.log(
+            `[FR Tools] Dashboard found ${jobs.length} jobs`
+        );
+
+    },
+
+    getJobs() {
+
+    const table = $("#UnitWorklistTable").DataTable();
+
+    return table.rows().data().toArray();
+
+    },
 
 });
