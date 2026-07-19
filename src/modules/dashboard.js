@@ -30,6 +30,7 @@ FRTools.Module.register({
             "[FR Tools] Dashboard loaded"
         );
 
+        this.loadPDFLibrary();
         this.addStyles();
         this.createButton();
 
@@ -42,6 +43,52 @@ FRTools.Module.register({
 
 
     },
+
+loadPDFLibrary() {
+
+    if (
+        typeof html2pdf !== "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    const script =
+        document.createElement(
+            "script"
+        );
+
+
+    script.src =
+        "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+
+
+    script.onload = () => {
+
+        console.log(
+            "[FR Tools] PDF export library loaded"
+        );
+
+    };
+
+
+    script.onerror = () => {
+
+        console.error(
+            "[FR Tools] Failed to load PDF export library"
+        );
+
+    };
+
+
+    document.head.appendChild(
+        script
+    );
+
+},
+
 
     addStyles() {
 
@@ -472,11 +519,17 @@ FRTools.Module.register({
                 <div id="frtools-dashboard-modal">
 
 
-                    <div class="frtools-dashboard-header">
+                <div class="frtools-dashboard-header">
 
+                    <span>
                         FR Tools Dashboard
+                    </span>
 
-                    </div>
+                    <button id="frtools-dashboard-export">
+                        Export PDF
+                    </button>
+
+                </div>
 
 
                     <div class="frtools-dashboard-content">
@@ -518,6 +571,19 @@ FRTools.Module.register({
             modal =
                 document.getElementById(
                     "frtools-dashboard-modal"
+                );
+
+            document
+                .getElementById(
+                    "frtools-dashboard-export"
+                )
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        this.exportDashboardPDF();
+
+                    }
                 );
 
 
@@ -993,7 +1059,86 @@ renderPriorityBreakdown(stats) {
 
     },
 
+exportDashboardPDF() {
 
+
+    const modal =
+        document.getElementById(
+            "frtools-dashboard-modal"
+        );
+
+
+    if (!modal) {
+
+        return;
+
+    }
+
+
+    if (
+        typeof html2pdf === "undefined"
+    ) {
+
+        console.error(
+            "[FR Tools] PDF library not loaded"
+        );
+
+        return;
+
+    }
+
+
+
+    const options = {
+
+        margin:
+            10,
+
+        filename:
+            "FR_Tools_Dashboard.pdf",
+
+        image: {
+
+            type:
+                "jpeg",
+
+            quality:
+                0.95
+
+        },
+
+
+        html2canvas: {
+
+            scale:
+                2
+
+        },
+
+
+        jsPDF: {
+
+            unit:
+                "mm",
+
+            format:
+                "a4",
+
+            orientation:
+                "landscape"
+
+        }
+
+    };
+
+
+    html2pdf()
+        .set(options)
+        .from(modal)
+        .save();
+
+
+},
 
 getStats() {
 

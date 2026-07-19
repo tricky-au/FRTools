@@ -67,6 +67,7 @@ module.exports = [
                 GM_addStyle: "readonly",
                 URLSearchParams: "readonly",
                 jQuery: "readonly",
+                html2pdf: "readonly",
             }
         },
 
