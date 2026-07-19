@@ -604,7 +604,7 @@ FRTools.Module.register({
     <div class="frtools-dashboard-card">
 
     <div class="frtools-dashboard-card-title">
-        Oldest Unassigned
+        Oldest Unassigned Request #
     </div>
 
     <div class="frtools-dashboard-card-value">
@@ -624,7 +624,7 @@ FRTools.Module.register({
     <div class="frtools-dashboard-card">
 
     <div class="frtools-dashboard-card-title">
-        Oldest Active
+        Oldest Active Request #
     </div>
 
 
@@ -641,11 +641,16 @@ FRTools.Module.register({
 
     </div>
 
+    </div>
 
-    <div style="font-size:12px;">
+    <div class="frtools-dashboard-card">
 
-        ${stats.oldestActive.status}
+    <div class="frtools-dashboard-card-title">
+        Examination Complete
+    </div>
 
+    <div class="frtools-dashboard-card-value">
+        ${stats.summary.examComplete}
     </div>
 
     </div>
@@ -693,13 +698,17 @@ FRTools.Module.register({
             }
         )}
 
+        ${this.renderStatSection(
+            "Examiner Workload",
+            stats.examinerWorkload
+            )}
+
 
         ${this.renderStatSection(
             "Exhibit Statistics",
             {
                 "Total Exhibits": stats.summary.exhibitCount,
                 "Average / Request": stats.summary.averageExhibits,
-                "Examination Complete": stats.summary.examComplete
             }
         )}
 
@@ -1030,6 +1039,11 @@ getStats() {
 
         offences:
             this.getOffenceStats(
+                jobs
+            ),
+
+        examinerWorkload:
+        this.getExaminerWorkloadStats(
                 jobs
             ),
 
@@ -1667,6 +1681,56 @@ getQueuePriorityStats(jobs) {
 
 
     return queue;
+
+},
+
+getExaminerWorkloadStats(jobs) {
+
+    const examiners = {};
+
+
+    jobs.forEach(job => {
+
+
+        // Only count assigned requests
+        if (
+            (job.BACKGROUNDCOLOR || "")
+                .toLowerCase() !== "green"
+        ) {
+
+            return;
+
+        }
+
+
+        const examiner =
+            (job.ASSIGNEDTOID || "Unassigned")
+                .trim();
+
+
+        examiners[examiner] =
+            (examiners[examiner] || 0) + 1;
+
+
+    });
+
+
+    return Object
+        .entries(examiners)
+        .sort(
+            (a, b) => b[1] - a[1]
+        )
+        .reduce(
+            (obj, [name, count]) => {
+
+                obj[name] = count;
+
+                return obj;
+
+            },
+            {}
+        );
+
 
 },
 
