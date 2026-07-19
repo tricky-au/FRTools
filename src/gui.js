@@ -240,7 +240,71 @@ max-width: 320px;
 
             }
 
+            #frtools-dashboard-button {
 
+                position: fixed;
+
+                bottom: 75px;
+
+                right: 20px;
+
+                z-index: 999999;
+
+
+                background:
+                    rgb(26,38,50);
+
+
+                color:
+                    white;
+
+
+                border:
+                    none;
+
+
+                border-radius:
+                    8px;
+
+
+                padding:
+                    12px 18px;
+
+
+                font-size:
+                    14px;
+
+
+                font-weight:
+                    600;
+
+
+                cursor:
+                    pointer;
+
+
+                box-shadow:
+                    0 4px 14px rgba(0,0,0,0.3);
+
+
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+
+            }
+
+
+
+            #frtools-dashboard-button:hover {
+
+                transform:
+                    translateY(-2px);
+
+
+                box-shadow:
+                    0 6px 18px rgba(0,0,0,0.35);
+
+            }
 
 
             #frtools-modal {
@@ -801,7 +865,18 @@ max-width: 320px;
         btn.textContent =
             "FR Tools";
 
+        const dashboardBtn =
+            document.createElement(
+                "button"
+            );
 
+
+        dashboardBtn.id =
+            "frtools-dashboard-button";
+
+
+        dashboardBtn.textContent =
+            "Dashboard";
 
         const overlay =
             document.createElement(
@@ -1358,7 +1433,29 @@ max-width: 320px;
             }
         );
 
+        dashboardBtn.addEventListener(
+            "click",
+            () => {
 
+                if (
+                    typeof FRTools.Dashboard !== "undefined"
+                    &&
+                    typeof FRTools.Dashboard.open === "function"
+                ) {
+
+                    FRTools.Dashboard.open();
+
+                }
+                else {
+
+                    console.error(
+                        "[FR Tools] Dashboard unavailable"
+                    );
+
+                }
+
+            }
+        );
 
 
 
@@ -1461,9 +1558,13 @@ max-width: 320px;
 
 
         document.body.appendChild(
-            btn
+            dashboardBtn
         );
 
+
+        document.body.appendChild(
+            btn
+        );
 
 
         document.body.appendChild(
