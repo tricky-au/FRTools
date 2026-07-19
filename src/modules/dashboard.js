@@ -663,52 +663,94 @@ ${this.renderStatSection(
 
     },
 
+getUniqueRequests(jobs) {
 
+    const requests =
+        new Map();
 
-    getStats() {
+    jobs.forEach(job => {
 
-        const jobs =
-            this.getJobs();
+        if (
+            !requests.has(
+                job.REPORTNO
+            )
+        ) {
 
-        return {
+            requests.set(
+                job.REPORTNO,
+                job
+            );
 
-            summary:
-                this.getSummaryStats(
-                    jobs
-                ),
+        }
 
-            priorities:
-                this.getPriorityStats(
-                    jobs
-                ),
-            queue:
+    });
 
-                this.getQueuePriorityStats(
-                    jobs
-                ),
+    return [
+        ...requests.values()
+    ];
 
-            capabilities:
-                this.getCapabilityStats(
-                    jobs
-                ),
+},
 
-            categories:
-                this.getCategoryStats(
-                     jobs
-                ),
+getStats() {
 
-            exhibits:
-                this.getExhibitStats(
-                    jobs
-                ),
+    const jobs =
+        this.getJobs();
 
-            offences:
-                this.getOffenceStats(
-                    jobs
-                ),
-        };
+    const requests =
+        this.getUniqueRequests(
+            jobs
+        );
 
-    },
+        console.log(
+            "Rows:",
+            jobs.length
+        );
+
+        console.log(
+            "Requests:",
+            requests.length
+        );
+        
+    return {
+
+        summary:
+            this.getSummaryStats(
+                requests
+            ),
+
+        priorities:
+            this.getPriorityStats(
+                requests
+            ),
+
+        queue:
+            this.getQueuePriorityStats(
+                requests
+            ),
+
+        capabilities:
+            this.getCapabilityStats(
+                requests
+            ),
+
+        categories:
+            this.getCategoryStats(
+                jobs
+            ),
+
+        exhibits:
+            this.getExhibitStats(
+                jobs
+            ),
+
+        offences:
+            this.getOffenceStats(
+                requests
+            ),
+
+    };
+
+},
 
 getSummaryStats(jobs) {
 
