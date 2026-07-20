@@ -1113,32 +1113,93 @@ renderPriorityBreakdown(stats) {
 
 exportDashboardPDF() {
 
+    if (!this.pdfReady) {
 
-    const modal =
+        FRTools.GUI.notify(
+            "PDF library is still loading..."
+        );
+
+        return;
+
+    }
+
+
+    const original =
         document.getElementById(
             "frtools-dashboard-modal"
         );
 
 
-    if (!modal) {
+    if (!original) {
 
         return;
 
     }
 
 
-    if (
-        typeof html2pdf === "undefined"
-    ) {
+    /*
+        Create export copy
+    */
 
-        console.error(
-            "[FR Tools] PDF library not loaded"
+    const exportModal =
+        original.cloneNode(
+            true
         );
 
-        return;
+
+    exportModal.id =
+        "frtools-dashboard-export-copy";
+
+
+    /*
+        Remove Export button
+    */
+
+    const exportButton =
+        exportModal.querySelector(
+            "#frtools-dashboard-export"
+        );
+
+
+    if (exportButton) {
+
+        exportButton.remove();
 
     }
 
+
+    /*
+        Expand fully
+    */
+
+    exportModal.style.position =
+        "absolute";
+
+    exportModal.style.left =
+        "-10000px";
+
+    exportModal.style.top =
+        "0";
+
+    exportModal.style.transform =
+        "none";
+
+    exportModal.style.maxHeight =
+        "none";
+
+    exportModal.style.height =
+        "auto";
+
+    exportModal.style.overflow =
+        "visible";
+
+    exportModal.style.width =
+        "1100px";
+
+
+    document.body.appendChild(
+        exportModal
+    );
 
 
     const options = {
@@ -1147,7 +1208,7 @@ exportDashboardPDF() {
             10,
 
         filename:
-            "FR_Tools_Dashboard.pdf",
+            "FRTools_Dashboard.pdf",
 
         image: {
 
@@ -1155,24 +1216,19 @@ exportDashboardPDF() {
                 "jpeg",
 
             quality:
-                0.95
+                1
 
         },
 
+        html2canvas: {
 
-html2canvas: {
+            scale:
+                2,
 
-    scale:
-        2,
+            useCORS:
+                true
 
-    scrollY:
-        0,
-
-    useCORS:
-        true
-
-},
-
+        },
 
         jsPDF: {
 
@@ -1180,7 +1236,7 @@ html2canvas: {
                 "mm",
 
             format:
-                "a4",
+                "a3",
 
             orientation:
                 "landscape"
@@ -1190,37 +1246,15 @@ html2canvas: {
     };
 
 
-const originalHeight =
-    modal.style.height;
+    html2pdf()
+        .set(options)
+        .from(exportModal)
+        .save()
+        .then(() => {
 
-const originalOverflow =
-    modal.style.overflow;
+            exportModal.remove();
 
-
-modal.style.height =
-    "auto";
-
-modal.style.overflow =
-    "visible";
-
-
-html2pdf()
-    .set(options)
-    .from(modal)
-    .save()
-    .then(() => {
-
-
-        modal.style.height =
-            originalHeight;
-
-
-        modal.style.overflow =
-            originalOverflow;
-
-
-    });
-
+        });
 
 },
 
