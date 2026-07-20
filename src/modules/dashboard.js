@@ -287,9 +287,9 @@ FRTools.Module.register({
 
             .frtools-dashboard-content {
 
-                padding: 20px;
+                padding: 12px;
 
-                font-size: 14px;
+                font-size: 13px;
 
                 overflow-y: auto;
 
@@ -330,7 +330,7 @@ FRTools.Module.register({
                     14px;
 
                 margin-bottom:
-                    16px;
+                    10px;
 
             }
 
@@ -355,7 +355,7 @@ FRTools.Module.register({
             }
 
 
-            .frtools-dashboard-row {
+            .frtools-dashboard-row strong{
 
                 display:
                     flex;
@@ -364,10 +364,13 @@ FRTools.Module.register({
                     space-between;
 
                 padding:
-                    6px 0;
+                    4px 8px;
 
                 border-bottom:
                     1px solid #ddd;
+
+                font-size:
+                    13px;
 
             }
 
@@ -425,7 +428,7 @@ FRTools.Module.register({
 
 
                 padding:
-                    16px;
+                    10px;
 
 
                 margin-bottom:

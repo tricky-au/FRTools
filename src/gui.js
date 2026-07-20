@@ -918,11 +918,14 @@ max-width: 320px;
 
     .frtools-dashboard-card-value {
 
-        font-size: 28px;
+        font-size: 22px;
 
         font-weight: 700;
 
         color: #1a2632;
+        
+        margin-top:
+        4px;
 
     }
 
