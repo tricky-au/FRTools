@@ -1152,21 +1152,43 @@ renderExhibitCategoryChart() {
 
                 options: {
 
-                    responsive: true,
+                indexAxis:
+                    "y",
 
-                    maintainAspectRatio: false,
+                responsive: true,
 
-                    plugins: {
+                maintainAspectRatio: false,
 
-                        legend: {
+                scales: {
 
-                            display: false
+                    y: {
+
+                        ticks: {
+
+                            autoSkip: false,
+                            font: {
+
+                            size: 11
+
+                                    }
 
                         }
 
                     }
 
+                },
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
                 }
+
+            }
 
             }
         );
@@ -1259,7 +1281,12 @@ renderOffenceCategoryChart() {
 
                             ticks: {
 
-                                autoSkip: false
+                                autoSkip: false,
+                                font: {
+
+                                    size: 11
+
+                                    }
 
                             }
 
