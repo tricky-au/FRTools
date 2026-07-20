@@ -1563,40 +1563,48 @@ max-width: 320px;
             }
         );
 
-        dashboardBtn.addEventListener(
-            "click",
-            () => {
+dashboardBtn.addEventListener(
+    "click",
+    () => {
 
-                if (
-                    typeof FRTools.Dashboard === "undefined"
-                    ||
-                    typeof FRTools.Dashboard.open !== "function"
-                ) {
 
-                    console.error(
-                        "[FR Tools] Dashboard unavailable"
-                    );
+        const dashboard =
+            FRTools.Module.get(
+                "dashboard"
+            );
 
-                    return;
 
-                }
+        if (!dashboard) {
 
-                if (
-                    !FRTools.Dashboard.matches(window.location)
-                ) {
+            console.error(
+                "[FR Tools] Dashboard module unavailable"
+            );
 
-                    FRTools.GUI.notify(
-                        "Dashboard is only available from the Unit Worklist."
-                    );
+            return;
 
-                    return;
+        }
 
-                }
 
-                FRTools.Dashboard.open();
+        if (
+            !dashboard.matches(
+                window.location
+            )
+        ) {
 
-            }
-        );
+            FRTools.GUI.notify(
+                "Dashboard is only available from the Unit Worklist."
+            );
+
+            return;
+
+        }
+
+
+        dashboard.openDashboard();
+
+
+    }
+);
 
 
         overlay.addEventListener(
