@@ -13,6 +13,9 @@ FRTools.Module.register({
     overlayId:
         "frtools-dashboard-overlay",
 
+    pdfReady:
+        false,
+
     matches(location) {
 
         return (
@@ -50,6 +53,8 @@ loadPDFLibrary() {
         typeof html2pdf !== "undefined"
     ) {
 
+        this.pdfReady = true;
+
         return;
 
     }
@@ -66,6 +71,8 @@ loadPDFLibrary() {
 
 
     script.onload = () => {
+
+        this.pdfReady = true;
 
         console.log(
             "[FR Tools] PDF export library loaded"
