@@ -1567,29 +1567,33 @@ max-width: 320px;
             "click",
             () => {
 
-                const dashboard =
-                    FRTools.Module.all()
-                        .find(
-                            module =>
-                                module.id === "dashboard"
-                        );
-
-
                 if (
-                    dashboard &&
-                    typeof dashboard.openDashboard === "function"
+                    typeof FRTools.Dashboard === "undefined"
+                    ||
+                    typeof FRTools.Dashboard.open !== "function"
                 ) {
 
-                    dashboard.openDashboard();
-
-                }
-                else {
-
                     console.error(
-                        "[FR Tools] Dashboard module unavailable"
+                        "[FR Tools] Dashboard unavailable"
                     );
 
+                    return;
+
                 }
+
+                if (
+                    !FRTools.Dashboard.matches(window.location)
+                ) {
+
+                    FRTools.GUI.notify(
+                        "Dashboard is only available from the Unit Worklist."
+                    );
+
+                    return;
+
+                }
+
+                FRTools.Dashboard.open();
 
             }
         );

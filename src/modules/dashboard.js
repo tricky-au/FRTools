@@ -13,9 +13,6 @@ FRTools.Module.register({
     overlayId:
         "frtools-dashboard-overlay",
 
-    pdfReady:
-        false,
-
     matches(location) {
 
         return (
@@ -33,7 +30,6 @@ FRTools.Module.register({
             "[FR Tools] Dashboard loaded"
         );
 
-        this.loadPDFLibrary();
         this.addStyles();
         this.createButton();
 
@@ -47,54 +43,7 @@ FRTools.Module.register({
 
     },
 
-loadPDFLibrary() {
 
-    if (
-        typeof window.jspdf !== "undefined"
-    ) {
-
-        this.pdfReady = true;
-
-        return;
-
-    }
-
-
-    const script =
-        document.createElement(
-            "script"
-        );
-
-
-    script.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-
-
-    script.onload = () => {
-
-        this.pdfReady = true;
-
-        console.log(
-            "[FR Tools] jsPDF loaded"
-        );
-
-    };
-
-
-    script.onerror = () => {
-
-        console.error(
-            "[FR Tools] Failed to load jsPDF"
-        );
-
-    };
-
-
-    document.head.appendChild(
-        script
-    );
-
-},
 
 
     addStyles() {
@@ -485,7 +434,57 @@ loadPDFLibrary() {
 
             }
 
+.frtools-dashboard-tabs {
 
+    display:
+        flex;
+
+    border-bottom:
+        1px solid #ccc;
+
+}
+
+
+.frtools-dashboard-tab {
+
+    flex:
+        1;
+
+    padding:
+        10px;
+
+    border:
+        none;
+
+    background:
+        #eee;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        600;
+
+}
+
+
+.frtools-dashboard-tab.active {
+
+    background:
+        white;
+
+    border-bottom:
+        3px solid rgb(26,38,50);
+
+}
+
+
+.frtools-dashboard-tab:hover {
+
+    background:
+        #ddd;
+
+}
 
         `);
 
@@ -544,7 +543,17 @@ loadPDFLibrary() {
 
     openDashboard() {
 
+    if (
+        !this.matches(window.location)
+    ) {
 
+        FRTools.GUI.notify(
+            "Dashboard is only available on the Unit Worklist."
+        );
+
+        return;
+
+    }
         let overlay =
             document.getElementById(
                 this.overlayId
@@ -574,24 +583,61 @@ loadPDFLibrary() {
 
             overlay.innerHTML = `
 
-
                 <div id="frtools-dashboard-modal">
 
 
-                <div class="frtools-dashboard-header">
+                    <div class="frtools-dashboard-header">
 
-                    <span>
                         FR Tools Dashboard
-                    </span>
 
-                    <button id="frtools-dashboard-export">
-                        Export PDF
-                    </button>
-
-                </div>
+                    </div>
 
 
-                    <div class="frtools-dashboard-content">
+                    <div class="frtools-dashboard-tabs">
+
+                        <button 
+                            class="frtools-dashboard-tab active"
+                            data-tab="overview">
+                            Overview
+                        </button>
+
+
+                        <button 
+                            class="frtools-dashboard-tab"
+                            data-tab="analytics">
+                            Analytics
+                        </button>
+
+
+                    </div>
+
+
+                    <div 
+                        id="frtools-dashboard-overview"
+                        class="frtools-dashboard-content">
+
+                    </div>
+
+
+                    <div 
+                        id="frtools-dashboard-analytics"
+                        class="frtools-dashboard-content"
+                        style="display:none;">
+
+                        <div class="frtools-dashboard-section">
+
+                            <div class="frtools-dashboard-section-title">
+
+                                Analytics
+
+                            </div>
+
+
+                            <p>
+                                Analytics coming soon...
+                            </p>
+
+                        </div>
 
                     </div>
 
@@ -608,6 +654,65 @@ loadPDFLibrary() {
             );
 
 
+overlay
+.querySelectorAll(
+    ".frtools-dashboard-tab"
+)
+.forEach(tab => {
+
+
+    tab.addEventListener(
+        "click",
+        () => {
+
+
+            overlay
+            .querySelectorAll(
+                ".frtools-dashboard-tab"
+            )
+            .forEach(button => {
+
+                button.classList.remove(
+                    "active"
+                );
+
+            });
+
+
+            tab.classList.add(
+                "active"
+            );
+
+
+            const selected =
+                tab.dataset.tab;
+
+
+            document
+            .getElementById(
+                "frtools-dashboard-overview"
+            )
+            .style.display =
+                selected === "overview"
+                    ? "block"
+                    : "none";
+
+
+            document
+            .getElementById(
+                "frtools-dashboard-analytics"
+            )
+            .style.display =
+                selected === "analytics"
+                    ? "block"
+                    : "none";
+
+
+        }
+    );
+
+
+});
 
             overlay.addEventListener(
                 "click",
@@ -636,15 +741,6 @@ loadPDFLibrary() {
                 .getElementById(
                     "frtools-dashboard-export"
                 )
-                .addEventListener(
-                    "click",
-                    () => {
-
-                        this.exportDashboardPDF();
-
-                    }
-                );
-
 
         }
 
@@ -654,9 +750,9 @@ loadPDFLibrary() {
             this.getStats();
 
 
-
-   modal.querySelector(
-    ".frtools-dashboard-content"
+document
+.getElementById(
+    "frtools-dashboard-overview"
 )
 .innerHTML = `
 
@@ -1118,182 +1214,7 @@ renderPriorityBreakdown(stats) {
 
     },
 
-exportDashboardPDF() {
 
-    if (!this.pdfReady) {
-
-        FRTools.GUI.notify(
-            "PDF library is still loading..."
-        );
-
-        return;
-
-    }
-
-
-    const {
-        jsPDF
-    } =
-        window.jspdf;
-
-
-    const doc =
-        new jsPDF({
-
-            orientation:
-                "landscape",
-
-            unit:
-                "mm",
-
-            format:
-                "a4"
-
-        });
-
-
-    const stats =
-        this.getStats();
-
-
-    const now =
-        new Date();
-
-
-    const generated =
-        now.toLocaleString(
-            "en-AU",
-            {
-                timeZone:
-                    "Australia/Melbourne"
-            }
-        );
-
-
-    doc.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    doc.setFontSize(
-        20
-    );
-
-    doc.text(
-        "FR Tools Dashboard",
-        15,
-        18
-    );
-
-
-    doc.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    doc.setFontSize(
-        10
-    );
-
-    doc.text(
-        `Generated: ${generated}`,
-        15,
-        25
-    );
-
-
-    doc.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    doc.setFontSize(
-        14
-    );
-
-    doc.text(
-        "Summary",
-        15,
-        40
-    );
-
-
-    doc.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    doc.setFontSize(
-        11
-    );
-
-
-    let y = 50;
-
-
-    const rows = [
-
-        [
-            "Requests",
-            stats.summary.totalJobs
-        ],
-
-        [
-            "Assigned",
-            stats.summary.assigned
-        ],
-
-        [
-            "Queue",
-            stats.summary.queue
-        ],
-
-        [
-            "Issues",
-            stats.summary.problems
-        ],
-
-        [
-            "Average Request Age",
-            stats.summary.averageAge
-        ],
-
-        [
-            "Examination Complete",
-            stats.summary.examComplete
-        ]
-
-    ];
-
-
-    rows.forEach(row => {
-
-        doc.text(
-            row[0],
-            20,
-            y
-        );
-
-        doc.text(
-            String(row[1]),
-            95,
-            y,
-            {
-                align:
-                    "right"
-            }
-        );
-
-        y += 8;
-
-    });
-
-
-    doc.save(
-        "FRTools_Dashboard.pdf"
-    );
-
-},
 
 getStats() {
 
