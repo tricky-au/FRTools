@@ -330,7 +330,7 @@ FRTools.Module.register({
                     14px;
 
                 margin-bottom:
-                    10px;
+                    8px;
 
             }
 
@@ -355,24 +355,30 @@ FRTools.Module.register({
             }
 
 
-            .frtools-dashboard-row strong{
+.frtools-dashboard-row {
 
-                display:
-                    flex;
+    display:
+        flex;
 
-                justify-content:
-                    space-between;
+    justify-content:
+        space-between;
 
-                padding:
-                    4px 8px;
+    align-items:
+        center;
 
-                border-bottom:
-                    1px solid #ddd;
+    padding:
+        2px 6px;
 
-                font-size:
-                    13px;
+    margin:
+        0;
 
-            }
+    line-height:
+        1.2;
+
+    font-size:
+        13px;
+
+}
 
 
             .frtools-dashboard-row:last-child {
