@@ -1253,6 +1253,20 @@ renderOffenceCategoryChart() {
 
                     maintainAspectRatio: false,
 
+                    scales: {
+
+                        y: {
+
+                            ticks: {
+
+                                autoSkip: false
+
+                            }
+
+                        }
+
+                    },
+
                     plugins: {
 
                         legend: {
