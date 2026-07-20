@@ -1191,6 +1191,9 @@ renderPriorityBreakdown(stats) {
 
 getStats(jobs) {
 
+    jobs =
+        jobs || this.getJobs();
+
     return {
 
         summary:
