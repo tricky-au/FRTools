@@ -719,6 +719,10 @@ const stats =
     this.stats =
     stats;
 
+    console.log(
+    "[FR Tools] Dashboard Stats Snapshot",
+    this.stats
+);
 
 document
 .getElementById(
