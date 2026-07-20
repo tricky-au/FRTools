@@ -50,7 +50,7 @@ FRTools.Module.register({
 loadPDFLibrary() {
 
     if (
-        typeof html2pdf !== "undefined"
+        typeof window.jspdf !== "undefined"
     ) {
 
         this.pdfReady = true;
@@ -67,7 +67,7 @@ loadPDFLibrary() {
 
 
     script.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
 
 
     script.onload = () => {
@@ -75,7 +75,7 @@ loadPDFLibrary() {
         this.pdfReady = true;
 
         console.log(
-            "[FR Tools] PDF export library loaded"
+            "[FR Tools] jsPDF loaded"
         );
 
     };
@@ -84,7 +84,7 @@ loadPDFLibrary() {
     script.onerror = () => {
 
         console.error(
-            "[FR Tools] Failed to load PDF export library"
+            "[FR Tools] Failed to load jsPDF"
         );
 
     };
@@ -1131,137 +1131,167 @@ exportDashboardPDF() {
     }
 
 
-    const original =
-        document.getElementById(
-            "frtools-dashboard-modal"
-        );
+    const {
+        jsPDF
+    } =
+        window.jspdf;
 
 
-    if (!original) {
+    const doc =
+        new jsPDF({
 
-        return;
-
-    }
-
-
-    /*
-        Create export copy
-    */
-
-    const exportModal =
-        original.cloneNode(
-            true
-        );
-
-
-    exportModal.id =
-        "frtools-dashboard-export-copy";
-
-
-    /*
-        Remove Export button
-    */
-
-    const exportButton =
-        exportModal.querySelector(
-            "#frtools-dashboard-export"
-        );
-
-
-    if (exportButton) {
-
-        exportButton.remove();
-
-    }
-
-
-    /*
-        Expand fully
-    */
-
-    exportModal.style.position =
-        "absolute";
-
-    exportModal.style.left =
-        "-10000px";
-
-    exportModal.style.top =
-        "0";
-
-    exportModal.style.transform =
-        "none";
-
-    exportModal.style.maxHeight =
-        "none";
-
-    exportModal.style.height =
-        "auto";
-
-    exportModal.style.overflow =
-        "visible";
-
-    exportModal.style.width =
-        "1100px";
-
-
-    document.body.appendChild(
-        exportModal
-    );
-
-
-    const options = {
-
-        margin:
-            10,
-
-        filename:
-            "FRTools_Dashboard.pdf",
-
-        image: {
-
-            type:
-                "jpeg",
-
-            quality:
-                1
-
-        },
-
-        html2canvas: {
-
-            scale:
-                2,
-
-            useCORS:
-                true
-
-        },
-
-        jsPDF: {
+            orientation:
+                "landscape",
 
             unit:
                 "mm",
 
             format:
-                "a3",
-
-            orientation:
-                "landscape"
-
-        }
-
-    };
-
-
-    html2pdf()
-        .set(options)
-        .from(exportModal)
-        .save()
-        .then(() => {
-
-            exportModal.remove();
+                "a4"
 
         });
+
+
+    const stats =
+        this.getStats();
+
+
+    const now =
+        new Date();
+
+
+    const generated =
+        now.toLocaleString(
+            "en-AU",
+            {
+                timeZone:
+                    "Australia/Melbourne"
+            }
+        );
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(
+        20
+    );
+
+    doc.text(
+        "FR Tools Dashboard",
+        15,
+        18
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.setFontSize(
+        10
+    );
+
+    doc.text(
+        `Generated: ${generated}`,
+        15,
+        25
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(
+        14
+    );
+
+    doc.text(
+        "Summary",
+        15,
+        40
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.setFontSize(
+        11
+    );
+
+
+    let y = 50;
+
+
+    const rows = [
+
+        [
+            "Requests",
+            stats.summary.totalJobs
+        ],
+
+        [
+            "Assigned",
+            stats.summary.assigned
+        ],
+
+        [
+            "Queue",
+            stats.summary.queue
+        ],
+
+        [
+            "Issues",
+            stats.summary.problems
+        ],
+
+        [
+            "Average Request Age",
+            stats.summary.averageAge
+        ],
+
+        [
+            "Examination Complete",
+            stats.summary.examComplete
+        ]
+
+    ];
+
+
+    rows.forEach(row => {
+
+        doc.text(
+            row[0],
+            20,
+            y
+        );
+
+        doc.text(
+            String(row[1]),
+            95,
+            y,
+            {
+                align:
+                    "right"
+            }
+        );
+
+        y += 8;
+
+    });
+
+
+    doc.save(
+        "FRTools_Dashboard.pdf"
+    );
 
 },
 
