@@ -931,31 +931,44 @@ max-width: 320px;
 
 
 
-    .frtools-dashboard-section {
+            .frtools-dashboard-section {
 
-        margin: 20px;
+                background:
+                    rgb(235,235,235);
 
-        padding: 15px;
+                border:
+                    1px solid #ccc;
 
-        background: #ebebeb;
+                border-radius:
+                    8px;
 
-        border-radius: 10px;
+                padding:
+                    14px;
 
-    }
+                margin-bottom:
+                    8px;
+
+            }
 
 
+            .frtools-dashboard-section-title {
 
-    .frtools-dashboard-section-title {
+                font-size:
+                    15px;
 
-        font-weight: 700;
+                font-weight:
+                    700;
 
-        font-size: 15px;
+                color:
+                    rgb(26,38,50);
 
-        color: #1a2632;
+                text-align:
+                    center;
 
-        margin-bottom: 12px;
+                margin-bottom:
+                    12px;
 
-    }
+            }
 
 
 

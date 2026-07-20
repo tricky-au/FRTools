@@ -315,44 +315,7 @@ FRTools.Module.register({
             }
 
 
-            .frtools-dashboard-section {
 
-                background:
-                    rgb(235,235,235);
-
-                border:
-                    1px solid #ccc;
-
-                border-radius:
-                    8px;
-
-                padding:
-                    14px;
-
-                margin-bottom:
-                    8px;
-
-            }
-
-
-            .frtools-dashboard-section-title {
-
-                font-size:
-                    15px;
-
-                font-weight:
-                    700;
-
-                color:
-                    rgb(26,38,50);
-
-                text-align:
-                    center;
-
-                margin-bottom:
-                    12px;
-
-            }
 
 
 .frtools-dashboard-row {
