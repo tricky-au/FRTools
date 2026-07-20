@@ -1,6 +1,7 @@
 FRTools.Module.register({
     stats: null,
     chart: null,
+    offenceChart: null,
 
     id: "dashboard",
 
@@ -620,6 +621,25 @@ init() {
 
                         </div>
 
+                        <div class="frtools-dashboard-section">
+
+                        <div class="frtools-dashboard-section-title">
+
+                            Forensic Offence Categories
+
+                        </div>
+
+
+                        <div class="frtools-chart-container">
+
+                            <canvas 
+                                id="frtools-offence-category-chart">
+                            </canvas>
+
+                        </div>
+
+                    </div>
+
 
                     </div>
 
@@ -1047,6 +1067,8 @@ loadChartLibrary() {
 
         this.renderExhibitCategoryChart();
 
+        this.renderOffenceCategoryChart();
+
     };
 
 
@@ -1090,6 +1112,7 @@ renderExhibitCategoryChart() {
         this.chart.destroy();
 
     }
+    
 
 
     const labels =
@@ -1128,6 +1151,103 @@ renderExhibitCategoryChart() {
                 },
 
                 options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+},
+
+renderOffenceCategoryChart() {
+
+
+    if (
+        !this.stats ||
+        !this.stats.offences
+    ) {
+
+        return;
+
+    }
+
+
+    const canvas =
+        document.getElementById(
+            "frtools-offence-category-chart"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    if (
+        this.offenceChart
+    ) {
+
+        this.offenceChart.destroy();
+
+    }
+
+
+    const labels =
+        Object.keys(
+            this.stats.offences
+        );
+
+
+    const values =
+        Object.values(
+            this.stats.offences
+        );
+
+
+    this.offenceChart =
+        new Chart(
+            canvas,
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels,
+
+                    datasets: [{
+
+                        label:
+                            "Requests",
+
+                        data:
+                            values
+
+                    }]
+
+                },
+
+                options: {
+
+                    indexAxis:
+                        "y",
 
                     responsive: true,
 
