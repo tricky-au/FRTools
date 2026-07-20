@@ -1,5 +1,6 @@
 FRTools.Module.register({
     stats: null,
+    chart: null,
 
     id: "dashboard",
 
@@ -315,7 +316,15 @@ init() {
             }
 
 
+.frtools-chart-container {
 
+    position: relative;
+
+    height: 350px;
+
+    width: 100%;
+
+}
 
 
 .frtools-dashboard-row {
@@ -600,9 +609,13 @@ init() {
                             </div>
 
 
-                            <canvas 
-                                id="frtools-exhibit-category-chart">
-                            </canvas>
+                            <div class="frtools-chart-container">
+
+                                <canvas 
+                                    id="frtools-exhibit-category-chart">
+                                </canvas>
+
+                            </div>
 
 
                         </div>
@@ -731,7 +744,6 @@ const stats =
 
     console.log(
     "[FR Tools] Dashboard Stats Snapshot",
-    this.stats
 );
 
 document
@@ -1071,6 +1083,15 @@ renderExhibitCategoryChart() {
     }
 
 
+    if (
+        this.chart
+    ) {
+
+        this.chart.destroy();
+
+    }
+
+
     const labels =
         Object.keys(
             this.stats.categories
@@ -1083,48 +1104,49 @@ renderExhibitCategoryChart() {
         );
 
 
-    new Chart(
-        canvas,
-        {
+    this.chart =
+        new Chart(
+            canvas,
+            {
 
-            type: "bar",
+                type: "bar",
 
-            data: {
+                data: {
 
-                labels,
+                    labels,
 
-                datasets: [{
+                    datasets: [{
 
-                    label:
-                        "Exhibits",
+                        label:
+                            "Exhibits",
 
-                    data:
-                        values
+                        data:
+                            values
 
-                }]
+                    }]
 
-            },
+                },
 
-            options: {
+                options: {
 
-                responsive: true,
+                    responsive: true,
 
-                maintainAspectRatio: false,
+                    maintainAspectRatio: false,
 
-                plugins: {
+                    plugins: {
 
-                    legend: {
+                        legend: {
 
-                        display: false
+                            display: false
+
+                        }
 
                     }
 
                 }
 
             }
-
-        }
-    );
+        );
 
 
 },
