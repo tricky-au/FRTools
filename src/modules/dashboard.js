@@ -1,4 +1,5 @@
 FRTools.Module.register({
+    stats: null,
 
     id: "dashboard",
 
@@ -24,24 +25,17 @@ FRTools.Module.register({
     },
 
 
-    init() {
+init() {
 
-        console.log(
-            "[FR Tools] Dashboard loaded"
-        );
+    console.log(
+        "[FR Tools] Dashboard loaded"
+    );
 
-        this.addStyles();
-        this.createButton();
+    this.addStyles();
 
+    this.createButton();
 
-        const stats =
-            this.getStats();
-
-
-        console.log(stats);
-
-
-    },
+},
 
 
 
@@ -721,6 +715,9 @@ const stats =
     this.getStats(
         jobs
     );
+
+    this.stats =
+    stats;
 
 
 document
