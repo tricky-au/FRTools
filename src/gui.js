@@ -873,21 +873,25 @@ max-width: 320px;
     .frtools-dashboard-content {
 
         padding:
-            20px;
+            12px;
 
     }
 
-        .frtools-dashboard-grid {
+.frtools-dashboard-grid {
 
-        display: grid;
+    display:
+        grid;
 
-        grid-template-columns: repeat(4, 1fr);
+    grid-template-columns:
+        repeat(4, 1fr);
 
-        gap: 12px;
+    gap:
+        10px;
 
-        padding: 20px;
+    width:
+        100%;
 
-    }
+}
 
 
     .frtools-dashboard-card {
@@ -947,6 +951,12 @@ max-width: 320px;
 
                 margin-bottom:
                     8px;
+
+                width:
+                    100%;
+
+                box-sizing:
+                    border-box;
 
             }
 

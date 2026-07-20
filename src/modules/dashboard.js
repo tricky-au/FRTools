@@ -297,15 +297,21 @@ FRTools.Module.register({
 
             }
 
-            .frtools-dashboard-columns {
+.frtools-dashboard-columns {
 
-                display: grid;
+    display:
+        grid;
 
-                grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        1fr 1fr;
 
-                gap: 16px;
+    gap:
+        10px;
 
-            }
+    width:
+        100%;
+
+}
 
 
             .frtools-dashboard-column {
