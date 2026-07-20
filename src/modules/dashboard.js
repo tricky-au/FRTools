@@ -589,20 +589,24 @@ init() {
                         class="frtools-dashboard-content"
                         style="display:none;">
 
+
                         <div class="frtools-dashboard-section">
+
 
                             <div class="frtools-dashboard-section-title">
 
-                                Analytics
+                                Exhibit Categories
 
                             </div>
 
 
-                            <p>
-                                Analytics coming soon...
-                            </p>
+                            <canvas 
+                                id="frtools-exhibit-category-chart">
+                            </canvas>
+
 
                         </div>
+
 
                     </div>
 
@@ -672,7 +676,13 @@ overlay
                     ? "block"
                     : "none";
 
+            if (
+                selected === "analytics"
+            ) {
 
+                this.loadChartLibrary();
+
+            }
         }
     );
 
@@ -995,6 +1005,129 @@ document
 
 
     },
+
+loadChartLibrary() {
+
+    if (
+        typeof Chart !== "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    const script =
+        document.createElement(
+            "script"
+        );
+
+
+    script.src =
+        "https://cdn.jsdelivr.net/npm/chart.js";
+
+
+    script.onload = () => {
+
+        console.log(
+            "[FR Tools] Chart.js loaded"
+        );
+
+        this.renderExhibitCategoryChart();
+
+    };
+
+
+    document.head.appendChild(
+        script
+    );
+
+},
+
+
+renderExhibitCategoryChart() {
+
+
+    if (
+        !this.stats ||
+        !this.stats.categories
+    ) {
+
+        return;
+
+    }
+
+
+    const canvas =
+        document.getElementById(
+            "frtools-exhibit-category-chart"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    const labels =
+        Object.keys(
+            this.stats.categories
+        );
+
+
+    const values =
+        Object.values(
+            this.stats.categories
+        );
+
+
+    new Chart(
+        canvas,
+        {
+
+            type: "bar",
+
+            data: {
+
+                labels,
+
+                datasets: [{
+
+                    label:
+                        "Exhibits",
+
+                    data:
+                        values
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+},
 
 
     renderStatSection(title, data) {

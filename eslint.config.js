@@ -68,6 +68,7 @@ module.exports = [
                 URLSearchParams: "readonly",
                 jQuery: "readonly",
                 html2pdf: "readonly",
+                Chart: "readonly",
             }
         },
 
