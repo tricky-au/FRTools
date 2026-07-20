@@ -538,13 +538,6 @@ FRTools.Module.register({
             );
 
 
-        let modal =
-            document.getElementById(
-                "frtools-dashboard-modal"
-            );
-
-
-
         if (!overlay) {
 
 
@@ -710,10 +703,7 @@ overlay
             );
 
 
-            modal =
-                document.getElementById(
-                    "frtools-dashboard-modal"
-                );
+
 
             document
                 .getElementById(
@@ -723,9 +713,14 @@ overlay
         }
 
 
+const jobs =
+    this.getJobs();
 
-        const stats =
-            this.getStats();
+
+const stats =
+    this.getStats(
+        jobs
+    );
 
 
 document
@@ -1194,10 +1189,7 @@ renderPriorityBreakdown(stats) {
 
 
 
-getStats() {
-
-    const jobs =
-        this.getJobs();
+getStats(jobs) {
 
     return {
 
@@ -1247,13 +1239,13 @@ getStats() {
             ),
 
         examinerWorkload:
-        this.getExaminerWorkloadStats(
+            this.getExaminerWorkloadStats(
                 jobs
             ),
 
         ageBuckets:
-        this.getAgeBucketStats(
-            jobs
+            this.getAgeBucketStats(
+                jobs
             ),
 
     };
