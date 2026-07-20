@@ -1178,7 +1178,9 @@ renderPriorityBreakdown(stats) {
 
 
     getJobs() {
-
+console.count(
+    "[FR Tools] getJobs called"
+);
         return this
             .getTable()
             .rows()
